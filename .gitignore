@@ -1,0 +1,5 @@
+# executables
+architecture-simulator
+
+# compiled binaries
+.obj

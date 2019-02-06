@@ -2,7 +2,7 @@ EXE := architecture-simulator
 CXX = g++
 
 SRCDIR := src
-OBJDIR := .obj
+OBJDIR := bin
 
 $(shell mkdir -p $(OBJDIR))
 

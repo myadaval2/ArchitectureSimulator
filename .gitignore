@@ -3,3 +3,5 @@ architecture-simulator
 
 # compiled binaries
 bin
+/architecturesim/nbproject/private/
+/architecturesim/build/

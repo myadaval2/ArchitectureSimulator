@@ -5,3 +5,4 @@ architecture-simulator
 bin
 /architecturesim/nbproject/private/
 /architecturesim/build/
+/architecturesim/dist/

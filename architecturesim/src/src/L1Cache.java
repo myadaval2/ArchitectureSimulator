@@ -9,10 +9,10 @@ package src;
  *
  * @author jjaikumar
  */
-
-// NOT ENABLED BY DEFAULT
-public class Driver {
-    public Driver(){
-        System.out.println("Booting up...");
+public class L1Cache {
+    int size;
+    public L1Cache(int size){
+        this.size = size;
+        System.out.println("Made L1Cache");
     }
 }

@@ -9,10 +9,6 @@ package src;
  *
  * @author jjaikumar
  */
-
-// NOT ENABLED BY DEFAULT
-public class Driver {
-    public Driver(){
-        System.out.println("Booting up...");
-    }
+public class Register {
+    
 }

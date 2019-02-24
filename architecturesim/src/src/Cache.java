@@ -25,34 +25,13 @@ public class Cache {
         this.mem_array = new char[sizeOfMemory];
         this.tag_array = new int[sizeOfMemory];
     }
-
- 
     
-    private Boolean addressInCurrMemoryLevel(int address) throws NoSuchMemoryLocationException{
-        // if address is in array, return true, else return false
-        if (this.levelsFromMain() == 2){
-            final char MASK_TAG = 49152; // BINARY 1100 0000 0000 0000
-            final char MASK_INDEX = 16383; // BINARY 0011 1111 1111 1111
-                
-            int tag_bit = address & MASK_TAG;
-            int index_bit = address & MASK_INDEX;
-            
-            return tag_bit == tag_array[index_bit];
-        }
-        else if (this.levelsFromMain == 1){          
-            final char MASK_TAG = 32768; // hex: 8000, binary 1000 0000 0000 0000
-            final char MASK_INDEX = 32767; // hex: 7FFF, binary 0111 1111 1111 1111
-        
-            int tag_bit = address & MASK_TAG;
-            int index_bit = address & MASK_INDEX;
-                
-            return tag_bit == tag_array[index_bit];
-        } else {
-            if (isDRAM)
-                return true;   
-            else 
-                throw new NoSuchMemoryLocationException(address);
-        }
+    public char getData(int address){
+        return this.mem_array[address];
+    }
+    
+    public void setData(char data, int address){
+        this.mem_array[address] = data;
     }
     
     private void delayCounter() {
@@ -63,6 +42,20 @@ public class Cache {
     public int getWaitCycles()          {   return waitCycles;          }
     public int getCounter()             {   return counter;             }
     public char[] getMemArray()         {   return mem_array;           }
+    public int[] getTagArray()          {   return tag_array;           }
+    public void setTagArray(int data, int address)   {   
+        tag_array[address] = data; 
+    }
 }
 
 
+class NoSuchMemoryLocationException extends Exception {
+    int address;
+    public NoSuchMemoryLocationException(int address){
+        this.address = address;
+        System.out.println("No such memory location exists: "+ address);
+    }
+    public NoSuchMemoryLocationException(){
+        System.out.println("No such memory location exists");
+    }
+}

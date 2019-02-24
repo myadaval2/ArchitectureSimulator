@@ -16,14 +16,14 @@ public class CPU {
     public Memory currMemoryLevel;
     public Memory topLevelMemory;
     
-    public CPU() {
+    
+    public CPU(boolean cache_enabled) {
         DRAM = new Memory(65536, null, 100); // 2^16 Bytes
         L2Cache = new Memory(32768,DRAM,30); // 2^15 Bytes
         L1Cache = new Memory(16384,L2Cache,4); // 2&14 Bytes
         currMemoryLevel = L1Cache;
         topLevelMemory = L1Cache;
-        // initialize DRAM
-        // initialize L1Cache
+        
         // read data in L1Cache
         // write data in L1Cache
         // read data in DRAM

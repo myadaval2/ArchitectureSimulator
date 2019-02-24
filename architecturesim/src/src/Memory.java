@@ -15,8 +15,11 @@ public class Memory {
     private Memory lowerLevelMemory;
     private int waitCycles;
     private int counter;
-    private Boolean fetchingMemory;
+    private boolean fetchingMemory;
+    private boolean isDRAM;
     private char[] mem_array;
+    private int[] tag_array;
+    private int levelsFromMain;
     
     // how do we want memory to look? vector of arrays? 2D array with row = 4 words, and 128 rows for DRAM?
 
@@ -26,42 +29,122 @@ public class Memory {
         this.lowerLevelMemory = lowerLevelMemory;
         this.waitCycles = waitCycles;
         this.counter = waitCycles;
-        this.fetchingMemory = false;
+        this.isDRAM = false;
         
-        mem_array = new char[sizeOfMemory];
+        this.mem_array = new char[sizeOfMemory];
+        this.tag_array = new int[sizeOfMemory];
+        
+        if (lowerLevelMemory == null){
+            this.isDRAM = true;
+        }
+        this.levelsFromMain = levelsFromMain();
     }
-    
-    public void getAddressInMemory(Memory currMemoryLevel, int address) {
-        if (!addressInCurrMemoryLevel(address)) {
-            currMemoryLevel = currMemoryLevel.lowerLevelMemory;
+
+    public void writeAddressInMemory(char data, int address) throws NoSuchMemoryLocationException {
+        boolean exists = false;
+        try {
+            exists = addressInCurrMemoryLevel(address);
+        } catch (NoSuchMemoryLocationException e) {
+            throw e;
+        }
+        
+        if (!exists) {
+            this.lowerLevelMemory.writeAddressInMemory(data, address);
+        } 
+        while (this.counter != 0){
+            delayCounter(); 
+        } 
+ 
+        if (isDRAM) {
+            mem_array[address] = data; 
         }
         else {
-            delayCounter();
-        }
-        if (this.counter == 0) {
-            getDataFromMemory(address);
+            char MASK_INDEX = 0;
+            if (this.levelsFromMain == 2) { // L1 Cache
+                MASK_INDEX = 16383; // BINARY 0011 1111 1111 1111
+                
+            } else { // levelsFromMain = 1, L2 Cache
+                MASK_INDEX = 32767; // BINARY 0111 1111 1111 1111
+            }
+            int index_bit = address & MASK_INDEX;
+            mem_array[index_bit] = data;
         }
     }
     
-    public Boolean addressInCurrMemoryLevel(int address) {
+    public int getAddressInMemory(int address) throws NoSuchMemoryLocationException{
+        
+        boolean exists = false;
+        try {
+            exists = addressInCurrMemoryLevel(address);
+        } catch (NoSuchMemoryLocationException e) {
+            throw e;
+        }
+        
+        if (!exists) {
+            return this.lowerLevelMemory.getAddressInMemory(address);
+        } 
+        while (this.counter != 0){
+            delayCounter(); 
+        } 
+ 
+        if (isDRAM)
+            return mem_array[address]; 
+        else {
+            char MASK_INDEX = 0;
+            if (this.levelsFromMain == 2) { // L1 Cache
+                MASK_INDEX = 16383; // BINARY 0011 1111 1111 1111
+                
+            } else { // levelsFromMain = 1, L2 Cache
+                MASK_INDEX = 32767; // BINARY 0111 1111 1111 1111
+            }
+            int index_bit = address & MASK_INDEX;
+                
+            return mem_array[index_bit];
+        }
+    }
+    
+    private Boolean addressInCurrMemoryLevel(int address) throws NoSuchMemoryLocationException{
         // if address is in array, return true, else return false
-        if (true) {
-            return true;
+        if (this.levelsFromMain() == 2){
+            final char MASK_TAG = 49152; // BINARY 1100 0000 0000 0000
+            final char MASK_INDEX = 16383; // BINARY 0011 1111 1111 1111
+                
+            int tag_bit = address & MASK_TAG;
+            int index_bit = address & MASK_INDEX;
+            
+            return tag_bit == tag_array[index_bit];
         }
-        else {
-            return false;
+        else if (this.levelsFromMain == 1){          
+            final char MASK_TAG = 32768; // hex: 8000, binary 1000 0000 0000 0000
+            final char MASK_INDEX = 32767; // hex: 7FFF, binary 0111 1111 1111 1111
+        
+            int tag_bit = address & MASK_TAG;
+            int index_bit = address & MASK_INDEX;
+                
+            return tag_bit == tag_array[index_bit];
+        } else {
+            if (isDRAM)
+                return true;   
+            else 
+                throw new NoSuchMemoryLocationException(address);
         }
     }
+        
+    private int levelsFromMain(){
+        if (this.isDRAM){
+            return 0;
+        }
+        int temp = 0;
+        Memory pointer = this;
+        while (pointer.lowerLevelMemory != null){
+            pointer = pointer.lowerLevelMemory;
+            temp++;
+        }
+        return temp;
+    }
     
-    public void delayCounter() {
+    private void delayCounter() {
         this.counter = this.counter--;
-        this.fetchingMemory = true;
-    }
-    
-    public int getDataFromMemory(int address) {
-        // access array and return data from memory address
-        return address;
-        // write to topLevelMemory
     }
     
     public int getSizeOfMemory()        {   return sizeOfMemory;        }
@@ -70,4 +153,15 @@ public class Memory {
     public int getCounter()             {   return counter;             }
     public Boolean getFetchingMemory()  {   return fetchingMemory;      }
     public char[] getMemArray()         {   return mem_array;           }
+}
+
+class NoSuchMemoryLocationException extends Exception {
+    int address;
+    public NoSuchMemoryLocationException(int address){
+        this.address = address;
+        System.out.println("No such memory location exists: "+ address);
+    }
+    public NoSuchMemoryLocationException(){
+        System.out.println("No such memory location exists");
+    }
 }

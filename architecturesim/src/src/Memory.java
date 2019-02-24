@@ -21,7 +21,7 @@ public class Memory {
         L1Cache = new Cache(16384,L2Cache,4); // 2&14 Bytes
         
     }
-       public int getAddressInMemory(int address) throws NoSuchMemoryLocationException{
+    public int getAddressInMemory(int address) throws NoSuchMemoryLocationException{
         
         boolean exists = false;
         try {
@@ -86,14 +86,31 @@ public class Memory {
         }
     }
     
-}
-class NoSuchMemoryLocationException extends Exception {
-    int address;
-    public NoSuchMemoryLocationException(int address){
-        this.address = address;
-        System.out.println("No such memory location exists: "+ address);
+    private Boolean addressInCurrMemoryLevel(int address) throws NoSuchMemoryLocationException{
+        // if address is in array, return true, else return false
+        if (this.levelsFromMain() == 2){
+            final char MASK_TAG = 49152; // BINARY 1100 0000 0000 0000
+            final char MASK_INDEX = 16383; // BINARY 0011 1111 1111 1111
+                
+            int tag_bit = address & MASK_TAG;
+            int index_bit = address & MASK_INDEX;
+            
+            return tag_bit == tag_array[index_bit];
+        }
+        else if (this.levelsFromMain == 1){          
+            final char MASK_TAG = 32768; // hex: 8000, binary 1000 0000 0000 0000
+            final char MASK_INDEX = 32767; // hex: 7FFF, binary 0111 1111 1111 1111
+        
+            int tag_bit = address & MASK_TAG;
+            int index_bit = address & MASK_INDEX;
+                
+            return tag_bit == tag_array[index_bit];
+        } else {
+            if (isDRAM)
+                return true;   
+            else 
+                throw new NoSuchMemoryLocationException(address);
+        }
     }
-    public NoSuchMemoryLocationException(){
-        System.out.println("No such memory location exists");
-    }
+    
 }

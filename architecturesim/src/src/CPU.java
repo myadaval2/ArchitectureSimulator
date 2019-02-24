@@ -10,5 +10,8 @@ package src;
  * @author jjaikumar
  */
 public class CPU {
+    public CPU() {
+        
+    }
     
 }

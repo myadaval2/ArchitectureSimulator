@@ -11,13 +11,15 @@ package src;
  */
 public class Memory {
     // public int lineLength;
-    public int sizeOfMemory;
-    public Memory lowerLevelMemory;
-    public int waitCycles;
-    public int counter;
-    public Boolean fetchingMemory;
+    private int sizeOfMemory;
+    private Memory lowerLevelMemory;
+    private int waitCycles;
+    private int counter;
+    private Boolean fetchingMemory;
+    private char[] mem_array;
     
     // how do we want memory to look? vector of arrays? 2D array with row = 4 words, and 128 rows for DRAM?
+
     
     public Memory(int sizeOfMemory, Memory lowerLevelMemory, int waitCycles) {
         this.sizeOfMemory = sizeOfMemory;
@@ -25,6 +27,8 @@ public class Memory {
         this.waitCycles = waitCycles;
         this.counter = waitCycles;
         this.fetchingMemory = false;
+        
+        mem_array = new char[sizeOfMemory];
     }
     
     public void getAddressInMemory(Memory currMemoryLevel, int address) {
@@ -60,4 +64,10 @@ public class Memory {
         // write to topLevelMemory
     }
     
+    public int getSizeOfMemory()        {   return sizeOfMemory;        }
+    public Memory getLowerLevelMemory() {   return lowerLevelMemory;    }
+    public int getWaitCycles()          {   return waitCycles;          }
+    public int getCounter()             {   return counter;             }
+    public Boolean getFetchingMemory()  {   return fetchingMemory;      }
+    public char[] getMemArray()         {   return mem_array;           }
 }

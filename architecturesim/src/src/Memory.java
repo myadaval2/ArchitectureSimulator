@@ -33,7 +33,15 @@ public class Memory {
         }
     }
     
-
+    public void writeAddressInMemory(char data, int address) throws NoSuchMemoryLocationException{
+        if (cacheEnabled){
+            writeToL1(data, address);
+            writeToL2(data, address);
+            writeToDRAM(data, address);
+        } else {
+            writeToDRAM(data, address);
+        }
+    }
     
     public int readAddressInMemory(int address) throws NoSuchMemoryLocationException{
         int exists = -1;
@@ -53,8 +61,8 @@ public class Memory {
         if (pointer.getHeirarchy() == 0){
            char temp = DRAM.getMemArray()[address];
            if (cacheEnabled){
-                writeToL1(temp);
-                writeToL2(temp);  
+                writeToL1(temp, address);
+                writeToL2(temp, address);  
            }
            return temp;  
         }  
@@ -80,10 +88,14 @@ public class Memory {
         }
     }
     
-    private void writeToL1(char data) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    private void writeToL1(char data, int address) {
+        L1Cache.setData(data, address);
     }
-    private void writeToL2(char data) {
+    private void writeToL2(char data, int address) {
+        L2Cache.setData(data, address);
+    }
+    private void writeToDRAM(char data, int address){
+        DRAM.setData(data, address);
     }
     
     private boolean isValidAddress(int address){

@@ -41,7 +41,6 @@ public class DisplayMemory {
             }
         }
         return memoryArraySegment;
-        
     }
     
     public String[] getMemoryPageLabelsForMemoryType(String memoryType) {

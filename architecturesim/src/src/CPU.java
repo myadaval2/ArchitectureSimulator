@@ -11,9 +11,9 @@ package src;
  */
 public class CPU {
     
-    
+    public Memory MemorySet;
     public CPU() {
-        Memory memory = new Memory();
+        MemorySet = new Memory();
     }
     
 }

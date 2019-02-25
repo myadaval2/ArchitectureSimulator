@@ -10,7 +10,6 @@ package src;
  * @author jjaikumar
  */
 public class Cache {
-    // public int lineLength;
     private int sizeOfMemory;
     private int waitCycles;
     private int counter;
@@ -25,26 +24,23 @@ public class Cache {
         this.mem_array = new char[sizeOfMemory];
         this.tag_array = new int[sizeOfMemory];
     }
-    
-    public char getData(int address){
-        return this.mem_array[address];
-    }
-    
-    public void setData(char data, int address){
-        this.mem_array[address] = data;
-    }
-    
+
     private void delayCounter() {
         this.counter = this.counter--;
     }
     
-    public int getSizeOfMemory()        {   return sizeOfMemory;        }
-    public int getWaitCycles()          {   return waitCycles;          }
-    public int getCounter()             {   return counter;             }
-    public char[] getMemArray()         {   return mem_array;           }
-    public int[] getTagArray()          {   return tag_array;           }
+    public int getSizeOfMemory()        {   return sizeOfMemory;            }
+    public int getWaitCycles()          {   return waitCycles;              }
+    public int getCounter()             {   return counter;                 }
+    public char[] getMemArray()         {   return mem_array;               }
+    public int[] getTagArray()          {   return tag_array;               }
+    public char getData(int address)    {   return this.mem_array[address]; }
+    
     public void setTagArray(int data, int address)   {   
-        tag_array[address] = data; 
+        this.tag_array[address] = data; 
+    }
+    public void setData(char data, int address){
+        this.mem_array[address] = data;
     }
 }
 

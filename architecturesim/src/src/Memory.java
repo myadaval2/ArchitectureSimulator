@@ -16,13 +16,12 @@ public class Memory {
     
     
     public Memory() {
-        DRAM = new Cache(131072, null, 100); // 2^16 Bytes
-        L2Cache = new Cache(65536,DRAM,30); // 2^15 Bytes
-        L1Cache = new Cache(32768,L2Cache,4); // 2&14 Bytes  
+        DRAM = new Cache(131072, null, 100); // 2^17 Bytes
+        L2Cache = new Cache(65536,DRAM,30); // 2^16 Bytes
+        L1Cache = new Cache(32768,L2Cache,4); // 2^15 Bytes  
     }
     
     public int getAddressInMemory(int address) throws NoSuchMemoryLocationException{
-        
         boolean exists = false;
         try {
             exists = addressInCurrMemoryLevel(address);

@@ -24,18 +24,29 @@ public class DisplayMemory {
         }   
     }
     
-    public Object[][] getMemoryPage(char[] fullMemoryArray, int pageNum) {
+    public Object[][] getMemoryPage(char[] fullMemoryArray, int[] tagArray, int pageNum) {
         //Object[] fma = (Object[]) fullMemoryArray;
         int arraySize = 64;
-        //Object y = (Object) arraySize;
+        int tempTag;
+        int addressValue;
         int startIndex = pageNum*arraySize;
         Object[][] memoryArraySegment = new Object[arraySize][2];
         for (int i = startIndex; i < startIndex+arraySize; i++) {
             for (int j = 0; j < 2; j++) {
+                tempTag = 0;
                 if (j == 0) {
-                    memoryArraySegment[i-startIndex][j] = (Object) i;
+                    // Close, but I think the shift of 15 is wrong for L2 and DRAM
+                    // tempTag = tagArray[i];
+                    tempTag = 1;
+                    tempTag = tempTag << 15;
+                    addressValue = (tempTag & 0xFFFF) | i;
+                    System.out.print(addressValue + "\n");
+                    memoryArraySegment[i-startIndex][j] = (Object) Integer.toHexString(addressValue);
+                    // memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(addressValue);
                 }
                 else {
+                    // (Object) Integer.toHexString(fullMemoryArray[i]); // to display hex
+                    // (Object) Integer.toBinaryString(fullMemoryArray[i]); // to display binary
                     memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(fullMemoryArray[i]);
                 }
             }
@@ -44,17 +55,18 @@ public class DisplayMemory {
     }
     
     public String[] getMemoryPageLabelsForMemoryType(String memoryType) {
-        if ("DRAM".equals((String) memoryType)) {
-            return Arrays.copyOfRange(this.displayLabels, 0, 2048);
-        }
-        else if ("L2Cache".equals((String) memoryType)) {
-            return Arrays.copyOfRange(this.displayLabels, 0, 1024);
-        }
-        else if ("L1Cache".equals((String) memoryType)) {
+        if (null == (String) memoryType) {
             return Arrays.copyOfRange(this.displayLabels, 0, 512);
         }
-        else {
-            return Arrays.copyOfRange(this.displayLabels, 0, 512);
+        else switch ((String) memoryType) {
+            case "DRAM":
+                return Arrays.copyOfRange(this.displayLabels, 0, 2048);
+            case "L2Cache":
+                return Arrays.copyOfRange(this.displayLabels, 0, 1024);
+            case "L1Cache":
+                return Arrays.copyOfRange(this.displayLabels, 0, 512);
+            default:
+                return Arrays.copyOfRange(this.displayLabels, 0, 512);
         }
     }
 }

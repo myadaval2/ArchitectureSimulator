@@ -172,7 +172,7 @@ public class MainWindow extends javax.swing.JFrame {
         String [] columnNames = {"Address", "Instruction"};
         if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
             case "DRAM":
-                memoryArraySegment = dm.getMemoryPage(cpu.MemorySet.DRAM.getMemArray(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage(cpu.getMemory().DRAM.getMemArray(), memoryPage);
                 MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                         memoryArraySegment,
                         columnNames
@@ -180,7 +180,7 @@ public class MainWindow extends javax.swing.JFrame {
                 {public boolean isCellEditable(int row, int column){return false;}}
                 );  break;
             case "L2 Cache":
-                memoryArraySegment = dm.getMemoryPage(cpu.MemorySet.L2Cache.getMemArray(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage(cpu.getMemory().L2Cache.getMemArray(), memoryPage);
                 MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                         memoryArraySegment,
                         columnNames
@@ -188,7 +188,7 @@ public class MainWindow extends javax.swing.JFrame {
                 {public boolean isCellEditable(int row, int column){return false;}}
                 );  break;
             case "L1 Cache":
-                memoryArraySegment = dm.getMemoryPage(cpu.MemorySet.L1Cache.getMemArray(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage(cpu.getMemory().L1Cache.getMemArray(), memoryPage);
                 MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                         memoryArraySegment,
                         columnNames

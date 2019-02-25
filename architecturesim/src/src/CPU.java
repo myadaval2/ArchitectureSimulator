@@ -11,10 +11,12 @@ package src;
  */
 public class CPU {
 
-    public Memory MemorySet;
+    private Memory memory;
 
     public CPU() {
-        MemorySet = new Memory();
+        memory = new Memory();
     }
+    
+    public Memory getMemory(){      return memory;      }
     
 }

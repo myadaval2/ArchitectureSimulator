@@ -14,14 +14,34 @@ public class Memory {
     public Cache L2Cache;
     public Cache DRAM;
     
-    private Cache currPointer;
+    private Cache headPointer;
     
     public Memory() {
-        DRAM    = new Cache(Utils.size_DRAM , null      , Utils.wait_DRAM); 
-        L2Cache = new Cache(Utils.size_l2   , DRAM      , Utils.wait_l2); 
-        L1Cache = new Cache(Utils.size_l1   , L2Cache   , Utils.wait_l1);
+        this(true);
+    }
+    
+    public Memory(boolean cache_enabled) {
+        if (cache_enabled){
+            DRAM    = new Cache(Utils.size_DRAM , null      , Utils.wait_DRAM); 
+            L2Cache = new Cache(Utils.size_l2   , DRAM      , Utils.wait_l2); 
+            L1Cache = new Cache(Utils.size_l1   , L2Cache   , Utils.wait_l1);
         
-        currPointer = L1Cache;
+            headPointer = L1Cache;
+        } else {
+            DRAM = new Cache(Utils.size_DRAM, null, Utils.wait_DRAM);
+            headPointer = DRAM;
+        }
+        setHeirarchy();
+    }
+    
+    private void setHeirarchy(){
+        int counter = 0;
+        Cache pointer = headPointer;
+        while(pointer != null){
+            pointer.setHeirarchy(counter);
+            counter++;
+            pointer = pointer.getNextCache();
+        }
     }
     
     public int getAddressInMemory(int address) throws NoSuchMemoryLocationException{
@@ -88,25 +108,27 @@ public class Memory {
         }
     }
     
-    private Boolean addressInCurrMemoryLevel(int address) throws NoSuchMemoryLocationException{
+    private int addressInMemoryLevel(int address) throws NoSuchMemoryLocationException{
         // if address is in array, return true, else return false
-        if (this.levelsFromMain() == 2){
-            final char MASK_TAG = 49152; // BINARY 1100 0000 0000 0000
-            final char MASK_INDEX = 16383; // BINARY 0011 1111 1111 1111
-                
-            int tag_bit = address & MASK_TAG;
-            int index_bit = address & MASK_INDEX;
-            
-            return tag_bit == tag_array[index_bit];
-        }
-        else if (this.levelsFromMain == 1){          
-            final char MASK_TAG = 32768; // hex: 8000, binary 1000 0000 0000 0000
-            final char MASK_INDEX = 32767; // hex: 7FFF, binary 0111 1111 1111 1111
+        Cache currPointer = headPointer;
+        int currLevel = currPointer.getHeirarchy();
         
-            int tag_bit = address & MASK_TAG;
-            int index_bit = address & MASK_INDEX;
+        if (currLevel == 0){
+            int tag_bit = address & Utils.tagMask_l1;
+            int index_bit = address & Utils.indexMask_l1;
+            
+            if (tag_bit == currPointer.getTagArray()[index_bit]){
+                return currLevel;
+            }
+        }
+        currPointer = currPointer.getNextCache();
+        if (currLevel == 1){          
+            int tag_bit = address & Utils.tagMask_l2;
+            int index_bit = address & Utils.indexMask_l2;
                 
-            return tag_bit == tag_array[index_bit];
+            if (tag_bit == currPointer.getTagArray()[index_bit]){
+                return currLevel;
+            }
         } else {
             if (isDRAM)
                 return true;   

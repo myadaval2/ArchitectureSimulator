@@ -16,6 +16,7 @@ public class Cache {
     private int counter;
     private char[] mem_array;
     private int[] tag_array;
+    private int heirarchy;
     
     public Cache(int sizeOfMemory, Cache lowerLevelMemory, int waitCycles) {
         this.sizeOfMemory = sizeOfMemory;
@@ -31,6 +32,7 @@ public class Cache {
         this.counter = this.counter--;
     }
     
+    public int getHeirarchy()           {   return heirarchy;               }
     public int getSizeOfMemory()        {   return sizeOfMemory;            }
     public int getWaitCycles()          {   return waitCycles;              }
     public int getCounter()             {   return counter;                 }
@@ -39,6 +41,9 @@ public class Cache {
     public Cache getNextCache()         {   return lowerLevelMemory;        }
     public char getData(int address)    {   return this.mem_array[address]; }
     
+    public void setHeirarchy(int level){
+        this.heirarchy = level;
+    }
     public void setTagArray(int data, int address)   {   
         this.tag_array[address] = data; 
     }

@@ -4,14 +4,15 @@
  * and open the template in the editor.
  */
 package src;
-import java.util.Arrays;
+
 /**
  *
  * @author jjaikumar
  */
 public class Cache {
-    // public int lineLength;
+    
     private int sizeOfMemory;
+    private Cache lowerLevelMemory;
     private int waitCycles;
     private int counter;
     private char[] mem_array;
@@ -19,34 +20,31 @@ public class Cache {
     
     public Cache(int sizeOfMemory, Cache lowerLevelMemory, int waitCycles) {
         this.sizeOfMemory = sizeOfMemory;
+        this.lowerLevelMemory = lowerLevelMemory;
         this.waitCycles = waitCycles;
         this.counter = waitCycles;
         
         this.mem_array = new char[sizeOfMemory];
-        Arrays.fill(this.mem_array, 'z');
-        this.mem_array[0] = 0b1010111100110000 & 0xFFFF;
         this.tag_array = new int[sizeOfMemory];
     }
-    
-    public char getData(int address){
-        return this.mem_array[address];
-    }
-    
-    public void setData(char data, int address){
-        this.mem_array[address] = data;
-    }
-    
+
     private void delayCounter() {
         this.counter = this.counter--;
     }
     
-    public int getSizeOfMemory()        {   return sizeOfMemory;        }
-    public int getWaitCycles()          {   return waitCycles;          }
-    public int getCounter()             {   return counter;             }
-    public char[] getMemArray()         {   return mem_array;           }
-    public int[] getTagArray()          {   return tag_array;           }
+    public int getSizeOfMemory()        {   return sizeOfMemory;            }
+    public int getWaitCycles()          {   return waitCycles;              }
+    public int getCounter()             {   return counter;                 }
+    public char[] getMemArray()         {   return mem_array;               }
+    public int[] getTagArray()          {   return tag_array;               }
+    public Cache getNextCache()         {   return lowerLevelMemory;        }
+    public char getData(int address)    {   return this.mem_array[address]; }
+    
     public void setTagArray(int data, int address)   {   
-        tag_array[address] = data; 
+        this.tag_array[address] = data; 
+    }
+    public void setData(char data, int address){
+        this.mem_array[address] = data;
     }
 }
 

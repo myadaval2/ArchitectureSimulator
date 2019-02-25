@@ -172,7 +172,7 @@ public class MainWindow extends javax.swing.JFrame {
         String [] columnNames = {"Address", "Instruction"};
         if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
             case "DRAM":
-                memoryArraySegment = dm.getMemoryPage(cpu.MemorySet.DRAM.getMemArray(), cpu.MemorySet.DRAM.getTagArray(), cpu.MemorySet.DRAM.getHeirarchy(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage(cpu.getMemory().DRAM.getMemArray(), cpu.getMemory().DRAM.getTagArray(), cpu.getMemory().DRAM.getHeirarchy(), memoryPage);        
                 MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                         memoryArraySegment,
                         columnNames
@@ -180,7 +180,7 @@ public class MainWindow extends javax.swing.JFrame {
                 {public boolean isCellEditable(int row, int column){return false;}}
                 );  break;
             case "L2 Cache":
-                memoryArraySegment = dm.getMemoryPage(cpu.MemorySet.L2Cache.getMemArray(), cpu.MemorySet.L2Cache.getTagArray(), cpu.MemorySet.L2Cache.getHeirarchy(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage(cpu.getMemory().L2Cache.getMemArray(), cpu.getMemory().L2Cache.getTagArray(), cpu.getMemory().L2Cache.getHeirarchy(), memoryPage);
                 MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                         memoryArraySegment,
                         columnNames
@@ -188,7 +188,7 @@ public class MainWindow extends javax.swing.JFrame {
                 {public boolean isCellEditable(int row, int column){return false;}}
                 );  break;
             case "L1 Cache":
-                memoryArraySegment = dm.getMemoryPage(cpu.MemorySet.L1Cache.getMemArray(), cpu.MemorySet.L1Cache.getTagArray(), cpu.MemorySet.L1Cache.getHeirarchy(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage(cpu.getMemory().L1Cache.getMemArray(), cpu.getMemory().L1Cache.getTagArray(), cpu.getMemory().L1Cache.getHeirarchy(), memoryPage);
                 MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                         memoryArraySegment,
                         columnNames

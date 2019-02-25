@@ -12,12 +12,16 @@ package src;
 public class Memory {
     public Cache L1Cache;
     public Cache L2Cache;
-    public Cache DRAM; 
+    public Cache DRAM;
+    
+    private Cache currPointer;
     
     public Memory() {
         DRAM    = new Cache(Utils.size_DRAM , null      , Utils.wait_DRAM); 
         L2Cache = new Cache(Utils.size_l2   , DRAM      , Utils.wait_l2); 
-        L1Cache = new Cache(Utils.size_l1   , L2Cache   , Utils.wait_l1);   
+        L1Cache = new Cache(Utils.size_l1   , L2Cache   , Utils.wait_l1);
+        
+        currPointer = L1Cache;
     }
     
     public int getAddressInMemory(int address) throws NoSuchMemoryLocationException{

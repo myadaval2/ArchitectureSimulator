@@ -11,6 +11,7 @@ package src;
  */
 public class Cache {
     private int sizeOfMemory;
+    private Cache lowerLevelMemory;
     private int waitCycles;
     private int counter;
     private char[] mem_array;
@@ -18,6 +19,7 @@ public class Cache {
     
     public Cache(int sizeOfMemory, Cache lowerLevelMemory, int waitCycles) {
         this.sizeOfMemory = sizeOfMemory;
+        this.lowerLevelMemory = lowerLevelMemory;
         this.waitCycles = waitCycles;
         this.counter = waitCycles;
         
@@ -34,6 +36,7 @@ public class Cache {
     public int getCounter()             {   return counter;                 }
     public char[] getMemArray()         {   return mem_array;               }
     public int[] getTagArray()          {   return tag_array;               }
+    public Cache getNextCache()         {   return lowerLevelMemory;        }
     public char getData(int address)    {   return this.mem_array[address]; }
     
     public void setTagArray(int data, int address)   {   

@@ -24,7 +24,7 @@ public class DisplayMemory {
         }   
     }
     
-    public Object[][] getMemoryPage(char[] fullMemoryArray, int[] tagArray, int pageNum) {
+    public Object[][] getMemoryPage(char[] fullMemoryArray, int[] tagArray, int memoryLevel, int pageNum) {
         //Object[] fma = (Object[]) fullMemoryArray;
         int arraySize = 64;
         int tempTag;
@@ -36,11 +36,21 @@ public class DisplayMemory {
                 tempTag = 0;
                 if (j == 0) {
                     // Close, but I think the shift of 15 is wrong for L2 and DRAM
-                    // tempTag = tagArray[i];
-                    tempTag = 1;
-                    tempTag = tempTag << 15;
-                    addressValue = (tempTag & 0xFFFF) | i;
-                    System.out.print(addressValue + "\n");
+                    tempTag = tagArray[i];
+                    switch (memoryLevel) {
+                        case 0:
+                            tempTag = 0;
+                            break;
+                        case 1:
+                            tempTag = tempTag << 16;
+                            break;
+                        case 2:
+                            tempTag = tempTag << 15;
+                            break;
+                        default:
+                            break;
+                    }
+                    addressValue = (tempTag & 0x18000) | i;
                     memoryArraySegment[i-startIndex][j] = (Object) Integer.toHexString(addressValue);
                     // memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(addressValue);
                 }

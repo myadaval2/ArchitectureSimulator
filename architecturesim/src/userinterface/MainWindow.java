@@ -165,7 +165,6 @@ public class MainWindow extends javax.swing.JFrame {
         Pattern p = Pattern.compile("\\d+");
         Matcher m = p.matcher(s);
         while(m.find()) {
-            System.out.println(m.group());
             memoryPage = Integer.parseInt(m.group());
         }
         if ("DRAM".equals((String) CacheLevelNameDropDown.getSelectedItem())) {
@@ -199,14 +198,18 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_AddressRangeDropDownActionPerformed
 
     private void CacheLevelNameDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CacheLevelNameDropDownActionPerformed
-        if ("DRAM".equals((String) CacheLevelNameDropDown.getSelectedItem())) {
-            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("DRAM"))); 
-        }
-        else if ("L2 Cache".equals((String) CacheLevelNameDropDown.getSelectedItem())) {
-            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L2Cache"))); 
-        }
-        else if ("L1 Cache".equals((String) CacheLevelNameDropDown.getSelectedItem())) {   
-            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L1Cache"))); 
+        if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
+            case "DRAM":
+                AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("DRAM")));
+                break;
+            case "L2 Cache":
+                AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L2Cache")));
+                break;
+            case "L1 Cache": 
+                AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L1Cache")));
+                break;
+            default:
+                break;
         }
     }//GEN-LAST:event_CacheLevelNameDropDownActionPerformed
 

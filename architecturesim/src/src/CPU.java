@@ -10,15 +10,10 @@ package src;
  * @author jjaikumar
  */
 public class CPU {
-<<<<<<< Updated upstream
-    public CPU() {
-        
-=======
     public Memory MemorySet;
     
     public CPU() {
         MemorySet = new Memory();
->>>>>>> Stashed changes
     }
     
 }

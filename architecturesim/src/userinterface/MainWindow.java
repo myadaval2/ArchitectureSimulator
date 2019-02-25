@@ -5,7 +5,9 @@
  */
 package userinterface;
 
-import src.Driver;
+import src.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  *
@@ -30,13 +32,47 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        CacheLevelNameDropDown = new javax.swing.JComboBox<>();
+        CacheLevelLabel = new javax.swing.JLabel();
+        AddressPageLabel = new javax.swing.JLabel();
+        AddressRangeDropDown = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        MemoryViewer = new javax.swing.JTable();
+        ProjectNameLabel = new javax.swing.JLabel();
+        RunButtonLabel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Helvetica", 1, 13)); // NOI18N
-        jLabel1.setText("CS 535 Architecture Simulator");
+        CacheLevelNameDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "L1 Cache", "L2 Cache", "DRAM" }));
+        CacheLevelNameDropDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CacheLevelNameDropDownActionPerformed(evt);
+            }
+        });
+
+        CacheLevelLabel.setText("Cache Level");
+
+        AddressPageLabel.setText("Address Range");
+
+        AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {" "}));
+        AddressRangeDropDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddressRangeDropDownActionPerformed(evt);
+            }
+        });
+
+        MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Address", "Memory"
+            }
+        ));
+        jScrollPane1.setViewportView(MemoryViewer);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -44,26 +80,44 @@ public class MainWindow extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(357, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(CacheLevelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(CacheLevelNameDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(AddressPageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(AddressRangeDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CacheLevelLabel)
+                    .addComponent(CacheLevelNameDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(AddressPageLabel)
+                    .addComponent(AddressRangeDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
-        jButton1.setText("Run");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        ProjectNameLabel.setFont(new java.awt.Font("Helvetica", 1, 13)); // NOI18N
+        ProjectNameLabel.setText("CS 535 Architecture Simulator");
+
+        RunButtonLabel.setText("Run");
+        RunButtonLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 RunButton(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        RunButtonLabel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                RunButtonLabelActionPerformed(evt);
             }
         });
 
@@ -73,32 +127,94 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ProjectNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(196, 196, 196)
+                        .addComponent(RunButtonLabel))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(613, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ProjectNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RunButtonLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(118, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void RunButtonLabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RunButtonLabelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_RunButtonLabelActionPerformed
 
     private void RunButton(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RunButton
         // TODO add your handling code here:
         Driver driver = new Driver();
+        // redraw table based on current values in pull down menus for cache and address range
     }//GEN-LAST:event_RunButton
+
+    private void AddressRangeDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddressRangeDropDownActionPerformed
+        // TODO add your handling code here:
+        Object[][] memoryArraySegment;
+        int memoryPage = 0;
+        String s = (String) AddressRangeDropDown.getSelectedItem();
+        Pattern p = Pattern.compile("\\d+");
+        Matcher m = p.matcher(s);
+        while(m.find()) {
+            memoryPage = Integer.parseInt(m.group());
+        }
+        String [] columnNames = {"Address", "Instruction"};
+        if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
+            case "DRAM":
+                memoryArraySegment = dm.getMemoryPage(cpu.MemorySet.DRAM.getMemArray(), memoryPage);
+                MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
+                        memoryArraySegment,
+                        columnNames
+                )
+                {public boolean isCellEditable(int row, int column){return false;}}
+                );  break;
+            case "L2 Cache":
+                memoryArraySegment = dm.getMemoryPage(cpu.MemorySet.L2Cache.getMemArray(), memoryPage);
+                MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
+                        memoryArraySegment,
+                        columnNames
+                )
+                {public boolean isCellEditable(int row, int column){return false;}}
+                );  break;
+            case "L1 Cache":
+                memoryArraySegment = dm.getMemoryPage(cpu.MemorySet.L1Cache.getMemArray(), memoryPage);
+                MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
+                        memoryArraySegment,
+                        columnNames
+                )
+                {public boolean isCellEditable(int row, int column){return false;}}
+                );  break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_AddressRangeDropDownActionPerformed
+
+    private void CacheLevelNameDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CacheLevelNameDropDownActionPerformed
+        if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
+            case "DRAM":
+                AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("DRAM")));
+                break;
+            case "L2 Cache":
+                AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L2Cache")));
+                break;
+            case "L1 Cache": 
+                AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L1Cache")));
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_CacheLevelNameDropDownActionPerformed
 
     /**
      * @param args the command line arguments
@@ -135,9 +251,19 @@ public class MainWindow extends javax.swing.JFrame {
         });
     }
 
+    CPU cpu = new CPU();
+    DisplayMemory dm = new DisplayMemory();
+    // cpu.MemorySet.L1Cache.getMemArray();
+    // cpu.MemorySet.L2Cache.getMemArray();
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel AddressPageLabel;
+    private javax.swing.JComboBox<String> AddressRangeDropDown;
+    private javax.swing.JLabel CacheLevelLabel;
+    private javax.swing.JComboBox<String> CacheLevelNameDropDown;
+    private javax.swing.JTable MemoryViewer;
+    private javax.swing.JLabel ProjectNameLabel;
+    private javax.swing.JButton RunButtonLabel;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

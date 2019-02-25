@@ -10,8 +10,9 @@ package src;
  * @author jjaikumar
  */
 public class CPU {
-    
+
     public Memory MemorySet;
+
     public CPU() {
         MemorySet = new Memory();
     }

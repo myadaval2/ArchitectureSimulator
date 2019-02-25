@@ -10,6 +10,7 @@ package src;
  * @author jjaikumar
  */
 public class Memory {
+    
     public Cache L1Cache;
     public Cache L2Cache;
     public Cache DRAM;

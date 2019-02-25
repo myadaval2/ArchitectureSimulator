@@ -10,6 +10,7 @@ package src;
  * @author jjaikumar
  */
 public class Cache {
+    
     private int sizeOfMemory;
     private Cache lowerLevelMemory;
     private int waitCycles;

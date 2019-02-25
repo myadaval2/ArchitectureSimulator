@@ -10,15 +10,14 @@ package src;
  * @author jjaikumar
  */
 public class Memory {
-    public Cache DRAM; 
     public Cache L1Cache;
     public Cache L2Cache;
-    
+    public Cache DRAM; 
     
     public Memory() {
-        DRAM = new Cache(131072, null, 100); // 2^17 Bytes
-        L2Cache = new Cache(65536,DRAM,30); // 2^16 Bytes
-        L1Cache = new Cache(32768,L2Cache,4); // 2^15 Bytes  
+        DRAM    = new Cache(Utils.size_DRAM , null      , Utils.wait_DRAM); 
+        L2Cache = new Cache(Utils.size_l2   , DRAM      , Utils.wait_l2); 
+        L1Cache = new Cache(Utils.size_l1   , L2Cache   , Utils.wait_l1);   
     }
     
     public int getAddressInMemory(int address) throws NoSuchMemoryLocationException{

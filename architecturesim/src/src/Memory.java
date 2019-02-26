@@ -89,12 +89,21 @@ public class Memory {
     }
     
     private void writeToL1(char data, int address) {
-        L1Cache.setData(data, address);
+        int tag_bit = address & Utils.tagMask_l1;
+        int index_bit = address & Utils.indexMask_l1;
+        L1Cache.setTagArray(tag_bit, index_bit);
+        L1Cache.setData(data, index_bit);
     }
     private void writeToL2(char data, int address) {
-        L2Cache.setData(data, address);
+        int tag_bit = address & Utils.tagMask_l2;
+        int index_bit = address & Utils.indexMask_l2;
+        L2Cache.setTagArray(tag_bit, index_bit);
+        L2Cache.setData(data, index_bit);
     }
     private void writeToDRAM(char data, int address){
+        while (DRAM.getCounter() != 0){
+            DRAM.delayCounter();
+        }
         DRAM.setData(data, address);
     }
     
@@ -133,10 +142,7 @@ public class Memory {
                 return currLevel;
             }
         } 
-        
-       return(addressInDRAM(address));
+        return(addressInDRAM(address));
     }
-
-
-
+    
 }

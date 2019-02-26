@@ -21,6 +21,7 @@ public class Memory {
     public Memory() {   this(true); }
     
     public Memory(boolean cacheEnabled) {
+        this.memoryCycleCount = 0;
         this.cacheEnabled = cacheEnabled;
         if (cacheEnabled){
             DRAM    = new Cache(Utils.size_DRAM , null      , Utils.wait_DRAM   , 0); 
@@ -55,7 +56,7 @@ public class Memory {
         while (pointer.getHeirarchy() != exists){
             pointer = pointer.getNextCache();
         }
-        this.memoryCycleCount += pointer.getmemoryCycleCount();
+        this.memoryCycleCount += pointer.getWaitCycles();
  
         if (pointer.getHeirarchy() == 0){
            char readData = DRAM.getMemArray()[address];
@@ -100,7 +101,7 @@ public class Memory {
         L2Cache.setData(data, index_bit);
     }
     private void writeToDRAM(char data, int address){
-        this.memoryCycleCount += DRAM.getmemoryCycleCount();
+        this.memoryCycleCount += DRAM.getWaitCycles();
         DRAM.setData(data, address);
     }
     
@@ -141,5 +142,7 @@ public class Memory {
         } 
         return(addressInDRAM(address));
     }
+    
+    public int getMemoryCycleCount()    {   return this.memoryCycleCount;   }
     
 }

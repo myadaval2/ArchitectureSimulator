@@ -14,7 +14,6 @@ public class Cache {
     private int sizeOfMemory;
     private Cache lowerLevelMemory;
     private int waitCycles;
-    private int counter;
     private char[] mem_array;
     private int[] tag_array;
     private int heirarchy;
@@ -23,21 +22,15 @@ public class Cache {
         this.sizeOfMemory = sizeOfMemory;
         this.lowerLevelMemory = lowerLevelMemory;
         this.waitCycles = waitCycles;
-        this.counter = waitCycles;
         this.heirarchy = heirarchy;
         
         this.mem_array = new char[sizeOfMemory];
         this.tag_array = new int[sizeOfMemory];
     }
-
-    public void delayCounter() {
-        this.counter = this.counter--;
-    }
     
     public int getHeirarchy()           {   return heirarchy;               }
     public int getSizeOfMemory()        {   return sizeOfMemory;            }
     public int getWaitCycles()          {   return waitCycles;              }
-    public int getCounter()             {   return counter;                 }
     public char[] getMemArray()         {   return mem_array;               }
     public int[] getTagArray()          {   return tag_array;               }
     public Cache getNextCache()         {   return lowerLevelMemory;        }

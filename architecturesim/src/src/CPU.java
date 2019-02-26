@@ -22,6 +22,13 @@ public class CPU {
     public Memory getMemory()   {       return memory;      }
     public int getClock()       {       return clock;       }
     
+    public void testCase1() {
+        memory.writeAddressInMemory((char) 0xffff, 0);
+        memory.writeAddressInMemory((char) 0xffff, 0x1ffff);
+        memory.writeAddressInMemory((char) 0xaaaa, 0);
+        System.out.println(memory.getMemoryCycleCount());
+    }
+    
     // During MEM stage CPU.clock += memory.getmemoryCycleCount();
     
 }

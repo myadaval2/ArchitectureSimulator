@@ -35,7 +35,7 @@ public class Memory {
         }
     }
     
-    public void writeAddressInMemory(char data, int address) throws NoSuchMemoryLocationException{
+    public void writeAddressInMemory(char data, int address) {//throws NoSuchMemoryLocationException{
         if (cacheEnabled){
             writeToL1(data, address);
             writeToL2(data, address);

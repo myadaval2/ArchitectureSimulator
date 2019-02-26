@@ -278,8 +278,11 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void RunButton(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RunButton
         // TODO add your handling code here:
-        Driver driver = new Driver();
-        // redraw table based on current values in pull down menus for cache and address range
+        // Driver driver = new Driver();
+        cpu = new CPU();
+        System.out.println("Starting Running Tests");
+        cpu.testCase1();
+        System.out.println("Finished Running Tests");
     }//GEN-LAST:event_RunButton
 
     private void AddressRangeDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddressRangeDropDownActionPerformed
@@ -295,7 +298,7 @@ public class MainWindow extends javax.swing.JFrame {
         String [] columnNames = {"Address", "Instruction"};
         if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
             case "DRAM":
-            memoryArraySegment = dm.getMemoryPage(cpu.getMemory().DRAM.getMemArray(), cpu.getMemory().DRAM.getTagArray(), cpu.getMemory().DRAM.getHeirarchy(), memoryPage);
+            memoryArraySegment = dm.getMemoryPage(cpu.getMemory().DRAM.getMemArray(), cpu.getMemory().DRAM.getTagArray(), memoryPage);
             MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                 memoryArraySegment,
                 columnNames
@@ -303,7 +306,7 @@ public class MainWindow extends javax.swing.JFrame {
             {public boolean isCellEditable(int row, int column){return false;}}
         );  break;
         case "L2 Cache":
-        memoryArraySegment = dm.getMemoryPage(cpu.getMemory().L2Cache.getMemArray(), cpu.getMemory().L2Cache.getTagArray(), cpu.getMemory().L2Cache.getHeirarchy(), memoryPage);
+        memoryArraySegment = dm.getMemoryPage(cpu.getMemory().L2Cache.getMemArray(), cpu.getMemory().L2Cache.getTagArray(), memoryPage);
         MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
             memoryArraySegment,
             columnNames
@@ -311,7 +314,7 @@ public class MainWindow extends javax.swing.JFrame {
         {public boolean isCellEditable(int row, int column){return false;}}
         );  break;
         case "L1 Cache":
-        memoryArraySegment = dm.getMemoryPage(cpu.getMemory().L1Cache.getMemArray(), cpu.getMemory().L1Cache.getTagArray(), cpu.getMemory().L1Cache.getHeirarchy(), memoryPage);
+        memoryArraySegment = dm.getMemoryPage(cpu.getMemory().L1Cache.getMemArray(), cpu.getMemory().L1Cache.getTagArray(), memoryPage);
         MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
             memoryArraySegment,
             columnNames
@@ -374,7 +377,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
     }
 
-    CPU cpu = new CPU();
+    CPU cpu;
     DisplayMemory dm = new DisplayMemory();
     // cpu.MemorySet.L1Cache.getMemArray();
     // cpu.MemorySet.L2Cache.getMemArray();

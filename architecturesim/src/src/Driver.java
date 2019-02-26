@@ -24,7 +24,7 @@ public class Driver {
     }
     
     public static void main(String[] args){
-        CPU cpu = new CPU();
-        System.out.println("Booting up...");
+        // CPU cpu = new CPU();
+        
     }
 }

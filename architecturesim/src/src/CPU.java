@@ -20,7 +20,7 @@ public class CPU {
     }
     
     public Memory getMemory()   {       return memory;      }
-    public int getClock()       {       return clock;       }
+    public int getClock()       {       return memory.getMemoryCycleCount();       }
     
     public void testCase1() {
         memory.writeAddressInMemory((char) 0xffff, 0);

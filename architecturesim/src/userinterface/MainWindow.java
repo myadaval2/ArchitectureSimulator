@@ -52,6 +52,8 @@ public class MainWindow extends javax.swing.JFrame {
         memoryScrollPane = new javax.swing.JScrollPane();
         MemoryViewer = new javax.swing.JTable();
         RunButtonLabel = new javax.swing.JButton();
+        clockTextBox = new javax.swing.JTextField();
+        clockLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -241,6 +243,14 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        clockTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clockTextBoxActionPerformed(evt);
+            }
+        });
+
+        clockLabel.setText("Clock Clycles");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -252,18 +262,24 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(ProjectNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(176, 176, 176)
-                        .addComponent(RunButtonLabel)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(RunButtonLabel)
+                        .addGap(26, 26, 26)
+                        .addComponent(clockLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clockTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(179, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(RunButtonLabel)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(ProjectNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(ProjectNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(RunButtonLabel)
+                        .addComponent(clockTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(clockLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -283,6 +299,7 @@ public class MainWindow extends javax.swing.JFrame {
         System.out.println("Starting Running Tests");
         cpu.testCase1();
         System.out.println("Finished Running Tests");
+        clockTextBox.setText(Integer.toString(cpu.getClock()));
     }//GEN-LAST:event_RunButton
 
     private void AddressRangeDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddressRangeDropDownActionPerformed
@@ -342,6 +359,11 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_CacheLevelNameDropDownActionPerformed
 
+    private void clockTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockTextBoxActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_clockTextBoxActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -396,6 +418,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel cacheButtonsLabel;
     private javax.swing.JRadioButton cacheDisabledButton;
     private javax.swing.JRadioButton cacheEnabledButton;
+    private javax.swing.JLabel clockLabel;
+    private javax.swing.JTextField clockTextBox;
     private javax.swing.JPanel leftPanel;
     private javax.swing.JPanel memoryPanel;
     private javax.swing.JScrollPane memoryScrollPane;

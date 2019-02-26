@@ -12,11 +12,16 @@ package src;
 public class CPU {
 
     private Memory memory;
+    private int clock;
 
     public CPU() {
         memory = new Memory();
+        clock = 0;
     }
     
-    public Memory getMemory(){      return memory;      }
+    public Memory getMemory()   {       return memory;      }
+    public int getClock()       {       return clock;       }
+    
+    // During MEM stage CPU.clock += memory.getmemoryCycleCount();
     
 }

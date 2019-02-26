@@ -16,6 +16,7 @@ public class Memory {
     public Cache DRAM;
     private Cache headPointer;
     private boolean cacheEnabled;
+    private int memoryCycleCount;
     
     public Memory() {   this(true); }
     
@@ -54,17 +55,15 @@ public class Memory {
         while (pointer.getHeirarchy() != exists){
             pointer = pointer.getNextCache();
         }
-        while (pointer.getCounter() != 0){
-            pointer.delayCounter();
-        } 
+        this.memoryCycleCount += pointer.getmemoryCycleCount();
  
         if (pointer.getHeirarchy() == 0){
-           char temp = DRAM.getMemArray()[address];
+           char readData = DRAM.getMemArray()[address];
            if (cacheEnabled){
-                writeToL1(temp, address);
-                writeToL2(temp, address);  
+                writeToL1(readData, address);
+                writeToL2(readData, address);  
            }
-           return temp;  
+           return readData;  
         }  
         else {
             char MASK_INDEX = 0;
@@ -101,9 +100,7 @@ public class Memory {
         L2Cache.setData(data, index_bit);
     }
     private void writeToDRAM(char data, int address){
-        while (DRAM.getCounter() != 0){
-            DRAM.delayCounter();
-        }
+        this.memoryCycleCount += DRAM.getmemoryCycleCount();
         DRAM.setData(data, address);
     }
     

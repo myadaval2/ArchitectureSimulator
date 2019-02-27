@@ -44,7 +44,7 @@
                       <Component id="clockTextBox" min="-2" pref="73" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="179" max="32767" attributes="0"/>
+              <EmptySpace pref="151" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -81,11 +81,11 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="memoryPanel" min="-2" max="-2" attributes="0"/>
-                      <Component id="simulationSettingsPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="simulationSettingsPanel" max="32767" attributes="0"/>
+                      <Component id="memoryPanel" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="342" max="32767" attributes="0"/>
               </Group>
@@ -95,8 +95,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace pref="10" max="32767" attributes="0"/>
-                  <Component id="simulationSettingsPanel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="simulationSettingsPanel" min="-2" pref="122" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="memoryPanel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="101" max="32767" attributes="0"/>
               </Group>
@@ -105,6 +105,13 @@
       </Layout>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="simulationSettingsPanel">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder title="Simulator Settings"/>
+              </Border>
+            </Property>
+          </Properties>
 
           <Layout>
             <DimensionLayout dim="0">
@@ -114,7 +121,7 @@
                       <Component id="CacheEnabledBox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="PipelineEnabledBox" min="-2" pref="210" max="-2" attributes="0"/>
-                      <EmptySpace pref="16" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -251,6 +258,14 @@
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="memoryPanel">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder title="Memory Viewer"/>
+              </Border>
+            </Property>
+            <Property name="name" type="java.lang.String" value="" noResource="true"/>
+          </Properties>
 
           <Layout>
             <DimensionLayout dim="0">

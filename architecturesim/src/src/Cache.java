@@ -44,13 +44,3 @@ public class Cache {
 }
 
 
-class NoSuchMemoryLocationException extends Exception {
-    int address;
-    public NoSuchMemoryLocationException(int address){
-        this.address = address;
-        System.out.println("No such memory location exists: "+ address);
-    }
-    public NoSuchMemoryLocationException(){
-        System.out.println("No such memory location exists");
-    }
-}

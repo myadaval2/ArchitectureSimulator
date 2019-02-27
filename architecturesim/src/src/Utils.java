@@ -18,7 +18,7 @@ public class Utils {
     public static final int wait_l2           =   30;
     public static final int wait_DRAM         =   100;
     
-    public static final int tagMask_l1        =   0x18000; //49152 0b1100 0000 0000 0000
+    public static final int tagMask_l1        =   0x18000; //
     public static final char indexMask_l1     =   0x7FFF; // BINARY 0011 1111 1111 1111
     
     public static final int tagMask_l2        =   0x10000;

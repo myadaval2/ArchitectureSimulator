@@ -204,15 +204,14 @@ public class MainWindow extends javax.swing.JFrame {
         memoryPanelLayout.setVerticalGroup(
             memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(memoryPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(9, Short.MAX_VALUE)
                 .addGroup(memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CacheLevelLabel)
                     .addComponent(CacheLevelNameDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(AddressPageLabel)
                     .addComponent(AddressRangeDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(memoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 572, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addComponent(memoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
@@ -229,11 +228,10 @@ public class MainWindow extends javax.swing.JFrame {
         leftPanelLayout.setVerticalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(leftPanelLayout.createSequentialGroup()
-                .addContainerGap(10, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(simulationSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(memoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addComponent(memoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         RunButtonLabel.setText("Run");
@@ -273,7 +271,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(clockLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(clockTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,7 +285,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(clockLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
@@ -302,7 +300,7 @@ public class MainWindow extends javax.swing.JFrame {
         // Driver driver = new Driver();
 //        cpu = new CPU();
 //        clockTextBox.setText(Integer.toString(cpu.getClock()));
-        Driver d = new Driver();
+        d = new Driver();
     }//GEN-LAST:event_RunButton
 
     private void AddressRangeDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddressRangeDropDownActionPerformed
@@ -318,7 +316,7 @@ public class MainWindow extends javax.swing.JFrame {
         String [] columnNames = {"Address", "Instruction"};
         if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
             case "DRAM":
-            memoryArraySegment = dm.getMemoryPage(cpu.getMemory().DRAM.getMemArray(), cpu.getMemory().DRAM.getTagArray(), memoryPage);
+            memoryArraySegment = dm.getMemoryPage(d.memoryEnabled.DRAM.getMemArray(), d.memoryEnabled.DRAM.getTagArray(), memoryPage);
             MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                 memoryArraySegment,
                 columnNames
@@ -326,7 +324,7 @@ public class MainWindow extends javax.swing.JFrame {
             {public boolean isCellEditable(int row, int column){return false;}}
         );  break;
         case "L2 Cache":
-        memoryArraySegment = dm.getMemoryPage(cpu.getMemory().L2Cache.getMemArray(), cpu.getMemory().L2Cache.getTagArray(), memoryPage);
+        memoryArraySegment = dm.getMemoryPage(d.memoryEnabled.L2Cache.getMemArray(), d.memoryEnabled.L2Cache.getTagArray(), memoryPage);
         MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
             memoryArraySegment,
             columnNames
@@ -334,7 +332,7 @@ public class MainWindow extends javax.swing.JFrame {
         {public boolean isCellEditable(int row, int column){return false;}}
         );  break;
         case "L1 Cache":
-        memoryArraySegment = dm.getMemoryPage(cpu.getMemory().L1Cache.getMemArray(), cpu.getMemory().L1Cache.getTagArray(), memoryPage);
+        memoryArraySegment = dm.getMemoryPage(d.memoryEnabled.L1Cache.getMemArray(), d.memoryEnabled.L1Cache.getTagArray(), memoryPage);
         MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
             memoryArraySegment,
             columnNames
@@ -398,11 +396,13 @@ public class MainWindow extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainWindow().setVisible(true);
+               
             }
         });
     }
 
-    CPU cpu;
+    Driver d;
+    CPU cpu = new CPU();
     DisplayMemory dm = new DisplayMemory();
     // cpu.MemorySet.L1Cache.getMemArray();
     // cpu.MemorySet.L2Cache.getMemArray();

@@ -11,28 +11,33 @@ package src;
  */
 
 public class Driver {
-
+    public Memory memoryEnabled;
+    public Memory memoryDisabled;
 
     public Driver(){
-        memoryDemo();
+        memoryEnabled = new Memory(true);
+        memoryDisabled = new Memory(false);
+        memoryDemo(memoryEnabled, memoryDisabled);
     }
     
-    public static void main(String[] args){
-        directCompare();
-    }
+    //public static void main(String[] args){
+    //    directCompare(memoryEnabled, memoryDisabled);
+    //}
     
-    public static void memoryDemo(){
+    public void memoryDemo(Memory memoryEnabled, Memory memoryDisabled){
         System.out.println("Demo 1: Cache disabled");
-        memoryDemo1();
+        memoryDemo1(memoryDisabled);
         
         System.out.println("Demo 2: Cache enabled");
-        memoryDemo2();
+        memoryDemo2(memoryEnabled);
+        
+        System.out.println("DirectCompare Test");
+        directCompare(memoryEnabled, memoryDisabled);
     }
     
     
-    public static void directCompare(){
-        Memory memoryEnabled = new Memory(true);
-        Memory memoryDisabled = new Memory(false);
+    public static void directCompare(Memory memoryEnabled, Memory memoryDisabled){
+        
         try {
             memoryEnabled.writeAddressInMemory((char) 10, 0);
             memoryEnabled.writeAddressInMemory((char) 11, 1);
@@ -80,8 +85,9 @@ public class Driver {
         
     }
     
-    public static void memoryDemo2(){
-        Memory memory = new Memory(true);
+    public static void memoryDemo2(Memory memoryEnabled){
+        // Memory memory = new Memory(true);
+        Memory memory = memoryEnabled; //new Memory(true);
         try {
             System.out.println("Cycle count: " + memory.getMemoryCycleCount());
             memory.writeAddressInMemory((char) 0xffff, 0);
@@ -106,8 +112,9 @@ public class Driver {
             System.out.println("Test Failed");
         }
     }
-    public static void memoryDemo1(){
-        Memory memory = new Memory(false);
+    public static void memoryDemo1(Memory memoryDisabled){
+        // Memory memory = new Memory(false);
+        Memory memory = memoryDisabled;
         try {
             System.out.println("Cycle count: " + memory.getMemoryCycleCount());
             memory.writeAddressInMemory((char) 0xffff, 0);

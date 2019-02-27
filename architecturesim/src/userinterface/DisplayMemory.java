@@ -25,7 +25,6 @@ public class DisplayMemory {
     }
     
     public Object[][] getMemoryPage(char[] fullMemoryArray, int[] tagArray, int pageNum) {
-        //Object[] fma = (Object[]) fullMemoryArray;
         int arraySize = 64;
         int addressValue;
         int startIndex = pageNum*arraySize;

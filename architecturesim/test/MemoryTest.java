@@ -18,7 +18,10 @@ public class MemoryTest {
     
     public MemoryTest() {
     }
-   
+    @Before
+    public void setup(){
+        
+    }
     /**
      * Test of trivial getClock example, of class CPU.
      */
@@ -61,7 +64,7 @@ public class MemoryTest {
         memory.writeAddressInMemory((char) 0xffff, 0x1fffd);
         assertEquals("CPU did not write correctly" , 536, memory.getMemoryCycleCount());
         memory.writeAddressInMemory((char) 0xffff, 0x1fffc);
-        assertEquals("CPU did not write correctly" , 670, memory.getMemoryCycleCount());;
+        assertEquals("CPU did not write correctly" , 670, memory.getMemoryCycleCount());
         memory.writeAddressInMemory((char) 0xaaaa, 0x7fff);
         assertEquals("CPU did not write correctly" , 804, memory.getMemoryCycleCount());
         memory.writeAddressInMemory((char) 0xaaaa, 0);

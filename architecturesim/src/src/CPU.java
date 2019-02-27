@@ -24,7 +24,7 @@ public class CPU {
     }
     public CPU(Memory memory){
         this.memory = memory;
-        this.clock = 0;
+        this.clock = memory.getMemoryCycleCount();
     }
     
     public Memory getMemory()   {       return this.memory;     }

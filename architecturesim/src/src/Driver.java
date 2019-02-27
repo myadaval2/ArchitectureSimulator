@@ -10,21 +10,65 @@ package src;
  * @author jjaikumar
  */
 
-// NOT ENABLED BY DEFAULT
 public class Driver {
 
 
     public Driver(){
-        main(new String[0]);
-        
-        // if data is not in L1Cache, when it is found and returned from DRAM, write it into the correct spot in cache
-        // access the same data again and should find it in the cache
-        
-        // how does L2 memory get populated? Does every L1Cache write just get trickled down to the lower levels?
     }
     
     public static void main(String[] args){
-        // CPU cpu = new CPU();
-        
+    }
+    
+    public static void memoryDemo1(){
+        Memory memory = new Memory(true);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xffff, 0);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xffff, 0x1ffff);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xffff, 0x1fffe);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xffff, 0x1fffd);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xffff, 0x1fffc);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xaaaa, 0x7fff);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xaaaa, 0);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        try {
+            System.out.println("Read address 0x7fff: " + memory.readAddressInMemory(0x7fff));
+            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+            System.out.println("Read address 0x1ffff: " + memory.readAddressInMemory(0x1ffff));
+            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        } catch (NoSuchMemoryLocationException e){
+            System.out.println("Test Failed");
+        }
+    }
+    public static void memoryDemo2(){
+        Memory memory = new Memory(false);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xffff, 0);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xffff, 0x1ffff);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xffff, 0x1fffe);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xffff, 0x1fffd);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xffff, 0x1fffc);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xaaaa, 0x7fff);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        memory.writeAddressInMemory((char) 0xaaaa, 0);
+        System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        try {
+            System.out.println("Read address 0x7fff: " + memory.readAddressInMemory(0x7fff));
+            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+            System.out.println("Read address 0x1ffff: " + memory.readAddressInMemory(0x1ffff));
+            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+        } catch (NoSuchMemoryLocationException e){
+            System.out.println("Test Failed");
+        }
     }
 }

@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.*;
 import src.CPU;
 import src.Memory;
-import src.Cache;
 import src.NoSuchMemoryLocationException;
 /**
  *
@@ -48,30 +47,30 @@ public class MemoryTest {
     }
     
     @Test
-    public void testReadWrite1() {
+    public void testReadWriteClock1() {
         System.out.println("Test read/write to address...");
         CPU instance = new CPU();
         Memory memory = instance.getMemory();
-        System.out.println("Clock cycle count: " + memory.getMemoryCycleCount());
+        assertEquals("CPU did not write correctly" , 0, memory.getMemoryCycleCount());
         memory.writeAddressInMemory((char) 0xffff, 0);
-        System.out.println("Clock cycle count: " + memory.getMemoryCycleCount());
+        assertEquals("CPU did not write correctly" , 134, memory.getMemoryCycleCount());
         memory.writeAddressInMemory((char) 0xffff, 0x1ffff);
-        System.out.println("Clock cycle count: " + memory.getMemoryCycleCount());
+        assertEquals("CPU did not write correctly" , 268, memory.getMemoryCycleCount());
         memory.writeAddressInMemory((char) 0xffff, 0x1fffe);
-        System.out.println("Clock cycle count: " + memory.getMemoryCycleCount());
+        assertEquals("CPU did not write correctly" , 402, memory.getMemoryCycleCount());
         memory.writeAddressInMemory((char) 0xffff, 0x1fffd);
-        System.out.println("Clock cycle count: " + memory.getMemoryCycleCount());
+        assertEquals("CPU did not write correctly" , 536, memory.getMemoryCycleCount());
         memory.writeAddressInMemory((char) 0xffff, 0x1fffc);
-        System.out.println("Clock cycle count: " + memory.getMemoryCycleCount());
+        assertEquals("CPU did not write correctly" , 670, memory.getMemoryCycleCount());;
         memory.writeAddressInMemory((char) 0xaaaa, 0x7fff);
-        System.out.println("Clock cycle count: " + memory.getMemoryCycleCount());
+        assertEquals("CPU did not write correctly" , 804, memory.getMemoryCycleCount());
         memory.writeAddressInMemory((char) 0xaaaa, 0);
-        System.out.println("Clock cycle count: " + memory.getMemoryCycleCount());
+        assertEquals("CPU did not write correctly" , 938, memory.getMemoryCycleCount());
         try {
-            System.out.println(memory.readAddressInMemory(0x7fff));
-            System.out.println("Clock cycle count: " + memory.getMemoryCycleCount());
-            System.out.println(memory.readAddressInMemory(0x1ffff));
-            System.out.println("Clock cycle count: " + memory.getMemoryCycleCount());
+            assertEquals("CPU did not read correctly" , 43690, memory.readAddressInMemory(0x7fff));
+            assertEquals("CPU did not read correctly" , 942, memory.getMemoryCycleCount());
+            assertEquals("CPU did not read correctly" , 65535, memory.readAddressInMemory(0x1ffff));
+            assertEquals("CPU did not read correctly" , 972, memory.getMemoryCycleCount());
         } catch (NoSuchMemoryLocationException e){
             System.out.println("Test Failed");
         }

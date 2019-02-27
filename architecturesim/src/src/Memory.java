@@ -11,26 +11,26 @@ package src;
  */
 public class Memory {
     
-    public Cache L1Cache;
-    public Cache L2Cache;
-    public Cache DRAM;
-    private Cache headPointer;
+    public Cache    L1Cache;
+    public Cache    L2Cache;
+    public Cache    DRAM;
+    private Cache   headPointer;
     private boolean cacheEnabled;
-    private int memoryCycleCount;
+    private int     memoryCycleCount;
     
-    public Memory() {   this(true); }
+    public Memory() {   this(true);     }
     
     public Memory(boolean cacheEnabled) {
         this.memoryCycleCount = 0;
         this.cacheEnabled = cacheEnabled;
         if (cacheEnabled){
-            DRAM    = new Cache(Utils.size_DRAM , null      , Utils.wait_DRAM   , 0); 
-            L2Cache = new Cache(Utils.size_l2   , DRAM      , Utils.wait_l2     , 1); 
-            L1Cache = new Cache(Utils.size_l1   , L2Cache   , Utils.wait_l1     , 2);
+            DRAM    = new Cache(Utils.SIZE_DRAM , null      , Utils.WAIT_DRAM   , 0); 
+            L2Cache = new Cache(Utils.SIZE_L2   , DRAM      , Utils.WAIT_L2     , 1); 
+            L1Cache = new Cache(Utils.SIZE_L1   , L2Cache   , Utils.WAIT_L1     , 2);
         
             headPointer = L1Cache;
         } else {
-            DRAM = new Cache(Utils.size_DRAM, null, Utils.wait_DRAM, 0);
+            DRAM = new Cache(Utils.SIZE_DRAM, null, Utils.WAIT_DRAM, 0);
             headPointer = DRAM;
         }
     }
@@ -69,10 +69,10 @@ public class Memory {
         else {
             char MASK_INDEX = 0;
             if (pointer.getHeirarchy() == 2) { // L1 Cache
-                MASK_INDEX = Utils.indexMask_l1; 
+                MASK_INDEX = Utils.INDEX_MASK_L1; 
                 
             } else { //  L2 Cache
-                MASK_INDEX = Utils.indexMask_l2; 
+                MASK_INDEX = Utils.INDEX_MASK_L2; 
             }
             int index_bit = address & MASK_INDEX;
                 
@@ -89,15 +89,15 @@ public class Memory {
     }
     
     private void writeToL1(char data, int address) {
-        int tag_bit = address & Utils.tagMask_l1;
-        int index_bit = address & Utils.indexMask_l1;
+        int tag_bit = address & Utils.TAG_MASK_L1;
+        int index_bit = address & Utils.INDEX_MASK_L1;
         L1Cache.setTagArray(tag_bit, index_bit);
         L1Cache.setData(data, index_bit);
         this.memoryCycleCount += L1Cache.getWaitCycles();
     }
     private void writeToL2(char data, int address) {
-        int tag_bit = address & Utils.tagMask_l2;
-        int index_bit = address & Utils.indexMask_l2;
+        int tag_bit = address & Utils.TAG_MASK_L2;
+        int index_bit = address & Utils.INDEX_MASK_L2;
         L2Cache.setTagArray(tag_bit, index_bit);
         L2Cache.setData(data, index_bit);
         this.memoryCycleCount += L2Cache.getWaitCycles();
@@ -125,8 +125,8 @@ public class Memory {
         int currLevel = currPointer.getHeirarchy();
         
         if (currLevel == 2){
-            int tag_bit = address & Utils.tagMask_l1;
-            int index_bit = address & Utils.indexMask_l1;
+            int tag_bit = address & Utils.TAG_MASK_L1;
+            int index_bit = address & Utils.INDEX_MASK_L1;
             
             if (tag_bit == currPointer.getTagArray()[index_bit]){
                 return currLevel;
@@ -135,8 +135,8 @@ public class Memory {
         currPointer = currPointer.getNextCache();
         currLevel = currPointer.getHeirarchy();
         if (currLevel == 1){          
-            int tag_bit = address & Utils.tagMask_l2;
-            int index_bit = address & Utils.indexMask_l2;
+            int tag_bit = address & Utils.TAG_MASK_L2;
+            int index_bit = address & Utils.INDEX_MASK_L2;
                 
             if (tag_bit == currPointer.getTagArray()[index_bit]){
                 return currLevel;

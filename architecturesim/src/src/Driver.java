@@ -13,11 +13,9 @@ package src;
 public class Driver {
 
 
-    public Driver(){
-    }
+    public Driver(){}
     
-    public static void main(String[] args){
-    }
+    public static void main(String[] args){}
     
     public static void memoryDemo1(){
         Memory memory = new Memory(true);

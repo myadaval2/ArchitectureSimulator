@@ -11,20 +11,18 @@ package src;
  */
 public class CPU {
 
-    private Memory memory;
-    private int clock;
+    private Memory  memory;
+    private int     clock;
 
-    public CPU() {
-        this(true);
-    }
+    public CPU() {      this(true);     }
     
     public CPU(boolean cacheEnabled){
-        this.memory = new Memory(cacheEnabled);
-        this.clock = 0;
+        this.memory     = new Memory(cacheEnabled);
+        this.clock      = 0;
     }
     public CPU(Memory memory){
-        this.memory = memory;
-        this.clock = memory.getMemoryCycleCount();
+        this.memory     = memory;
+        this.clock      = memory.getMemoryCycleCount();
     }
     
     public Memory getMemory()   {       return this.memory;     }

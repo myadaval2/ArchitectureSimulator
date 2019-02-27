@@ -11,21 +11,20 @@ package src;
  */
 public class Cache {
     
-    private int sizeOfMemory;
-    private Cache lowerLevelMemory;
-    private int waitCycles;
-    private char[] mem_array;
-    private int[] tag_array;
-    private int heirarchy;
+    private final int       sizeOfMemory;
+    private final Cache     lowerLevelMemory;
+    private final int       waitCycles;
+    private final char[]    mem_array;
+    private final int[]     tag_array;
+    private final int       heirarchy;
     
     public Cache(int sizeOfMemory, Cache lowerLevelMemory, int waitCycles, int heirarchy) {
-        this.sizeOfMemory = sizeOfMemory;
-        this.lowerLevelMemory = lowerLevelMemory;
-        this.waitCycles = waitCycles;
-        this.heirarchy = heirarchy;
-        
-        this.mem_array = new char[sizeOfMemory];
-        this.tag_array = new int[sizeOfMemory];
+        this.sizeOfMemory       = sizeOfMemory;
+        this.lowerLevelMemory   = lowerLevelMemory;
+        this.waitCycles         = waitCycles;
+        this.heirarchy          = heirarchy;  
+        this.mem_array          = new char[sizeOfMemory];
+        this.tag_array          = new int[sizeOfMemory];
     }
     
     public int getHeirarchy()           {   return heirarchy;               }
@@ -35,9 +34,11 @@ public class Cache {
     public int[] getTagArray()          {   return tag_array;               }
     public Cache getNextCache()         {   return lowerLevelMemory;        }
     public char getData(int address)    {   return this.mem_array[address]; }
+    
     public void setTagArray(int data, int address)   {   
         this.tag_array[address] = data; 
     }
+    
     public void setData(char data, int address){
         this.mem_array[address] = data;
     }

@@ -33,14 +33,25 @@ public class MemoryTest {
         int result = instance.getClock();
         assertEquals("CPU did not initialize Clock correctly" ,expResult, result);
     }
+    
+    @Test
+    public void testResetClock() {
+        System.out.println("Test Reset clock...");
+        Memory mem = new Memory();
+        mem.writeAddressInMemory((char)0xffff, 0);
+        CPU instance = new CPU(mem);
+        instance.resetClock();
+        int expResult = 0;
+        int result = instance.getClock();
+        assertEquals("CPU did not reset Clock correctly" ,expResult, result);
+    }
     /**
      * Test of trivial getClock example, of class CPU.
      */
     @Test
     public void testWrite3LocationsClock() {
         System.out.println("Test write to address...");
-        CPU instance = new CPU();
-        Memory mem = instance.getMemory();
+        Memory mem = new Memory();
         mem.writeAddressInMemory((char) 0xffff, 0);
         mem.writeAddressInMemory((char) 0xffff, 0x1ffff);
         mem.writeAddressInMemory((char) 0xaaaa, 0);
@@ -52,8 +63,7 @@ public class MemoryTest {
     @Test
     public void testReadWriteClock1() {
         System.out.println("Test read/write to address...");
-        CPU instance = new CPU();
-        Memory memory = instance.getMemory();
+        Memory memory = new Memory();
         assertEquals("CPU did not write correctly" , 0, memory.getMemoryCycleCount());
         memory.writeAddressInMemory((char) 0xffff, 0);
         assertEquals("CPU did not write correctly" , 134, memory.getMemoryCycleCount());

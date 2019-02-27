@@ -296,9 +296,6 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         // Driver driver = new Driver();
         cpu = new CPU();
-        System.out.println("Starting Running Tests");
-        cpu.testCase1();
-        System.out.println("Finished Running Tests");
         clockTextBox.setText(Integer.toString(cpu.getClock()));
     }//GEN-LAST:event_RunButton
 

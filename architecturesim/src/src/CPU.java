@@ -15,20 +15,20 @@ public class CPU {
     private int clock;
 
     public CPU() {
-        memory = new Memory();
-        clock = 0;
+        this(true);
     }
     
-    public Memory getMemory()   {       return memory;      }
-    public int getClock()       {       return memory.getMemoryCycleCount();       }
-    
-    public void testCase1() {
-        memory.writeAddressInMemory((char) 0xffff, 0);
-        memory.writeAddressInMemory((char) 0xffff, 0x1ffff);
-        memory.writeAddressInMemory((char) 0xaaaa, 0);
-        System.out.println(memory.getMemoryCycleCount());
+    public CPU(boolean cacheEnabled){
+        this.memory = new Memory(cacheEnabled);
+        this.clock = 0;
+    }
+    public CPU(Memory memory){
+        this.memory = memory;
+        this.clock = 0;
     }
     
-    // During MEM stage CPU.clock += memory.getmemoryCycleCount();
+    public Memory getMemory()   {       return this.memory;     }
+    public int getClock()       {       return this.clock;      }
+    public void resetClock()    {       this.clock = 0;         }
     
 }

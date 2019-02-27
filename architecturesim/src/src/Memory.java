@@ -93,12 +93,14 @@ public class Memory {
         int index_bit = address & Utils.indexMask_l1;
         L1Cache.setTagArray(tag_bit, index_bit);
         L1Cache.setData(data, index_bit);
+        this.memoryCycleCount += L1Cache.getWaitCycles();
     }
     private void writeToL2(char data, int address) {
         int tag_bit = address & Utils.tagMask_l2;
         int index_bit = address & Utils.indexMask_l2;
         L2Cache.setTagArray(tag_bit, index_bit);
         L2Cache.setData(data, index_bit);
+        this.memoryCycleCount += L2Cache.getWaitCycles();
     }
     private void writeToDRAM(char data, int address){
         this.memoryCycleCount += DRAM.getWaitCycles();

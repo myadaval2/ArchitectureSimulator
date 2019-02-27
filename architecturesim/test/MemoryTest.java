@@ -38,7 +38,12 @@ public class MemoryTest {
     public void testResetClock() {
         System.out.println("Test Reset clock...");
         Memory mem = new Memory();
-        mem.writeAddressInMemory((char)0xffff, 0);
+        try{
+            mem.writeAddressInMemory((char)0xffff, 0);
+        } catch (Exception e){
+            
+        }
+        
         CPU instance = new CPU(mem);
         instance.resetClock();
         int expResult = 0;
@@ -52,9 +57,13 @@ public class MemoryTest {
     public void testWrite3LocationsClock() {
         System.out.println("Test write to address...");
         Memory mem = new Memory();
+        try {
         mem.writeAddressInMemory((char) 0xffff, 0);
         mem.writeAddressInMemory((char) 0xffff, 0x1ffff);
         mem.writeAddressInMemory((char) 0xaaaa, 0);
+        } catch (Exception e){
+            
+        }
         int expResult = 402;
         int result = mem.getMemoryCycleCount();
         assertEquals("CPU did not write correctly" ,expResult, result);
@@ -64,22 +73,22 @@ public class MemoryTest {
     public void testReadWriteClock1() {
         System.out.println("Test read/write to address...");
         Memory memory = new Memory();
-        assertEquals("CPU did not write correctly" , 0, memory.getMemoryCycleCount());
-        memory.writeAddressInMemory((char) 0xffff, 0);
-        assertEquals("CPU did not write correctly" , 134, memory.getMemoryCycleCount());
-        memory.writeAddressInMemory((char) 0xffff, 0x1ffff);
-        assertEquals("CPU did not write correctly" , 268, memory.getMemoryCycleCount());
-        memory.writeAddressInMemory((char) 0xffff, 0x1fffe);
-        assertEquals("CPU did not write correctly" , 402, memory.getMemoryCycleCount());
-        memory.writeAddressInMemory((char) 0xffff, 0x1fffd);
-        assertEquals("CPU did not write correctly" , 536, memory.getMemoryCycleCount());
-        memory.writeAddressInMemory((char) 0xffff, 0x1fffc);
-        assertEquals("CPU did not write correctly" , 670, memory.getMemoryCycleCount());
-        memory.writeAddressInMemory((char) 0xaaaa, 0x7fff);
-        assertEquals("CPU did not write correctly" , 804, memory.getMemoryCycleCount());
-        memory.writeAddressInMemory((char) 0xaaaa, 0);
-        assertEquals("CPU did not write correctly" , 938, memory.getMemoryCycleCount());
         try {
+            assertEquals("CPU did not write correctly" , 0, memory.getMemoryCycleCount());
+            memory.writeAddressInMemory((char) 0xffff, 0);
+            assertEquals("CPU did not write correctly" , 134, memory.getMemoryCycleCount());
+            memory.writeAddressInMemory((char) 0xffff, 0x1ffff);
+            assertEquals("CPU did not write correctly" , 268, memory.getMemoryCycleCount());
+            memory.writeAddressInMemory((char) 0xffff, 0x1fffe);
+            assertEquals("CPU did not write correctly" , 402, memory.getMemoryCycleCount());
+            memory.writeAddressInMemory((char) 0xffff, 0x1fffd);
+            assertEquals("CPU did not write correctly" , 536, memory.getMemoryCycleCount());
+            memory.writeAddressInMemory((char) 0xffff, 0x1fffc);
+            assertEquals("CPU did not write correctly" , 670, memory.getMemoryCycleCount());
+            memory.writeAddressInMemory((char) 0xaaaa, 0x7fff);
+            assertEquals("CPU did not write correctly" , 804, memory.getMemoryCycleCount());
+            memory.writeAddressInMemory((char) 0xaaaa, 0);
+            assertEquals("CPU did not write correctly" , 938, memory.getMemoryCycleCount());
             assertEquals("CPU did not read correctly" , 43690, memory.readAddressInMemory(0x7fff));
             assertEquals("CPU did not read correctly" , 942, memory.getMemoryCycleCount());
             assertEquals("CPU did not read correctly" , 65535, memory.readAddressInMemory(0x1ffff));

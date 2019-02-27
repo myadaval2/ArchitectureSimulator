@@ -300,8 +300,9 @@ public class MainWindow extends javax.swing.JFrame {
     private void RunButton(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RunButton
         // TODO add your handling code here:
         // Driver driver = new Driver();
-        cpu = new CPU();
-        clockTextBox.setText(Integer.toString(cpu.getClock()));
+//        cpu = new CPU();
+//        clockTextBox.setText(Integer.toString(cpu.getClock()));
+        Driver d = new Driver();
     }//GEN-LAST:event_RunButton
 
     private void AddressRangeDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddressRangeDropDownActionPerformed

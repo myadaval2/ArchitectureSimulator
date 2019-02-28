@@ -34,10 +34,6 @@ public class DisplayMemory {
             for (int j = 0; j < 2; j++) {
                 if (j == 0) {
                     addressValue = tagArray[i] | i;
-//                    System.out.println(pageNum);
-//                    System.out.println(i);
-//                    System.out.println(tagArray[i]);
-//                    System.out.println(addressValue);
                     memoryArraySegment[i-startIndex][j] = (Object) Integer.toHexString(addressValue);
                     // memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(addressValue);
                 }

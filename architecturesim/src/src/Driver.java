@@ -20,19 +20,19 @@ public class Driver {
         memoryDemo(memoryEnabled, memoryDisabled);
     }
     
-    //public static void main(String[] args){
-    //    directCompare(memoryEnabled, memoryDisabled);
-    //}
+    public void main(String[] args){
+        directCompare(memoryEnabled, memoryDisabled);
+    }
     
     public void memoryDemo(Memory memoryEnabled, Memory memoryDisabled){
-//        System.out.println("Demo 1: Cache disabled");
-//        memoryDemo1(memoryDisabled);
+        System.out.println("Demo 1: Cache disabled");
+        memoryDemo1(memoryDisabled);
         
         System.out.println("Demo 2: Cache enabled");
         memoryDemo2(memoryEnabled);
         
-//        System.out.println("DirectCompare Test");
-//        directCompare(memoryEnabled, memoryDisabled);
+        System.out.println("DirectCompare Test");
+        directCompare(memoryEnabled, memoryDisabled);
     }
     
     

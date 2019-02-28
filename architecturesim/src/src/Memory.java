@@ -90,11 +90,9 @@ public class Memory {
     
     private void writeToL1(char data, int address) {
         int tag_bit = address & Utils.TAG_MASK_L1;
-        int index_bit = address & 0x1FFF;
+        int index_bit = address & Utils.INDEX_MASK_L1;
         L1Cache.setTagArray(tag_bit, index_bit);
         L1Cache.setData(data, index_bit);
-        System.out.println(address);
-        System.out.println(index_bit);
         this.memoryCycleCount += L1Cache.getWaitCycles();
     }
     private void writeToL2(char data, int address) {

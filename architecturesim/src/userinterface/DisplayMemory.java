@@ -24,16 +24,29 @@ public class DisplayMemory {
         }   
     }
     
-    public Object[][] getMemoryPage(char[] fullMemoryArray, int[] tagArray, int pageNum) {
+    public Object[][] getMemoryPage(String memoryLevel, char[] fullMemoryArray, int[] tagArray, int pageNum) {
         int tableSize = 64;
-        int addressValue;
+        int addressValue = 0;
         
         int startIndex = pageNum*tableSize;
         Object[][] memoryArraySegment = new Object[tableSize][2];
+        
         for (int i = startIndex; i < startIndex+tableSize; i++) {
+            if (null != memoryLevel) switch (memoryLevel) {
+                case "DRAM":
+                    addressValue = tagArray[i] | i;
+                    break;
+                case "L2Cache":
+                    addressValue = tagArray[i] | (i / Utils.N_SET);
+                    break;
+                case "L1Cache":
+                    addressValue = tagArray[i] | (i / Utils.N_SET);
+                    break;
+                default:
+                    break;
+            }
             for (int j = 0; j < 2; j++) {
                 if (j == 0) {
-                    addressValue = tagArray[i] | i;
                     memoryArraySegment[i-startIndex][j] = (Object) Integer.toHexString(addressValue);
                     // memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(addressValue);
                 }

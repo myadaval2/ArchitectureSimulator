@@ -25,14 +25,14 @@ public class Driver {
     }
     
     public void memoryDemo(Memory memoryEnabled, Memory memoryDisabled){
-        System.out.println("Demo 1: Cache disabled");
-        memoryDemo1(memoryDisabled);
+//        System.out.println("Demo 1: Cache disabled");
+//        memoryDemo1(memoryDisabled);
         
         System.out.println("Demo 2: Cache enabled");
         memoryDemo2(memoryEnabled);
         
-        System.out.println("DirectCompare Test");
-        directCompare(memoryEnabled, memoryDisabled);
+//        System.out.println("DirectCompare Test");
+//        directCompare(memoryEnabled, memoryDisabled);
     }
     
     
@@ -89,26 +89,40 @@ public class Driver {
         // Memory memory = new Memory(true);
         Memory memory = memoryEnabled; //new Memory(true);
         try {
-            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
-            memory.writeAddressInMemory((char) 0xffff, 0);
-            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
-            memory.writeAddressInMemory((char) 0xffff, 0x1ffff);
-            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
-            memory.writeAddressInMemory((char) 0xffff, 0x1fffe);
-            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
-            memory.writeAddressInMemory((char) 0xffff, 0x1fffd);
-            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+//            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+//            memory.writeAddressInMemory((char) 0xffff, 0);
+//            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+//            memory.writeAddressInMemory((char) 0xffff, 0x1ffff);
+//            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+//            memory.writeAddressInMemory((char) 0xffff, 0x1fffe);
+//            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+//            memory.writeAddressInMemory((char) 0xffff, 0x1fffd);
+//            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+            
+            memory.writeAddressInMemory((char) 0x0101, 0x00ffc);
             memory.writeAddressInMemory((char) 0xffff, 0x1fffc);
+            memory.writeAddressInMemory((char) 0xaaaa, 0x0fffc);
+            memory.writeAddressInMemory((char) 0xdead, 0x03ffc);
+            
+            memory.writeAddressInMemory((char) 0x0101, 0x03fff); 
+            memory.writeAddressInMemory((char) 0xffff, 0x07fff);
+            memory.readAddressInMemory(0x03fff);
+            memory.writeAddressInMemory((char) 0x00ff, 0x03fff); // left
+            memory.writeAddressInMemory((char) 0xaaaa, 0x17fff);
             System.out.println("Cycle count: " + memory.getMemoryCycleCount());
-            memory.writeAddressInMemory((char) 0xaaaa, 0x7fff);
-            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
-            memory.writeAddressInMemory((char) 0xaaaa, 0);
-            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
-            System.out.println("Read address 0x7fff: " + memory.readAddressInMemory(0x7fff));
-            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
-            System.out.println("Read address 0x1ffff: " + memory.readAddressInMemory(0x1ffff));
-            System.out.println("Read address 0x1fffe: " + memory.readAddressInMemory(0x1fffe));
-            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+            
+            // test case for write and read same address
+            
+//            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+//            memory.writeAddressInMemory((char) 0xaaaa, 0x7fff);
+//            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+//            memory.writeAddressInMemory((char) 0xaaaa, 0);
+//            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+//            System.out.println("Read address 0x7fff: " + memory.readAddressInMemory(0x7fff));
+//            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
+//            System.out.println("Read address 0x1ffff: " + memory.readAddressInMemory(0x1ffff));
+//            System.out.println("Read address 0x1fffe: " + memory.readAddressInMemory(0x1fffe));
+//            System.out.println("Cycle count: " + memory.getMemoryCycleCount());
         } catch (NoSuchMemoryLocationException e){
             System.out.println("Test Failed");
         }

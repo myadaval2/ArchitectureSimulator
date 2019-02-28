@@ -67,17 +67,27 @@ public class Memory {
            return readData;  
         }  
         else {
-            char MASK_INDEX = 0;
+            int MASK_INDEX = 0;
+            int MASK_TAG = 0;
             if (pointer.getHeirarchy() == 2) { // L1 Cache
-                MASK_INDEX = Utils.INDEX_MASK_L1; 
+                MASK_TAG = Utils.TAG_MASK_L1; 
+                MASK_INDEX = Utils.INDEX_MASK_L1;
                 
             } else { //  L2 Cache
-                MASK_INDEX = Utils.INDEX_MASK_L2; 
+                MASK_TAG = Utils.TAG_MASK_L2; 
+                MASK_INDEX = Utils.INDEX_MASK_L2;
             }
+            int tag_bit = address & MASK_TAG;
             int index_bit = address & MASK_INDEX;
-                
-            return pointer.getMemArray()[index_bit];
+            int cacheIndex = index_bit * 2;
+            for (int i = cacheIndex; i < cacheIndex + Utils.N_SET; i++) {
+                if (tag_bit == pointer.getTagArray()[cacheIndex]) {
+                    pointer.updateHistoryArray(cacheIndex, 1);
+                    return pointer.getMemArray()[cacheIndex];
+                }
+            }
         }
+        return 0;
     }
     
     public int addressInMemory(int address) throws NoSuchMemoryLocationException{
@@ -88,18 +98,43 @@ public class Memory {
         }
     }
     
+    private int checkCacheHistoryForReplacement(int address, int index, int tag, Cache cacheLevel) {
+        // if address already in memory, need to replace that address regardless of replacement policy
+        // tag matching
+        int i = index * 2;
+        int min = 99999;
+        int cacheIndexToReplace = -1;
+        for (int cacheIndex = i; cacheIndex < i + Utils.N_SET; cacheIndex++) {
+            if (tag == cacheLevel.getTagArray()[cacheIndex]) {
+                cacheIndexToReplace = cacheIndex;
+                cacheLevel.updateHistoryArray(cacheIndexToReplace, 1);
+                return cacheIndexToReplace;
+            }
+        }
+        for (int cacheIndex = i; cacheIndex < i + Utils.N_SET; cacheIndex++) {
+            if (min > cacheLevel.getHistoryArray()[cacheIndex]) {
+                min = cacheLevel.getHistoryArray()[cacheIndex];
+                cacheIndexToReplace = cacheIndex;
+                cacheLevel.updateHistoryArray(cacheIndexToReplace, 0);
+            }
+        }
+        return cacheIndexToReplace;
+    }
+    
     private void writeToL1(char data, int address) {
         int tag_bit = address & Utils.TAG_MASK_L1;
         int index_bit = address & Utils.INDEX_MASK_L1;
-        L1Cache.setTagArray(tag_bit, index_bit);
-        L1Cache.setData(data, index_bit);
+        int cacheIndexToReplace = checkCacheHistoryForReplacement(address, index_bit, tag_bit, L1Cache);
+        L1Cache.setTagArray(tag_bit, cacheIndexToReplace);
+        L1Cache.setData(data, cacheIndexToReplace);
         this.memoryCycleCount += L1Cache.getWaitCycles();
     }
     private void writeToL2(char data, int address) {
         int tag_bit = address & Utils.TAG_MASK_L2;
         int index_bit = address & Utils.INDEX_MASK_L2;
-        L2Cache.setTagArray(tag_bit, index_bit);
-        L2Cache.setData(data, index_bit);
+        int cacheIndexToReplace = checkCacheHistoryForReplacement(address, index_bit, tag_bit, L2Cache);
+        L2Cache.setTagArray(tag_bit, cacheIndexToReplace);
+        L2Cache.setData(data, cacheIndexToReplace);
         this.memoryCycleCount += L2Cache.getWaitCycles();
     }
     private void writeToDRAM(char data, int address){
@@ -127,9 +162,13 @@ public class Memory {
         if (currLevel == 2){
             int tag_bit = address & Utils.TAG_MASK_L1;
             int index_bit = address & Utils.INDEX_MASK_L1;
-            
-            if (tag_bit == currPointer.getTagArray()[index_bit]){
-                return currLevel;
+            int cacheIndex = index_bit * 2;
+            for (int i = cacheIndex; i < cacheIndex + Utils.N_SET; i++) {
+                if (tag_bit == currPointer.getTagArray()[cacheIndex])
+                    return currLevel;
+                else {
+                    return 0;
+                }
             }
         }
         currPointer = currPointer.getNextCache();
@@ -137,11 +176,15 @@ public class Memory {
         if (currLevel == 1){          
             int tag_bit = address & Utils.TAG_MASK_L2;
             int index_bit = address & Utils.INDEX_MASK_L2;
-                
-            if (tag_bit == currPointer.getTagArray()[index_bit]){
-                return currLevel;
+            int cacheIndex = index_bit * 2;
+            for (int i = cacheIndex; i < cacheIndex + Utils.N_SET; i++) {
+                if (tag_bit == currPointer.getTagArray()[cacheIndex])
+                    return currLevel;
+                else {
+                    return 0;
+                }
             }
-        } 
+        }
         return(addressInDRAM(address));
     }
     

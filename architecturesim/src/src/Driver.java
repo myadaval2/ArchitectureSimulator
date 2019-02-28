@@ -25,14 +25,14 @@ public class Driver {
     //}
     
     public void memoryDemo(Memory memoryEnabled, Memory memoryDisabled){
-        System.out.println("Demo 1: Cache disabled");
-        memoryDemo1(memoryDisabled);
+//        System.out.println("Demo 1: Cache disabled");
+//        memoryDemo1(memoryDisabled);
         
         System.out.println("Demo 2: Cache enabled");
         memoryDemo2(memoryEnabled);
         
-        System.out.println("DirectCompare Test");
-        directCompare(memoryEnabled, memoryDisabled);
+//        System.out.println("DirectCompare Test");
+//        directCompare(memoryEnabled, memoryDisabled);
     }
     
     
@@ -107,6 +107,7 @@ public class Driver {
             System.out.println("Read address 0x7fff: " + memory.readAddressInMemory(0x7fff));
             System.out.println("Cycle count: " + memory.getMemoryCycleCount());
             System.out.println("Read address 0x1ffff: " + memory.readAddressInMemory(0x1ffff));
+            System.out.println("Read address 0x1fffe: " + memory.readAddressInMemory(0x1fffe));
             System.out.println("Cycle count: " + memory.getMemoryCycleCount());
         } catch (NoSuchMemoryLocationException e){
             System.out.println("Test Failed");

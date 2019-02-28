@@ -25,14 +25,19 @@ public class DisplayMemory {
     }
     
     public Object[][] getMemoryPage(char[] fullMemoryArray, int[] tagArray, int pageNum) {
-        int arraySize = 64;
+        int tableSize = 64;
         int addressValue;
-        int startIndex = pageNum*arraySize;
-        Object[][] memoryArraySegment = new Object[arraySize][2];
-        for (int i = startIndex; i < startIndex+arraySize; i++) {
+        
+        int startIndex = pageNum*tableSize;
+        Object[][] memoryArraySegment = new Object[tableSize][2];
+        for (int i = startIndex; i < startIndex+tableSize; i++) {
             for (int j = 0; j < 2; j++) {
                 if (j == 0) {
                     addressValue = tagArray[i] | i;
+//                    System.out.println(pageNum);
+//                    System.out.println(i);
+//                    System.out.println(tagArray[i]);
+//                    System.out.println(addressValue);
                     memoryArraySegment[i-startIndex][j] = (Object) Integer.toHexString(addressValue);
                     // memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(addressValue);
                 }
@@ -54,11 +59,11 @@ public class DisplayMemory {
             case "DRAM":
                 return Arrays.copyOfRange(this.displayLabels, 0, 2048);
             case "L2Cache":
-                return Arrays.copyOfRange(this.displayLabels, 0, 1024);
+                return Arrays.copyOfRange(this.displayLabels, 0, 512);
             case "L1Cache":
-                return Arrays.copyOfRange(this.displayLabels, 0, 512);
+                return Arrays.copyOfRange(this.displayLabels, 0, 128);
             default:
-                return Arrays.copyOfRange(this.displayLabels, 0, 512);
+                return Arrays.copyOfRange(this.displayLabels, 0, 128);
         }
     }
 }

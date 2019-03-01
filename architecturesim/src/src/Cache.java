@@ -28,6 +28,7 @@ public class Cache {
         this.mem_array          = new char[sizeOfMemory];
         this.tag_array          = new int[sizeOfMemory];
         this.historyArray       = new int[sizeOfMemory];
+        Arrays.fill(this.tag_array, -1);
         Arrays.fill(this.historyArray, -1);
     }
     

@@ -24,7 +24,7 @@ public class DisplayMemory {
         }   
     }
     
-    public Object[][] getMemoryPage(String memoryLevel, char[] fullMemoryArray, int[] tagArray, int pageNum) {
+    public Object[][] getMemoryPage(String memoryLevel, char[] fullMemoryArray, int[] tagArray, int[] historyArray, int pageNum) {
         int tableSize = 64;
         int addressValue = 0;
         
@@ -34,7 +34,7 @@ public class DisplayMemory {
         for (int i = startIndex; i < startIndex+tableSize; i++) {
             if (null != memoryLevel) switch (memoryLevel) {
                 case "DRAM":
-                    addressValue = tagArray[i] | i;
+                    addressValue = i;
                     break;
                 case "L2Cache":
                     addressValue = tagArray[i] | (i / Utils.N_SET);
@@ -47,13 +47,24 @@ public class DisplayMemory {
             }
             for (int j = 0; j < 2; j++) {
                 if (j == 0) {
-                    memoryArraySegment[i-startIndex][j] = (Object) Integer.toHexString(addressValue);
-                    // memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(addressValue);
+                    if (historyArray[i] != -1) {
+                        memoryArraySegment[i-startIndex][j] = (Object) String.format("%05X", addressValue);
+                        // memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(addressValue);
+                    }
+                    else if ("DRAM".equals(memoryLevel)) {
+                        memoryArraySegment[i-startIndex][j] = (Object) Integer.toHexString(addressValue);
+                    }
                 }
                 else {
-                    // (Object) Integer.toHexString(fullMemoryArray[i]); // to display hex
-                    // (Object) Integer.toBinaryString(fullMemoryArray[i]); // to display binary
-                    memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(fullMemoryArray[i]);
+                    if (historyArray[i] != -1) {
+                        // (Object) Integer.toHexString(fullMemoryArray[i]); // to display hex
+                        // (Object) Integer.toBinaryString(fullMemoryArray[i]); // to display binary
+                        
+                        memoryArraySegment[i-startIndex][j] = (Object) String.format("%04X", (int) fullMemoryArray[i]);
+                    }
+                    else if ("DRAM".equals(memoryLevel)) {
+                        memoryArraySegment[i-startIndex][j] = (Object) String.format("%04X", (int) fullMemoryArray[i]);
+                    }
                 }
             }
         }

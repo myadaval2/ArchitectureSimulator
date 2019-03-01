@@ -98,10 +98,10 @@ public class Memory {
         }
     }
     
-    private int checkCacheHistoryForReplacement(int address, int index, int tag, Cache cacheLevel) {
+    private int checkCacheHistoryForReplacement(int index, int tag, Cache cacheLevel) {
         // if address already in memory, need to replace that address regardless of replacement policy
         // tag matching
-        int i = index * 2;
+        int i = index * Utils.N_SET;
         int min = 99999;
         int cacheIndexToReplace = -1;
         for (int cacheIndex = i; cacheIndex < i + Utils.N_SET; cacheIndex++) {
@@ -115,16 +115,16 @@ public class Memory {
             if (min > cacheLevel.getHistoryArray()[cacheIndex]) {
                 min = cacheLevel.getHistoryArray()[cacheIndex];
                 cacheIndexToReplace = cacheIndex;
-                cacheLevel.updateHistoryArray(cacheIndexToReplace, 0);
             }
         }
+        cacheLevel.updateHistoryArray(cacheIndexToReplace, 0);
         return cacheIndexToReplace;
     }
     
     private void writeToL1(char data, int address) {
         int tag_bit = address & Utils.TAG_MASK_L1;
         int index_bit = address & Utils.INDEX_MASK_L1;
-        int cacheIndexToReplace = checkCacheHistoryForReplacement(address, index_bit, tag_bit, L1Cache);
+        int cacheIndexToReplace = checkCacheHistoryForReplacement(index_bit, tag_bit, L1Cache);
         L1Cache.setTagArray(tag_bit, cacheIndexToReplace);
         L1Cache.setData(data, cacheIndexToReplace);
         this.memoryCycleCount += L1Cache.getWaitCycles();
@@ -132,7 +132,7 @@ public class Memory {
     private void writeToL2(char data, int address) {
         int tag_bit = address & Utils.TAG_MASK_L2;
         int index_bit = address & Utils.INDEX_MASK_L2;
-        int cacheIndexToReplace = checkCacheHistoryForReplacement(address, index_bit, tag_bit, L2Cache);
+        int cacheIndexToReplace = checkCacheHistoryForReplacement(index_bit, tag_bit, L2Cache);
         L2Cache.setTagArray(tag_bit, cacheIndexToReplace);
         L2Cache.setData(data, cacheIndexToReplace);
         this.memoryCycleCount += L2Cache.getWaitCycles();

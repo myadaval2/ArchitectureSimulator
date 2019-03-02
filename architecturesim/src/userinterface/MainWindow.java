@@ -316,32 +316,34 @@ public class MainWindow extends javax.swing.JFrame {
         String [] columnNames = {"Address", "Instruction"};
         if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
             case "DRAM":
-            memoryArraySegment = dm.getMemoryPage("DRAM", d.memoryEnabled.DRAM.getMemArray(), d.memoryEnabled.DRAM.getTagArray(), d.memoryEnabled.DRAM.getHistoryArray(), memoryPage);
-            MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
-                memoryArraySegment,
-                columnNames
-            )
-            {public boolean isCellEditable(int row, int column){return false;}}
-        );  break;
-        case "L2 Cache":
-        memoryArraySegment = dm.getMemoryPage("L2Cache", d.memoryEnabled.L2Cache.getMemArray(), d.memoryEnabled.L2Cache.getTagArray(), d.memoryEnabled.L2Cache.getHistoryArray(), memoryPage);
-        MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
-            memoryArraySegment,
-            columnNames
-        )
-        {public boolean isCellEditable(int row, int column){return false;}}
-        );  break;
-        case "L1 Cache":
-        memoryArraySegment = dm.getMemoryPage("L1Cache", d.memoryEnabled.L1Cache.getMemArray(), d.memoryEnabled.L1Cache.getTagArray(), d.memoryEnabled.L1Cache.getHistoryArray(), memoryPage);
-        MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
-            memoryArraySegment,
-            columnNames
-        )
-        {public boolean isCellEditable(int row, int column){return false;}}
-        );  break;
-        default:
-        break;
-        }
+                memoryArraySegment = dm.getMemoryPage("DRAM", d.memoryEnabled.DRAM.getMemArray(), d.memoryEnabled.DRAM.getTagArray(), d.memoryEnabled.DRAM.getHistoryArray(), memoryPage);
+                MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
+                    memoryArraySegment,
+                    columnNames
+                )
+                {public boolean isCellEditable(int row, int column){return false;}}
+            );  break;
+            case "L2 Cache":
+                columnNames[0] = "Line";
+                memoryArraySegment = dm.getMemoryPage("L2Cache", d.memoryEnabled.L2Cache.getMemArray(), d.memoryEnabled.L2Cache.getTagArray(), d.memoryEnabled.L2Cache.getHistoryArray(), memoryPage);
+                MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
+                    memoryArraySegment,
+                    columnNames
+                )
+                {public boolean isCellEditable(int row, int column){return false;}}
+            );  break;
+            case "L1 Cache":
+                columnNames[0] = "Line";
+                memoryArraySegment = dm.getMemoryPage("L1Cache", d.memoryEnabled.L1Cache.getMemArray(), d.memoryEnabled.L1Cache.getTagArray(), d.memoryEnabled.L1Cache.getHistoryArray(), memoryPage);
+                MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
+                    memoryArraySegment,
+                    columnNames
+                )
+                {public boolean isCellEditable(int row, int column){return false;}}
+            );  break;
+            default:
+                break;
+            }
     }//GEN-LAST:event_AddressRangeDropDownActionPerformed
 
     private void CacheLevelNameDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CacheLevelNameDropDownActionPerformed

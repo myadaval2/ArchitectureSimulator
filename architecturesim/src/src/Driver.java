@@ -50,17 +50,21 @@ public class Driver {
             // Write multiple locations that map to same L1Cache
             // Read same multiple locations that map to same L1Cache
             memory.writeAddressInMemory((char) 0x0101, 0x00000); // 0
-            memory.writeAddressInMemory((char) 0x1010, 0x00000); // 0
+            //memory.writeAddressInMemory((char) 0x1010, 0x00000); // 0
             memory.writeAddressInMemory((char) 0x0101, 0x00001);
             System.out.println("Read address 0x00000: " + memory.readAddressInMemory(0x00000)); // 0
+            System.out.println("Read address 0x00001: " + memory.readAddressInMemory(0x00001)); // 0
+            memory.writeAddressInMemory((char) 0xffff, 0x0002); // 0
+            //memory.writeAddressInMemory((char) 0x1010, 0x00000); // 0
+            memory.writeAddressInMemory((char) 0xaaaa, 0x00003);
             
-            memory.writeAddressInMemory((char) 0x1cccc, 0x00000); // 0
-            memory.writeAddressInMemory((char) 0xffff, 0x00001); 
+//            memory.writeAddressInMemory((char) 0x1cccc, 0x00000); // 0
+//            memory.writeAddressInMemory((char) 0xffff, 0x00001); 
             memory.writeAddressInMemory((char) 0xdddd, 0x10001);
             memory.writeAddressInMemory((char) 0x0101, 0x1f000); // 0
-            memory.writeAddressInMemory((char) 0xffff, 0x00000); // 0
+            memory.writeAddressInMemory((char) 0xffff, 0x00010); // 0
             memory.writeAddressInMemory((char) 0xaaaa, 0x17000); // 0 displayed
-            memory.writeAddressInMemory((char) 0xdead, 0x1ffff); // 0 displayed
+//            memory.writeAddressInMemory((char) 0xdead, 0x1ffff); // 0 displayed
             
             // TEST 3
             // Write multiple locations that map to same L2Cache

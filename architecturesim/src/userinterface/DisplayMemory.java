@@ -79,11 +79,11 @@ public class DisplayMemory {
             case "DRAM":
                 return Arrays.copyOfRange(this.displayLabels, 0, 2048);
             case "L2Cache":
-                return Arrays.copyOfRange(this.displayLabels, 0, 512);
+                return Arrays.copyOfRange(this.displayLabels, 0, 256);
             case "L1Cache":
-                return Arrays.copyOfRange(this.displayLabels, 0, 128);
+                return Arrays.copyOfRange(this.displayLabels, 0, 64);
             default:
-                return Arrays.copyOfRange(this.displayLabels, 0, 128);
+                return Arrays.copyOfRange(this.displayLabels, 0, 64);
         }
     }
 }

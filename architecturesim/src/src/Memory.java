@@ -115,22 +115,24 @@ public class Memory {
             if (tag == cacheLevel.getTagArray()[cacheIndex]) {
                 cacheIndexToReplace = cacheIndex;
                 cacheLevel.updateHistoryArray(cacheIndexToReplace, 1);
+
                 return cacheIndexToReplace;
             }
         }
         for (int cacheIndex = i; cacheIndex < i + Utils.N_SET; cacheIndex++) {
             if (min > cacheLevel.getHistoryArray()[cacheIndex]) {
                 min = cacheLevel.getHistoryArray()[cacheIndex];
-                cacheIndexToReplace = cacheIndex;
+                cacheIndexToReplace = cacheIndex;      
             }
         }
+
         cacheLevel.updateHistoryArray(cacheIndexToReplace, 0);
         return cacheIndexToReplace;
     }
     
     private void writeToL1(int data, int address) {
         int tag_bit = address & Utils.TAG_MASK_L1;
-        int index_bit = address & Utils.INDEX_MASK_L1 >> 1;
+        int index_bit = (address & Utils.INDEX_MASK_L1) >> 1;
         int dataToWrite = 0;
         int cacheIndexToReplace = checkCacheHistoryForReplacement(index_bit, tag_bit, L1Cache);
         if (address % 2 == 0x0) {
@@ -145,7 +147,7 @@ public class Memory {
     }
     private void writeToL2(int data, int address) {
         int tag_bit = address & Utils.TAG_MASK_L2;
-        int index_bit = address & Utils.INDEX_MASK_L2 >> 1;
+        int index_bit = (address & Utils.INDEX_MASK_L2) >> 1;
         int dataToWrite = 0;
         int cacheIndexToReplace = checkCacheHistoryForReplacement(index_bit, tag_bit, L2Cache);
         if (address % 2 == 0x0) {

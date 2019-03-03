@@ -54,6 +54,7 @@ public class MainWindow extends javax.swing.JFrame {
         RunButtonLabel = new javax.swing.JButton();
         clockTextBox = new javax.swing.JTextField();
         clockLabel = new javax.swing.JLabel();
+        stepButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -254,6 +255,13 @@ public class MainWindow extends javax.swing.JFrame {
 
         clockLabel.setText("Clock Clycles");
 
+        stepButton.setText("Step");
+        stepButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stepButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -270,7 +278,9 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGap(26, 26, 26)
                         .addComponent(clockLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clockTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(clockTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(stepButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(77, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -282,7 +292,8 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(RunButtonLabel)
                         .addComponent(clockTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(clockLabel)))
+                        .addComponent(clockLabel)
+                        .addComponent(stepButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
@@ -304,7 +315,31 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_RunButton
 
     private void AddressRangeDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddressRangeDropDownActionPerformed
+        drawTable();
+    }//GEN-LAST:event_AddressRangeDropDownActionPerformed
+
+    private void CacheLevelNameDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CacheLevelNameDropDownActionPerformed
+        if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
+            case "DRAM":
+            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("DRAM")));
+            break;
+            case "L2 Cache":
+            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L2Cache")));
+            break;
+            case "L1 Cache":
+            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L1Cache")));
+            break;
+            default:
+            break;
+        }
+    }//GEN-LAST:event_CacheLevelNameDropDownActionPerformed
+
+    private void clockTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockTextBoxActionPerformed
         // TODO add your handling code here:
+        
+    }//GEN-LAST:event_clockTextBoxActionPerformed
+
+    private void drawTable() {
         Object[][] memoryArraySegment;
         int memoryPage = 0;
         String s = (String) AddressRangeDropDown.getSelectedItem();
@@ -344,28 +379,14 @@ public class MainWindow extends javax.swing.JFrame {
             default:
                 break;
             }
-    }//GEN-LAST:event_AddressRangeDropDownActionPerformed
-
-    private void CacheLevelNameDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CacheLevelNameDropDownActionPerformed
-        if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
-            case "DRAM":
-            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("DRAM")));
-            break;
-            case "L2 Cache":
-            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L2Cache")));
-            break;
-            case "L1 Cache":
-            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L1Cache")));
-            break;
-            default:
-            break;
-        }
-    }//GEN-LAST:event_CacheLevelNameDropDownActionPerformed
-
-    private void clockTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockTextBoxActionPerformed
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_clockTextBoxActionPerformed
+    }
+    
+    
+    private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
+        d.memoryStep(d.memoryEnabled);
+        System.out.println(d.counter);
+        drawTable();
+    }//GEN-LAST:event_stepButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -432,5 +453,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JRadioButton pipelineDisabledButton;
     private javax.swing.JRadioButton pipelineEnabledButton;
     private javax.swing.JPanel simulationSettingsPanel;
+    private javax.swing.JButton stepButton;
     // End of variables declaration//GEN-END:variables
 }

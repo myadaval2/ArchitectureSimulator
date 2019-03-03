@@ -42,6 +42,8 @@
                       <Component id="clockLabel" min="-2" pref="76" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="clockTextBox" min="-2" pref="73" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="stepButton" min="-2" pref="73" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="77" max="32767" attributes="0"/>
@@ -58,6 +60,7 @@
                       <Component id="RunButtonLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="clockTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="clockLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="stepButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -384,6 +387,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Clock Clycles"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="stepButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Step"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stepButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

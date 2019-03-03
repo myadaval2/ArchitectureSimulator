@@ -13,30 +13,81 @@ package src;
 public class Driver {
     public Memory memoryEnabled;
     public Memory memoryDisabled;
+    public int counter;
+    char[] values = {0xdead, 0xeeee, 0x3333, 0x6666, 0x1111, 0xffff, 0xaced, 0xbbbb, 0xaaaa, 0x2222, 0xaced};
+    int[] address = {0x00000, 0x00001, 0x2000, 0x4000, 0xc000, 0x4002, 0xc002, 0x11000, 0xd000, 0x6000, 0x1ffff};
+        
 
     public Driver(){
         memoryEnabled = new Memory(true);
         memoryDisabled = new Memory(false);
-        memoryDemo(memoryEnabled, memoryDisabled);
+        this.counter = 0;
+        // memoryDemo(memoryEnabled, memoryDisabled);
     }
     
     public void main(String[] args){
         directCompare(memoryEnabled, memoryDisabled);
     }
     
-    public void memoryDemo(Memory memoryEnabled, Memory memoryDisabled){
+    public void memoryDemo(Memory memoryEnabled){
+        System.out.println("Real Demo for caching, n-set associative, and n-lines");
+        // memoryStep(memoryEnabled);
 //        System.out.println("Demo 1: Cache disabled");
 //        memoryDemo1(memoryDisabled);
         
         // System.out.println("Demo 2: Cache enabled");
         // memoryDemo2(memoryEnabled);
         
-        System.out.println("Demo 2: N-Set Associativity");
-        nSetAssociativityDemo(memoryEnabled);
+//        System.out.println("Demo 2: N-Set Associativity");
+//        nSetAssociativityDemo(memoryEnabled);
         
 //        System.out.println("DirectCompare Test");
 //        directCompare(memoryEnabled, memoryDisabled);
     }
+    
+    public void memoryStep(Memory memoryEnabled) {
+        try {
+            memoryEnabled.writeAddressInMemory(this.values[this.counter], this.address[this.counter]); 
+            this.counter += 1;
+        }
+        catch (NoSuchMemoryLocationException e){
+            System.out.println("Test Failed");
+        }
+    }
+    
+    public void allCacheDemoReal(Memory memory) {
+        try {
+            // L1 Page 0: 00000	DEADEEEE
+            // L1 Page 0: 04002	FFFF0000
+            // L1 Page 0: 0C002	ACED0000
+            // L1 Page 0: 06000	22220000
+            // L2 Page 0: 00000	DEADEEEE
+            // L2 Page 0: 0C000	11110000
+            // L2 Page 0: 04002	FFFF0000
+            // L2 Page 0: 0C002	ACED0000
+            // L2 Page 64: 11000 BBBB0000
+            // L2 Page 64: 0D000 AAAA0000
+            // L2 Page 128: 02000 33330000
+            // L2 Page 128: 06000 22220000
+            memory.writeAddressInMemory((char) 0xdead, 0b00000000000000000); 
+            memory.writeAddressInMemory((char) 0xeeee, 0b00000000000000001);
+            memory.writeAddressInMemory((char) 0x3333, 0b00010000000000000);
+            memory.writeAddressInMemory((char) 0x6666, 0b00100000000000000);
+            memory.writeAddressInMemory((char) 0x1111, 0b01100000000000000);
+            memory.writeAddressInMemory((char) 0xffff, 0b00100000000000010); 
+            memory.writeAddressInMemory((char) 0xaced, 0b01100000000000010); 
+            memory.writeAddressInMemory((char) 0xbbbb, 0b10001000000000000);
+            memory.writeAddressInMemory((char) 0xaaaa, 0b01101000000000000);
+            memory.writeAddressInMemory((char) 0x2222, 0b00110000000000000); 
+            memory.writeAddressInMemory((char) 0xabcd, 0b11111111111111111); 
+        }
+        catch (NoSuchMemoryLocationException e){
+            System.out.println("Test Failed");
+        }
+       }
+    
+    
+    
     
     public static void nSetAssociativityDemo(Memory memoryEnabled) {
         Memory memory = memoryEnabled;
@@ -49,27 +100,28 @@ public class Driver {
             // TEST 2
             // Write multiple locations that map to same L1Cache
             // Read same multiple locations that map to same L1Cache
-            memory.writeAddressInMemory((char) 0x0101, 0x00000); // 0
-            //memory.writeAddressInMemory((char) 0x1010, 0x00000); // 0
-            memory.writeAddressInMemory((char) 0x0101, 0x00001);
-            System.out.println("Read address 0x00000: " + memory.readAddressInMemory(0x00000)); // 0
-            System.out.println("Read address 0x00001: " + memory.readAddressInMemory(0x00001)); // 0
-            memory.writeAddressInMemory((char) 0xffff, 0x0002); // 0
-            //memory.writeAddressInMemory((char) 0x1010, 0x00000); // 0
-            memory.writeAddressInMemory((char) 0xaaaa, 0x00003);
+//            memory.writeAddressInMemory((char) 0x0101, 0x00000); // 0
+//            //memory.writeAddressInMemory((char) 0x1010, 0x00000); // 0
+//            memory.writeAddressInMemory((char) 0x0101, 0x00001);
+//            System.out.println("Read address 0x00000: " + memory.readAddressInMemory(0x00000)); // 0
+//            System.out.println("Read address 0x00001: " + memory.readAddressInMemory(0x00001)); // 0
+//            memory.writeAddressInMemory((char) 0xffff, 0x0002); // 0
+//            //memory.writeAddressInMemory((char) 0x1010, 0x00000); // 0
+//            memory.writeAddressInMemory((char) 0xaaaa, 0x00003);
+//            
+////            memory.writeAddressInMemory((char) 0x1cccc, 0x00000); // 0
+////            memory.writeAddressInMemory((char) 0xffff, 0x00001); 
+//            memory.writeAddressInMemory((char) 0xdddd, 0x10001);
+//            memory.writeAddressInMemory((char) 0x0101, 0x1f000); // 0
+//            memory.writeAddressInMemory((char) 0xffff, 0x00010); // 0
+//            memory.writeAddressInMemory((char) 0xaaaa, 0x17000); // 0 displayed
+//
+//            memory.writeAddressInMemory((char) 0xdead, 0x1ffff); // 0 displayed
+//            memory.writeAddressInMemory((char) 0xeeee, 0x1ffff); // 0 displayed
+//            memory.writeAddressInMemory((char) 0x3333, 0x10fff); // 0 displayed
+//            memory.writeAddressInMemory((char) 0x1111, 0x1fffe); // 0 displayed
+            memory.writeAddressInMemory((char) 0x6666, 0x00fff); // 0 displayed
             
-//            memory.writeAddressInMemory((char) 0x1cccc, 0x00000); // 0
-//            memory.writeAddressInMemory((char) 0xffff, 0x00001); 
-            memory.writeAddressInMemory((char) 0xdddd, 0x10001);
-            memory.writeAddressInMemory((char) 0x0101, 0x1f000); // 0
-            memory.writeAddressInMemory((char) 0xffff, 0x00010); // 0
-            memory.writeAddressInMemory((char) 0xaaaa, 0x17000); // 0 displayed
-
-            memory.writeAddressInMemory((char) 0xdead, 0x1ffff); // 0 displayed
-            memory.writeAddressInMemory((char) 0xeeee, 0x1ffff); // 0 displayed
-            memory.writeAddressInMemory((char) 0x3333, 0x10fff); // 0 displayed
-            memory.writeAddressInMemory((char) 0x1111, 0x1fffe); // 0 displayed
-            //memory.writeAddressInMemory((char) 0x6666, 0x00fff); // 0 displayed
 
 //            memory.writeAddressInMemory((char) 0xdead, 0x1ffff); // 0 displayed
 

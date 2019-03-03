@@ -20,12 +20,12 @@ public class Utils {
     
 /////////// 2-WAY SET ASSOCIATIVITY ////////////////////////////////////////
     
-    public static final int N_SET              = 2;
-    public static final int TAG_MASK_L1        =   0x1F000; //
-    public static final int INDEX_MASK_L1     =   0x0FFF; // BINARY 0001 1111 1111 1111
-    
-    public static final int TAG_MASK_L2        =   0x1C000;
-    public static final int INDEX_MASK_L2     =   0x3FFF; // BINARY 1111 1111 1111 1111
+//    public static final int N_SET              = 2;
+//    public static final int TAG_MASK_L1        =   0x1F000; //
+//    public static final int INDEX_MASK_L1     =   0x0FFF; // BINARY 0001 1111 1111 1111
+//    
+//    public static final int TAG_MASK_L2        =   0x1C000;
+//    public static final int INDEX_MASK_L2     =   0x3FFF; // BINARY 1111 1111 1111 1111
     
 /////////// 1-WAY SET ASSOCIATIVITY  ////////////////////////////////////////
     
@@ -36,5 +36,20 @@ public class Utils {
 //    
 //    public static final int TAG_MASK_L2       =   0x18000;
 //    public static final int INDEX_MASK_L2     =   0x7FFF; // BINARY 1111 1111 1111 1111
+    
+/////////// 2-WAY SET ASSOCIATIVITY WITH 2 WORDS PER LINE ////////////////////////////////////////
+    
+    public static final int N_SET              = 2;
+    public static final int N_WORDS_PER_LINE    = 2;
+    
+    public static final int TAG_MASK_L1        =   0x1F000; //
+    public static final int INDEX_MASK_L1     =   0x0FFE; // BINARY 0001 1111 1111 1111
+    
+    
+    public static final int TAG_MASK_L2        =   0x1C000;
+    public static final int INDEX_MASK_L2     =   0x3FFE; // BINARY 1111 1111 1111 1111
+    
+    public static final int WORD_0    = 0xFFFF0000;
+    public static final int WORD_1    = 0x0000FFFF;
     
 }

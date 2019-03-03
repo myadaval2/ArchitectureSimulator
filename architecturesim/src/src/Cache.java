@@ -15,7 +15,7 @@ public class Cache {
     private final int       sizeOfMemory;
     private final Cache     lowerLevelMemory;
     private final int       waitCycles;
-    private final char[]    mem_array;
+    private final int[]    mem_array;
     private final int[]     tag_array;
     private final int[]     historyArray;
     private final int       heirarchy;
@@ -25,7 +25,7 @@ public class Cache {
         this.lowerLevelMemory   = lowerLevelMemory;
         this.waitCycles         = waitCycles;
         this.heirarchy          = heirarchy;  
-        this.mem_array          = new char[sizeOfMemory];
+        this.mem_array          = new int[sizeOfMemory];
         this.tag_array          = new int[sizeOfMemory];
         this.historyArray       = new int[sizeOfMemory];
         Arrays.fill(this.tag_array, -1);
@@ -35,17 +35,17 @@ public class Cache {
     public int getHeirarchy()           {   return heirarchy;               }
     public int getSizeOfMemory()        {   return sizeOfMemory;            }
     public int getWaitCycles()          {   return waitCycles;              }
-    public char[] getMemArray()         {   return mem_array;               }
+    public int[] getMemArray()          {   return mem_array;               }
     public int[] getTagArray()          {   return tag_array;               }
     public int[] getHistoryArray()      {   return historyArray;            }
     public Cache getNextCache()         {   return lowerLevelMemory;        }
-    public char getData(int address)    {   return this.mem_array[address]; }
+    public int getData(int address)    {   return this.mem_array[address]; }
     
     public void setTagArray(int data, int address)   {   
         this.tag_array[address] = data; 
     }
     
-    public void setData(char data, int address){
+    public void setData(int data, int address){
         this.mem_array[address] = data;
     }
     

@@ -24,7 +24,7 @@ public class DisplayMemory {
         }   
     }
     
-    public Object[][] getMemoryPage(String memoryLevel, char[] fullMemoryArray, int[] tagArray, int[] historyArray, int pageNum) {
+    public Object[][] getMemoryPage(String memoryLevel, int[] fullMemoryArray, int[] tagArray, int[] historyArray, int pageNum) {
         int tableSize = 64;
         int addressValue = 0;
         
@@ -60,10 +60,10 @@ public class DisplayMemory {
                         // (Object) Integer.toHexString(fullMemoryArray[i]); // to display hex
                         // (Object) Integer.toBinaryString(fullMemoryArray[i]); // to display binary
                         
-                        memoryArraySegment[i-startIndex][j] = (Object) String.format("%04X", (int) fullMemoryArray[i]);
+                        memoryArraySegment[i-startIndex][j] = (Object) String.format("%08X", (int) fullMemoryArray[i]);
                     }
                     else if ("DRAM".equals(memoryLevel)) {
-                        memoryArraySegment[i-startIndex][j] = (Object) String.format("%04X", (int) fullMemoryArray[i]);
+                        memoryArraySegment[i-startIndex][j] = (Object) (String.format("%08X", (int) fullMemoryArray[i]));
                     }
                 }
             }

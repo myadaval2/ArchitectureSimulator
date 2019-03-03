@@ -61,6 +61,7 @@ public class Driver {
             memory.writeAddressInMemory((char) 0xffff, 0x00000); // 0
             memory.writeAddressInMemory((char) 0xaaaa, 0x17000); // 0 displayed
             memory.writeAddressInMemory((char) 0xdead, 0x1ffff); // 0 displayed
+            memory.writeAddressInMemory((char) 0x6666, 0x00fff); // 0 displayed
             
             // TEST 3
             // Write multiple locations that map to same L2Cache

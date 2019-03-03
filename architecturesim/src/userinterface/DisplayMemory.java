@@ -37,10 +37,10 @@ public class DisplayMemory {
                     addressValue = i;
                     break;
                 case "L2Cache":
-                    addressValue = tagArray[i] | (i / Utils.N_SET);
+                    addressValue = tagArray[i] | ((i / Utils.N_SET) << 1);
                     break;
                 case "L1Cache":
-                    addressValue = tagArray[i] | (i / Utils.N_SET);
+                    addressValue = tagArray[i] | ((i / Utils.N_SET) << 1);
                     break;
                 default:
                     break;

@@ -66,7 +66,10 @@ public class Driver {
             memory.writeAddressInMemory((char) 0xaaaa, 0x17000); // 0 displayed
 
             memory.writeAddressInMemory((char) 0xdead, 0x1ffff); // 0 displayed
-            memory.writeAddressInMemory((char) 0x6666, 0x00fff); // 0 displayed
+            memory.writeAddressInMemory((char) 0xeeee, 0x1ffff); // 0 displayed
+            memory.writeAddressInMemory((char) 0x3333, 0x10fff); // 0 displayed
+            memory.writeAddressInMemory((char) 0x1111, 0x1fffe); // 0 displayed
+            //memory.writeAddressInMemory((char) 0x6666, 0x00fff); // 0 displayed
 
 //            memory.writeAddressInMemory((char) 0xdead, 0x1ffff); // 0 displayed
 

@@ -52,4 +52,8 @@ public class Utils {
     public static final int WORD_0    = 0xFFFF0000;
     public static final int WORD_1    = 0x0000FFFF;
     
+    enum Opcodes
+    {
+      ADD, SUB, NONE
+    }
 }

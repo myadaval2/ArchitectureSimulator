@@ -17,6 +17,9 @@ public class PipeStage {
     private String RT;
     private char immediate;
     private char opcode;
+    private int testValue;
+    private int ALUOutput;
+    private int memoryOutput;
     
     public PipeStage() {
         this.stage = "";
@@ -26,6 +29,9 @@ public class PipeStage {
         this.RT = "";
         this.immediate = 0;
         this.opcode = 0;
+        this.testValue = 0;
+        this.ALUOutput = 0;
+        this.memoryOutput = 0;
     }
 
     /**
@@ -124,6 +130,48 @@ public class PipeStage {
      */
     public void setOpcode(char opcode) {
         this.opcode = opcode;
+    }
+
+    /**
+     * @return the testValue
+     */
+    public int getTestValue() {
+        return testValue;
+    }
+
+    /**
+     * @param testValue the testValue to set
+     */
+    public void setTestValue(int testValue) {
+        this.testValue = testValue;
+    }
+
+    /**
+     * @return the ALUOutput
+     */
+    public int getALUOutput() {
+        return ALUOutput;
+    }
+
+    /**
+     * @param ALUOutput the ALUOutput to set
+     */
+    public void setALUOutput(int ALUOutput) {
+        this.ALUOutput = ALUOutput;
+    }
+
+    /**
+     * @return the memoryOutput
+     */
+    public int getMemoryOutput() {
+        return memoryOutput;
+    }
+
+    /**
+     * @param memoryOutput the memoryOutput to set
+     */
+    public void setMemoryOutput(int memoryOutput) {
+        this.memoryOutput = memoryOutput;
     }
     
     

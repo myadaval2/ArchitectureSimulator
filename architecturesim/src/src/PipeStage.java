@@ -12,21 +12,23 @@ package src;
 public class PipeStage {
     private String stage;
     private int instruction;
-    private String RD;
-    private String RS;
-    private String RT;
-    private char immediate;
-    private char opcode;
+    private int RD;
+    private int RS;
+    private int RT;
+    private int immediate;
+    private int offset;
+    private int opcode;
     private int testValue;
     private int ALUOutput;
     private int memoryOutput;
+    // private int registerValue; OR should this be ALUOutput? ALUOutput is not used in LD/ST
     
     public PipeStage() {
         this.stage = "";
         this.instruction = 0;
-        this.RD = "";
-        this.RS = "";
-        this.RT = "";
+        this.RD = 0;
+        this.RS = 0;
+        this.RT = 0;
         this.immediate = 0;
         this.opcode = 0;
         this.testValue = 0;
@@ -65,70 +67,70 @@ public class PipeStage {
     /**
      * @return the RD
      */
-    public String getRD() {
+    public int getRD() {
         return RD;
     }
 
     /**
      * @param RD the RD to set
      */
-    public void setRD(String RD) {
+    public void setRD(int RD) {
         this.RD = RD;
     }
 
     /**
      * @return the RS
      */
-    public String getRS() {
+    public int getRS() {
         return RS;
     }
 
     /**
      * @param RS the RS to set
      */
-    public void setRS(String RS) {
+    public void setRS(int RS) {
         this.RS = RS;
     }
 
     /**
      * @return the RT
      */
-    public String getRT() {
+    public int getRT() {
         return RT;
     }
 
     /**
      * @param RT the RT to set
      */
-    public void setRT(String RT) {
+    public void setRT(int RT) {
         this.RT = RT;
     }
 
     /**
      * @return the immediate
      */
-    public char getImmediate() {
+    public int getImmediate() {
         return immediate;
     }
 
     /**
      * @param immediate the immediate to set
      */
-    public void setImmediate(char immediate) {
+    public void setImmediate(int immediate) {
         this.immediate = immediate;
     }
 
     /**
      * @return the opcode
      */
-    public char getOpcode() {
+    public int getOpcode() {
         return opcode;
     }
 
     /**
      * @param opcode the opcode to set
      */
-    public void setOpcode(char opcode) {
+    public void setOpcode(int opcode) {
         this.opcode = opcode;
     }
 
@@ -173,6 +175,20 @@ public class PipeStage {
     public void setMemoryOutput(int memoryOutput) {
         this.memoryOutput = memoryOutput;
     }
-    
+
+    /**
+     * @return the offset
+     */
+    public int getOffset() {
+        return offset;
+    }
+
+    /**
+     * @param offset the offset to set
+     */
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
     
 }

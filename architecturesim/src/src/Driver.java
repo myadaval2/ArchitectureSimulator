@@ -14,18 +14,10 @@ import java.util.Scanner;
  */
 
 public class Driver {
-    public Memory memoryEnabled;
-    public Memory memoryDisabled;
-    public int counter;
-    char[] values = {0xdead, 0xeeee, 0x3333, 0x6666, 0x1111, 0xffff, 0xaced, 0xbbbb, 0xaaaa, 0x2222, 0xaced};
-    int[] address = {0x00000, 0x00001, 0x2000, 0x4000, 0xc000, 0x4002, 0xc002, 0x11000, 0xd000, 0x6000, 0x1ffff};
     public Pipeline pipeline;
     
 
     public Driver(){
-        memoryEnabled = new Memory(true);
-        memoryDisabled = new Memory(false);
-        this.counter = 0;
         // memoryDemo(memoryEnabled, memoryDisabled);
         pipeline = new Pipeline();
         
@@ -66,15 +58,6 @@ public class Driver {
 //        directCompare(memoryEnabled, memoryDisabled);
     }
     
-    public void memoryStep(Memory memoryEnabled) {
-        try {
-            memoryEnabled.writeAddressInMemory(this.values[this.counter], this.address[this.counter]); 
-            this.counter += 1;
-        }
-        catch (NoSuchMemoryLocationException e){
-            System.out.println("Test Failed");
-        }
-    }
     
     public void allCacheDemoReal(Memory memory) {
         try {
@@ -108,86 +91,86 @@ public class Driver {
        }
     
     
-    public static void CLI(){
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Architecture Memory Interface\nCache enabled? y/n\n");
-        String ans1 = scan.next();
-        Memory mem;
-        if (ans1.charAt(0) == 'y'){
-            mem = new Memory(true);
-        } else {
-            mem = new Memory(false);
-        }
-        ArrayList<Integer> written = new ArrayList<Integer>();
-        while(true){
-            System.out.println("Available commands: r --Read, w --Write, s --show memory, x --exit");
-            System.out.println("Enter a command");
-            char ans2 = scan.next().charAt(0);
-            if (ans2 == 'x'){
-                System.out.println("Final state of memory: ");
-                System.out.println("Address     Data");
-                for (int i = 0; i < written.size(); ++i){
-                    try {
-                        System.out.println(written.get(i) + "    " + mem.readAddressInMemory(written.get(i)));
-                    } catch (Exception e){
-                        System.out.println("Operation failed");
-                    }        
-                }
-                System.out.println("Total entries: " + written.size());
-                System.out.println("Cycles: "+mem.getMemoryCycleCount());
-                break;
-            }
-            if (ans2 == 'r'){
-                if (written.isEmpty()){
-                    System.out.println("No address to read");
-                } else {
-                    System.out.println("Enter an address to read");
-                    int address = Integer.parseInt(scan.next());
-                    try{
-                        int data = mem.readAddressInMemory(address);
-                        System.out.println("Memory at " + address + " is " + data);
-                        System.out.println("Cycles: "+mem.getMemoryCycleCount());
-                    } catch(Exception e){
-                        System.out.println("Invalid address");
-                    }
-                }
-            }
-            if (ans2 == 'w'){
-                System.out.println("Enter an address to write to");
-                int address = Integer.parseInt(scan.next());
-                System.out.println("Enter data to write");
-                int data = Integer.parseInt(scan.next());
-                
-                try{
-                    mem.writeAddressInMemory((char) data, address);
-                    written.add(address);
-                    System.out.println("Cycles: "+mem.getMemoryCycleCount());
-                } catch(Exception e){
-                    System.out.println("Invalid address");
-                }
-            }
-            if (ans2 == 's'){
-                if (written.isEmpty()){
-                    System.out.println("No address to show");
-                } else {
-                    System.out.println("Address     Data");
-                    for (int i = 0; i < written.size(); ++i){
-                        try {
-                            System.out.println(written.get(i) + "    " + mem.readAddressInMemory(written.get(i)));
-                        } catch (Exception e){
-                            System.out.println("Operation failed");
-                        }
-                        
-                    }
-                    System.out.println("Total entries: " + written.size());
-                    System.out.println("Cycles: "+mem.getMemoryCycleCount());
-                }
-            }
-            
-        }
-        
-        
-    }
+//    public static void CLI(){
+//        Scanner scan = new Scanner(System.in);
+//        System.out.println("Architecture Memory Interface\nCache enabled? y/n\n");
+//        String ans1 = scan.next();
+//        Memory mem;
+//        if (ans1.charAt(0) == 'y'){
+//            mem = new Memory(true);
+//        } else {
+//            mem = new Memory(false);
+//        }
+//        ArrayList<Integer> written = new ArrayList<Integer>();
+//        while(true){
+//            System.out.println("Available commands: r --Read, w --Write, s --show memory, x --exit");
+//            System.out.println("Enter a command");
+//            char ans2 = scan.next().charAt(0);
+//            if (ans2 == 'x'){
+//                System.out.println("Final state of memory: ");
+//                System.out.println("Address     Data");
+//                for (int i = 0; i < written.size(); ++i){
+//                    try {
+//                        System.out.println(written.get(i) + "    " + mem.readAddressInMemory(written.get(i)));
+//                    } catch (Exception e){
+//                        System.out.println("Operation failed");
+//                    }        
+//                }
+//                System.out.println("Total entries: " + written.size());
+//                System.out.println("Cycles: "+mem.getMemoryCycleCount());
+//                break;
+//            }
+//            if (ans2 == 'r'){
+//                if (written.isEmpty()){
+//                    System.out.println("No address to read");
+//                } else {
+//                    System.out.println("Enter an address to read");
+//                    int address = Integer.parseInt(scan.next());
+//                    try{
+//                        int data = mem.readAddressInMemory(address);
+//                        System.out.println("Memory at " + address + " is " + data);
+//                        System.out.println("Cycles: "+mem.getMemoryCycleCount());
+//                    } catch(Exception e){
+//                        System.out.println("Invalid address");
+//                    }
+//                }
+//            }
+//            if (ans2 == 'w'){
+//                System.out.println("Enter an address to write to");
+//                int address = Integer.parseInt(scan.next());
+//                System.out.println("Enter data to write");
+//                int data = Integer.parseInt(scan.next());
+//                
+//                try{
+//                    mem.writeAddressInMemory((char) data, address);
+//                    written.add(address);
+//                    System.out.println("Cycles: "+mem.getMemoryCycleCount());
+//                } catch(Exception e){
+//                    System.out.println("Invalid address");
+//                }
+//            }
+//            if (ans2 == 's'){
+//                if (written.isEmpty()){
+//                    System.out.println("No address to show");
+//                } else {
+//                    System.out.println("Address     Data");
+//                    for (int i = 0; i < written.size(); ++i){
+//                        try {
+//                            System.out.println(written.get(i) + "    " + mem.readAddressInMemory(written.get(i)));
+//                        } catch (Exception e){
+//                            System.out.println("Operation failed");
+//                        }
+//                        
+//                    }
+//                    System.out.println("Total entries: " + written.size());
+//                    System.out.println("Cycles: "+mem.getMemoryCycleCount());
+//                }
+//            }
+//            
+//        }
+//        
+//        
+//    }
     
     public static void nSetAssociativityDemo(Memory memoryEnabled) {
         Memory memory = memoryEnabled;

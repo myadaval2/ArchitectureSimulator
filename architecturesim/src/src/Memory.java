@@ -18,9 +18,11 @@ public class Memory {
     private boolean cacheEnabled;
     private int     memoryCycleCount;
     
+    public static Memory memory = new Memory(true);
+    
     public Memory() {   this(true);     }
     
-    public Memory(boolean cacheEnabled) {
+    private Memory(boolean cacheEnabled) {
         this.memoryCycleCount = 0;
         this.cacheEnabled = cacheEnabled;
         if (cacheEnabled){
@@ -33,6 +35,10 @@ public class Memory {
             DRAM = new Cache(Utils.SIZE_DRAM, null, Utils.WAIT_DRAM, 0);
             headPointer = DRAM;
         }
+    }
+    
+    public static Memory getMemory() {
+        return memory;
     }
     
     public void writeAddressInMemory(int data, int address) throws NoSuchMemoryLocationException{

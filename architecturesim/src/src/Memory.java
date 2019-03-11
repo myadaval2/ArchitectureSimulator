@@ -85,7 +85,8 @@ public class Memory {
             }
             int tag_bit = address & MASK_TAG;
             int index_bit = address & MASK_INDEX;
-            int cacheIndex = index_bit * 2;
+            int cacheIndex = (index_bit >> 1) * 2;
+            
             for (int i = cacheIndex; i < cacheIndex + Utils.N_SET; i++) {
                 if (tag_bit == pointer.getTagArray()[cacheIndex]) {
                     pointer.updateHistoryArray(cacheIndex, 1);

@@ -122,27 +122,27 @@ public class Pipeline {
         
         // memoryOutput is for load/store, ALUOutput is for new address calculations
         // do we need both??
-//        switch (checkEXHazard()) {
-//            case 1:
-//                RSValue = this.hazardValues.getALUOutput();
-//                break;
-//            case 2:
-//                RTValue = this.hazardValues.getALUOutput();
-//                break;
-//            default:
-//                break;
-//        }
-//        
-//        switch (checkMEMHazard()) {
-//            case 1:
-//                RSValue = this.hazardValues.getALUOutput();
-//                break;
-//            case 2:
-//                RTValue = this.hazardValues.getALUOutput();
-//                break;
-//            default:
-//                break;
-//        }
+        switch (checkEXHazard()) {
+            case 1:
+                RSValue = this.hazardValues.getALUOutput();
+                break;
+            case 2:
+                RTValue = this.hazardValues.getALUOutput();
+                break;
+            default:
+                break;
+        }
+        
+        switch (checkMEMHazard()) {
+            case 1:
+                RSValue = this.hazardValues.getALUOutput();
+                break;
+            case 2:
+                RTValue = this.hazardValues.getALUOutput();
+                break;
+            default:
+                break;
+        }
         
         // do ALU operations
         switch (opcode) {
@@ -297,6 +297,7 @@ public class Pipeline {
         pipeline[1].setImmediate(immediate);
         pipeline[1].setOffset(offset);
         pipeline[1].setOpcode(opcode);
+        
         updateIDHazard();
     }
     
@@ -311,39 +312,38 @@ public class Pipeline {
         register.setNextPC(register.getPC() + 1);
         this.getPipeline()[0].setTestValue(instruction);
         register.setPC(register.getNextPC());
-        System.out.println("PC Value: " + register.getPC());
+        // System.out.println("PC Value: " + register.getPC());
     }
     
     // may need to return something to indicate how to change RS/RT
     private int checkEXHazard() {
-        // if writing to register Rd (ALU operations, etc.) AND
-        if (this.hazardValues.getEX_MEM_RegisterRd() == this.hazardValues.getID_EX_RegisterRs()) {
-            return 1;
+        // if writing to register File
+        if (this.hazardValues.getEX_MEM_RegWrite() == 1) {
+            if (this.hazardValues.getEX_MEM_RegisterRd() == this.hazardValues.getID_EX_RegisterRs()) {
+                return 1;
+            }
+            else if (this.hazardValues.getEX_MEM_RegisterRd() == this.hazardValues.getID_EX_RegisterRt()) {
+                return 2;
+            }
+            
         }
-        
-        else if (this.hazardValues.getEX_MEM_RegisterRd() == this.hazardValues.getID_EX_RegisterRt()) {
-            return 2;
-        }
-        
-        else {
-            return 0;
-        }
+        return 0;
     }
     
     // may need to return something to indicate how to change RS/RT
     private int checkMEMHazard() {
         // more conditions to check
-        // if writing to register Rd (ALU operations, etc.) AND
-        if (this.hazardValues.getMEM_WB_RegisterRd() == this.hazardValues.getID_EX_RegisterRs()) {
-            return 1;
+        // if writing to register File
+        if (this.hazardValues.getMEM_WB_RegWrite() == 1) {
+            if (this.hazardValues.getMEM_WB_RegisterRd() == this.hazardValues.getID_EX_RegisterRs()) {
+                return 1;
+            }
+
+            else if (this.hazardValues.getMEM_WB_RegisterRd() == this.hazardValues.getID_EX_RegisterRt()) {
+                return 2;
+            }
         }
-        
-        else if (this.hazardValues.getMEM_WB_RegisterRd() == this.hazardValues.getID_EX_RegisterRt()) {
-            return 2;
-        }
-        else {
-            return 0;
-        }
+        return 0;
     }
     
     private void updateIDHazard() {
@@ -356,12 +356,23 @@ public class Pipeline {
         // update whatever starts with EX
         this.hazardValues.setEX_MEM_RegisterRd(pipeline[2].getRD());
         this.hazardValues.setALUOutput(pipeline[2].getALUOutput());
+        int opcode = pipeline[2].getOpcode();
+        
+        if (opcode >=1 && opcode <=8 || opcode >= 10 && opcode <= 15) {
+            this.hazardValues.setEX_MEM_RegWrite(1);
+        }
+        
     }
     
     private void updateMEMHazard() {
         // update whatever starts with MEM
         this.hazardValues.setMEM_WB_RegisterRd(pipeline[3].getRD());
         this.hazardValues.setMemoryOutput(pipeline[3].getMemoryOutput());
+        int opcode = pipeline[3].getOpcode();
+        
+        if (opcode >=1 && opcode <=8 || opcode >= 10 && opcode <= 15) {
+            this.hazardValues.setMEM_WB_RegWrite(1);
+        }
     }
     
     private void copyStage(PipeStage oldStage, PipeStage newStage) {

@@ -22,6 +22,7 @@ public class PipeStage {
     private int ALUOutput;
     private int memoryOutput;
     private int dataFromMemory;
+    private int regWrite;
     // private int registerValue; OR should this be ALUOutput? ALUOutput is not used in LD/ST
     
     public PipeStage() {
@@ -35,6 +36,7 @@ public class PipeStage {
         this.testValue = 0;
         this.ALUOutput = 0;
         this.memoryOutput = 0;
+        this.regWrite = 0;
     }
 
     /**
@@ -203,5 +205,19 @@ public class PipeStage {
      */
     public void setDataFromMemory(int dataFromMemory) {
         this.dataFromMemory = dataFromMemory;
+    }
+
+    /**
+     * @return the regWrite
+     */
+    public int getRegWrite() {
+        return regWrite;
+    }
+
+    /**
+     * @param regWrite the regWrite to set
+     */
+    public void setRegWrite(int regWrite) {
+        this.regWrite = regWrite;
     }
 }

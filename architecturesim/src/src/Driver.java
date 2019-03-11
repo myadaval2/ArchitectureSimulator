@@ -42,12 +42,9 @@ public class Driver {
 //            memory.writeAddressInMemory(0b0010010010111000, 3); //9400
 //            memory.writeAddressInMemory(0b0010110111011100, 4); //11740
             
-            memory.writeAddressInMemory(0b0000101101000100, 0); //2380
-            memory.writeAddressInMemory(0x0000, 1); //2380
-            memory.writeAddressInMemory(0x0000, 2); //4720
-            memory.writeAddressInMemory(0x0000, 3); //7060
-            memory.writeAddressInMemory(0x0000, 4); //9400
-            memory.writeAddressInMemory(0b0000110000101100, 5); //4720
+            memory.writeAddressInMemory(0b0000101101000100, 0); //
+            memory.writeAddressInMemory(0b0000110000101100, 1); //
+            memory.writeAddressInMemory(0b0000111001110000, 2); //
             
         }
         catch (NoSuchMemoryLocationException e){
@@ -64,7 +61,7 @@ public class Driver {
                             + " R6 " + register.getRegisterValue(6)
                             + " R7 " + register.getRegisterValue(7));
         
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 7; i++) {
             pipeline.step(i);
 //            for (int j = 0; j < 6; j++) {
 //                System.out.println( pipeline.getPipeline()[j].getInstruction()

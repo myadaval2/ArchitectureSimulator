@@ -20,24 +20,72 @@ public class Driver {
     public Driver(){
         // memoryDemo(memoryEnabled, memoryDisabled);
         pipeline = new Pipeline();
-        
     }
     
     public static void main(String[] args){
        // directCompare(memoryEnabled, memoryDisabled);
        // CLI();
        Driver driver = new Driver();
+       // driver.allCacheDemoReal();
        driver.pipelineTest();
        
     }
     
     public void pipelineTest() {
-        for (int i = 1; i < 10; i++) {
-            System.out.println("Instruction i: " + i);
-            pipeline.step(i);
-            System.out.println(pipeline.getPipeline()[0].getTestValue() + " " + pipeline.getPipeline()[1].getTestValue() + " " + pipeline.getPipeline()[2].getTestValue() + " " +
-            pipeline.getPipeline()[3].getTestValue() + " " + pipeline.getPipeline()[4].getTestValue() + " " + pipeline.getPipeline()[5].getTestValue());
+        Memory memory = Memory.getMemory();
+        Register register = Register.getRegisters();
+        try {
+            // put real things in here and print all attributes of pipestage
+//            memory.writeAddressInMemory(0b0000100101001100, 0); //2380
+//            memory.writeAddressInMemory(0b0001001001110000, 1); //4720
+//            memory.writeAddressInMemory(0b0001101110010100, 2); //7060
+//            memory.writeAddressInMemory(0b0010010010111000, 3); //9400
+//            memory.writeAddressInMemory(0b0010110111011100, 4); //11740
+            
+            memory.writeAddressInMemory(0b0000101101000100, 0); //2380
+            memory.writeAddressInMemory(0x0000, 1); //2380
+            memory.writeAddressInMemory(0x0000, 2); //4720
+            memory.writeAddressInMemory(0x0000, 3); //7060
+            memory.writeAddressInMemory(0x0000, 4); //9400
+            memory.writeAddressInMemory(0b0000110000101100, 5); //4720
+            
         }
+        catch (NoSuchMemoryLocationException e){
+            System.out.println("Test Failed");
+        }
+        
+        System.out.println("Registers BEFORE: " +
+                              " R0 " + register.getRegisterValue(0)
+                            + " R1 " + register.getRegisterValue(1)
+                            + " R2 " + register.getRegisterValue(2)
+                            + " R3 " + register.getRegisterValue(3)
+                            + " R4 " + register.getRegisterValue(4)
+                            + " R5 " + register.getRegisterValue(5)
+                            + " R6 " + register.getRegisterValue(6)
+                            + " R7 " + register.getRegisterValue(7));
+        
+        for (int i = 0; i < 11; i++) {
+            pipeline.step(i);
+//            for (int j = 0; j < 6; j++) {
+//                System.out.println( pipeline.getPipeline()[j].getInstruction()
+//                            + " " + pipeline.getPipeline()[j].getOpcode()
+//                            + " " + pipeline.getPipeline()[j].getRD()
+//                            + " " + pipeline.getPipeline()[j].getRS()
+//                            + " " + pipeline.getPipeline()[j].getRT()
+//                            + " " + pipeline.getPipeline()[j].getImmediate()
+//                            + " " + pipeline.getPipeline()[j].getALUOutput());
+//        
+//            }
+        }  
+        System.out.println("Registers AFTER: " +
+                              " R0 " + register.getRegisterValue(0)
+                            + " R1 " + register.getRegisterValue(1)
+                            + " R2 " + register.getRegisterValue(2)
+                            + " R3 " + register.getRegisterValue(3)
+                            + " R4 " + register.getRegisterValue(4)
+                            + " R5 " + register.getRegisterValue(5)
+                            + " R6 " + register.getRegisterValue(6)
+                            + " R7 " + register.getRegisterValue(7));
     }
     
     
@@ -59,8 +107,20 @@ public class Driver {
     }
     
     
-    public void allCacheDemoReal(Memory memory) {
+    public void allCacheDemoReal() {
+        Memory memory = Memory.getMemory();
         try {
+            
+            memory.writeAddressInMemory(0b0000100101001100, 0); //2380
+            memory.writeAddressInMemory(0b0001001001110000, 1); //4720
+            memory.writeAddressInMemory(0b0001101110010100, 2); //7060
+            memory.writeAddressInMemory(0b0010010010111000, 3); //9400
+            memory.writeAddressInMemory(0b0010110111011100, 4); //11740
+            System.out.println("Read address 0: " + memory.readAddressInMemory(0));
+            System.out.println("Read address 1: " + memory.readAddressInMemory(1));
+            System.out.println("Read address 2: " + memory.readAddressInMemory(2));
+            System.out.println("Read address 3: " + memory.readAddressInMemory(3));
+            System.out.println("Read address 4: " + memory.readAddressInMemory(4));
             // L1 Page 0: 00000	DEADEEEE
             // L1 Page 0: 04002	FFFF0000
             // L1 Page 0: 0C002	ACED0000
@@ -73,17 +133,17 @@ public class Driver {
             // L2 Page 64: 0D000 AAAA0000
             // L2 Page 128: 02000 33330000
             // L2 Page 128: 06000 22220000
-            memory.writeAddressInMemory((char) 0xdead, 0b00000000000000000); 
-            memory.writeAddressInMemory((char) 0xeeee, 0b00000000000000001);
-            memory.writeAddressInMemory((char) 0x3333, 0b00010000000000000);
-            memory.writeAddressInMemory((char) 0x6666, 0b00100000000000000);
-            memory.writeAddressInMemory((char) 0x1111, 0b01100000000000000);
-            memory.writeAddressInMemory((char) 0xffff, 0b00100000000000010); 
-            memory.writeAddressInMemory((char) 0xaced, 0b01100000000000010); 
-            memory.writeAddressInMemory((char) 0xbbbb, 0b10001000000000000);
-            memory.writeAddressInMemory((char) 0xaaaa, 0b01101000000000000);
-            memory.writeAddressInMemory((char) 0x2222, 0b00110000000000000); 
-            memory.writeAddressInMemory((char) 0xabcd, 0b11111111111111111); 
+//            memory.writeAddressInMemory((char) 0xdead, 0b00000000000000000); 
+//            memory.writeAddressInMemory((char) 0xeeee, 0b00000000000000001);
+//            memory.writeAddressInMemory((char) 0x3333, 0b00010000000000000);
+//            memory.writeAddressInMemory((char) 0x6666, 0b00100000000000000);
+//            memory.writeAddressInMemory((char) 0x1111, 0b01100000000000000);
+//            memory.writeAddressInMemory((char) 0xffff, 0b00100000000000010); 
+//            memory.writeAddressInMemory((char) 0xaced, 0b01100000000000010); 
+//            memory.writeAddressInMemory((char) 0xbbbb, 0b10001000000000000);
+//            memory.writeAddressInMemory((char) 0xaaaa, 0b01101000000000000);
+//            memory.writeAddressInMemory((char) 0x2222, 0b00110000000000000); 
+//            memory.writeAddressInMemory((char) 0xabcd, 0b11111111111111111); 
         }
         catch (NoSuchMemoryLocationException e){
             System.out.println("Test Failed");

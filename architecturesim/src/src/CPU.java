@@ -17,7 +17,7 @@ public class CPU {
     public CPU() {      this(true);     }
     
     public CPU(boolean cacheEnabled){
-        this.memory     = new Memory(cacheEnabled);
+        //this.memory     = new Memory(cacheEnabled);
         this.clock      = 0;
     }
     public CPU(Memory memory){

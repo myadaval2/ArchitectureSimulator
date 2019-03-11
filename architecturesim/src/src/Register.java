@@ -10,7 +10,7 @@ package src;
  * @author megha
  */
 public class Register {
-    private int[]     GP;
+    private int[]      GP;
     private int        PC;
     private int        NextPC;
     private int        SP;
@@ -22,7 +22,7 @@ public class Register {
     private Register() {
         this.GP = new int[8];
         for (int i = 0; i < 8; i++) {
-            this.GP[i] = (char) i;
+            this.GP[i] = (char) 1;
         }
         this.PC        = 0;
         this.NextPC    = 0;
@@ -31,7 +31,17 @@ public class Register {
         this.CMP       = 0;
     }
 
-
+    public void clearRegisterFile() {
+        for (int i = 0; i < 8; i++) {
+            this.GP[i] = (char) 0;
+        }
+        this.PC        = 0;
+        this.NextPC    = 0;
+        this.SP        = 0;
+        this.RTN       = 0;
+        this.CMP       = 0;
+    }
+    
     public int getRegisterValue(int register) {
         return GP[register];
     }

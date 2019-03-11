@@ -21,6 +21,7 @@ public class PipeStage {
     private int testValue;
     private int ALUOutput;
     private int memoryOutput;
+    private int dataFromMemory;
     // private int registerValue; OR should this be ALUOutput? ALUOutput is not used in LD/ST
     
     public PipeStage() {
@@ -190,5 +191,17 @@ public class PipeStage {
         this.offset = offset;
     }
 
-    
+    /**
+     * @return the dataFromMemory
+     */
+    public int getDataFromMemory() {
+        return dataFromMemory;
+    }
+
+    /**
+     * @param dataFromMemory the dataFromMemory to set
+     */
+    public void setDataFromMemory(int dataFromMemory) {
+        this.dataFromMemory = dataFromMemory;
+    }
 }

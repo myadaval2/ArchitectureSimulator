@@ -32,26 +32,23 @@ public class Pipeline {
             if (isEmpty(this.getPipeline()[i])) {
                 switch (i) {
                     case 5:
-                        System.out.println("got to WB stage");
+                        // System.out.println("got to WB stage");
                         stepWB();
                         break;
                     case 4:
-                        System.out.println("got to MEM stage");
+                        // System.out.println("got to MEM stage");
                         stepMEM();
-                        
                         break;
                     case 3:
-                        System.out.println("got to EX stage");
+                        // System.out.println("got to EX stage");
                         stepEX();
-                        
                         break;
                     case 2:
-                        System.out.println("got to ID stage");
+                        // System.out.println("got to ID stage");
                         stepID();
-                        
                         break;
                     case 1:
-                        System.out.println("got to IF stage");
+                        // System.out.println("got to IF stage");
                         stepIF(instruction);
                         break;
                     default:
@@ -68,22 +65,32 @@ public class Pipeline {
         // WHAT INSTRUCTIONS WRITE BACK?
         // write to register file pipeline[5]
         // NEED TO CAST AS CHAR ?? NEED TO GET THIS STRAIGHT
-        if (pipeline[3].getOpcode() >= 1 && pipeline[3].getOpcode() <= 14) {
-            register.setRegisterValue(pipeline[3].getRD(), pipeline[3].getALUOutput());
+        int writeDataToRegister;
+        int registerWrite = pipeline[4].getRD();
+        int opcode  = pipeline[4].getOpcode();
+        // ALU Ops
+        if (opcode >= 1 && opcode <= 14) {
+            writeDataToRegister = pipeline[4].getALUOutput();
+            register.setRegisterValue(registerWrite, writeDataToRegister);
         }
-        else if (pipeline[3].getOpcode() == 16) {
-            register.setRegisterValue(pipeline[3].getRD(), pipeline[3].getMemoryOutput());
-        }
+        // LD
+        else if (opcode == 15) {
+            writeDataToRegister = pipeline[4].getDataFromMemory();
+            register.setRegisterValue(registerWrite, writeDataToRegister);
+        }        
     }
     
     private void stepMEM() {
         // get from ALUOutput or memoryOutput?
-        int address = 0;
+        int RD = pipeline[3].getRD();
+        int address = pipeline[3].getMemoryOutput();
         int data = 0;
+        
         // LD
         if (pipeline[3].getOpcode() == 15) {
             try {
-            data = memory.readAddressInMemory(address);
+                data = memory.readAddressInMemory(address);
+                pipeline[3].setDataFromMemory(data);
             }
             catch (NoSuchMemoryLocationException e){
                 System.out.println("Test Failed");
@@ -92,13 +99,13 @@ public class Pipeline {
         // ST
         else if (pipeline[3].getOpcode() == 16) {
             try {
-            memory.writeAddressInMemory(data, address);
+                data = register.getRegisterValue(RD);
+                memory.writeAddressInMemory(data, address);
             }
             catch (NoSuchMemoryLocationException e){
                 System.out.println("Test Failed");
             }
         }
-        // pipeline[3].setRegisterValue(data);
         updateMEMHazard();
     }
     
@@ -112,30 +119,30 @@ public class Pipeline {
         int offset = pipeline[2].getOffset();
         int ALUOutput = 0;
         int memoryOutput = 0;
+        
         // memoryOutput is for load/store, ALUOutput is for new address calculations
         // do we need both??
-        
-        switch (checkEXHazard()) {
-            case 1:
-                RSValue = this.hazardValues.getALUOutput();
-                break;
-            case 2:
-                RTValue = this.hazardValues.getALUOutput();
-                break;
-            default:
-                break;
-        }
-        
-        switch (checkMEMHazard()) {
-            case 1:
-                RSValue = this.hazardValues.getALUOutput();
-                break;
-            case 2:
-                RTValue = this.hazardValues.getALUOutput();
-                break;
-            default:
-                break;
-        }
+//        switch (checkEXHazard()) {
+//            case 1:
+//                RSValue = this.hazardValues.getALUOutput();
+//                break;
+//            case 2:
+//                RTValue = this.hazardValues.getALUOutput();
+//                break;
+//            default:
+//                break;
+//        }
+//        
+//        switch (checkMEMHazard()) {
+//            case 1:
+//                RSValue = this.hazardValues.getALUOutput();
+//                break;
+//            case 2:
+//                RTValue = this.hazardValues.getALUOutput();
+//                break;
+//            default:
+//                break;
+//        }
         
         // do ALU operations
         switch (opcode) {
@@ -153,7 +160,7 @@ public class Pipeline {
                 break;
             // DIV
             case 4:
-                ALUOutput = RSValue / RTValue;
+                ALUOutput = RSValue / (RTValue + 1);
                 break;
             // MOD
             case 5:
@@ -251,7 +258,8 @@ public class Pipeline {
             
         
         // switch statement for ALU operations
-        // store ALUOutput in pipeline[2].setALUOutput(ALUOutput);
+        pipeline[2].setALUOutput(ALUOutput);
+        pipeline[2].setMemoryOutput(memoryOutput);
         updateEXHazard();
     }
     
@@ -295,13 +303,15 @@ public class Pipeline {
     private void stepIF(int instruction) {
         // fetch instruction
         try {
-            memory.readAddressInMemory(register.getPC());
+            pipeline[0].setInstruction(memory.readAddressInMemory(register.getPC()));
         }
         catch (NoSuchMemoryLocationException e){
             System.out.println("Test Failed");
         }
         register.setNextPC(register.getPC() + 1);
         this.getPipeline()[0].setTestValue(instruction);
+        register.setPC(register.getNextPC());
+        System.out.println("PC Value: " + register.getPC());
     }
     
     // may need to return something to indicate how to change RS/RT
@@ -361,6 +371,8 @@ public class Pipeline {
         newStage.setRS(oldStage.getRS());
         newStage.setRT(oldStage.getRT());
         newStage.setImmediate(oldStage.getImmediate());
+        newStage.setALUOutput(oldStage.getALUOutput());
+        newStage.setMemoryOutput(oldStage.getMemoryOutput());
         newStage.setOpcode(oldStage.getOpcode());
         newStage.setTestValue(oldStage.getTestValue());
     }
@@ -372,6 +384,8 @@ public class Pipeline {
         stage.setRS(0);
         stage.setRT(0);
         stage.setImmediate((char) 0x0000);
+        stage.setALUOutput(0);
+        stage.setMemoryOutput(0);
         stage.setOpcode((char) 0x0000);
         stage.setTestValue(0);
     }

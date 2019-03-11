@@ -341,6 +341,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void drawTable() {
         Object[][] memoryArraySegment;
+        Memory memory = Memory.getMemory();
         int memoryPage = 0;
         String s = (String) AddressRangeDropDown.getSelectedItem();
         Pattern p = Pattern.compile("\\d+");
@@ -351,7 +352,7 @@ public class MainWindow extends javax.swing.JFrame {
         String [] columnNames = {"Address", "Instruction"};
         if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
             case "DRAM":
-                memoryArraySegment = dm.getMemoryPage("DRAM", d.memoryEnabled.DRAM.getMemArray(), d.memoryEnabled.DRAM.getTagArray(), d.memoryEnabled.DRAM.getHistoryArray(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage("DRAM", memory.DRAM.getMemArray(), memory.DRAM.getTagArray(), memory.DRAM.getHistoryArray(), memoryPage);
                 MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                     memoryArraySegment,
                     columnNames
@@ -360,7 +361,7 @@ public class MainWindow extends javax.swing.JFrame {
             );  break;
             case "L2 Cache":
                 columnNames[0] = "Line";
-                memoryArraySegment = dm.getMemoryPage("L2Cache", d.memoryEnabled.L2Cache.getMemArray(), d.memoryEnabled.L2Cache.getTagArray(), d.memoryEnabled.L2Cache.getHistoryArray(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage("L2Cache", memory.L2Cache.getMemArray(), memory.L2Cache.getTagArray(), memory.L2Cache.getHistoryArray(), memoryPage);
                 MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                     memoryArraySegment,
                     columnNames
@@ -369,7 +370,7 @@ public class MainWindow extends javax.swing.JFrame {
             );  break;
             case "L1 Cache":
                 columnNames[0] = "Line";
-                memoryArraySegment = dm.getMemoryPage("L1Cache", d.memoryEnabled.L1Cache.getMemArray(), d.memoryEnabled.L1Cache.getTagArray(), d.memoryEnabled.L1Cache.getHistoryArray(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage("L1Cache", memory.L1Cache.getMemArray(), memory.L1Cache.getTagArray(), memory.L1Cache.getHistoryArray(), memoryPage);
                 MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                     memoryArraySegment,
                     columnNames
@@ -383,8 +384,8 @@ public class MainWindow extends javax.swing.JFrame {
     
     
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
-        d.memoryStep(d.memoryEnabled);
-        System.out.println(d.counter);
+        //d.memoryStep(d.memoryEnabled);
+        //System.out.println(d.counter);
         drawTable();
     }//GEN-LAST:event_stepButtonActionPerformed
 
@@ -425,7 +426,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     Driver d;
-    CPU cpu = new CPU();
+    //CPU cpu = new CPU();
     DisplayMemory dm = new DisplayMemory();
     // cpu.MemorySet.L1Cache.getMemArray();
     // cpu.MemorySet.L2Cache.getMemArray();

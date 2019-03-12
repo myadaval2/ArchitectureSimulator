@@ -26,7 +26,7 @@ public class Register {
         }
         this.GP[0] = (char) 0;
         this.GP[1] = (char) 0;
-        this.GP[3] = (char) 5;
+        this.GP[3] = (char) 3;
         this.PC        = 0;
         this.NextPC    = 0;
         this.SP        = 0;

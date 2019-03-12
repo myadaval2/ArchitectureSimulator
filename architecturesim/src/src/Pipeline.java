@@ -121,6 +121,7 @@ public class Pipeline {
         int opcode = pipeline[2].getOpcode();
         int offset = pipeline[2].getOffset();
         int branchTaken = 0;
+        System.out.println("Current instruction: " + opcode);
         
         int ALUOutput = 0;
         int memoryOutput = 0;

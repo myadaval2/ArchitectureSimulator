@@ -44,19 +44,23 @@ public class Driver {
 //            memory.writeAddressInMemory(0b0010110111011100, 4); //11740
             
 // checking LD ST ADD dependencies
-//            memory.writeAddressInMemory(0b0000101101000100, 0); //
-//            memory.writeAddressInMemory(0b0000110000101100, 1); //
-//            memory.writeAddressInMemory(0b0000111001110000, 2); //
-//            memory.writeAddressInMemory(0b0111101000100000, 3); // LD R2 with Mem[R1+0]
-//            memory.writeAddressInMemory(0b0000111000110000, 4); // ADD R6 = R1 + R4, R6 = 4
-//            memory.writeAddressInMemory(0b1000011000011111, 5); // ST R6 into Mem[R0+31] -> Mem[31]
+            memory.writeAddressInMemory(0b0000101101000100, 0); //
+            memory.writeAddressInMemory(0b0000110000101100, 1); //
+            memory.writeAddressInMemory(0b0000111001110000, 2); //
+            memory.writeAddressInMemory(0b0111101000100000, 3); // LD R2 with Mem[R1+0]
+            memory.writeAddressInMemory(0b0000111000110000, 4); // ADD R6 = R1 + R4, R6 = 4
+            memory.writeAddressInMemory(0b1000011000011111, 5); // ST R6 into Mem[R0+31] -> Mem[31]
             
 // branch test
             //memory.writeAddressInMemory(0b0000101101000100, 0); // LD R1, 0
             //memory.writeAddressInMemory(0b0000110000101100, 1); // LD R3 5
-            memory.writeAddressInMemory(0b0101101101100001, 0); // SUBi R3 R3, -1
-            memory.writeAddressInMemory(0b1000100101100010, 1); // BGT R1 R3 -2
-            memory.writeAddressInMemory(0b0101001001000001, 2); // Addi R2 R2 +1
+//            memory.writeAddressInMemory(0b0101101101100001, 0); // SUBi R3 R3, -1
+//            memory.writeAddressInMemory(0b1000100101100010, 1); // BGT R1 R3 -2
+//            memory.writeAddressInMemory(0b0101001001000001, 2); // Addi R2 R2 +1
+//            System.out.println("Read address 0: " + memory.readAddressInMemory(0));
+//            // System.out.println("\n\n");
+//            System.out.println("Read address 1: " + memory.readAddressInMemory(1));
+//            System.out.println("Read address 2: " + memory.readAddressInMemory(2));
             
         }
         catch (NoSuchMemoryLocationException e){
@@ -73,7 +77,7 @@ public class Driver {
                             + " R6 " + register.getRegisterValue(6)
                             + " R7 " + register.getRegisterValue(7));
         
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 17; i++) {
             pipeline.step(i);
             for (int j = 0; j < 6; j++) {
                 // System.out.println( pipeline.getPipeline()[j].getInstruction());

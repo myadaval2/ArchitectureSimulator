@@ -24,6 +24,9 @@ public class Register {
         for (int i = 0; i < 8; i++) {
             this.GP[i] = (char) 1;
         }
+        this.GP[0] = (char) 0;
+        this.GP[1] = (char) 0;
+        this.GP[3] = (char) 5;
         this.PC        = 0;
         this.NextPC    = 0;
         this.SP        = 0;

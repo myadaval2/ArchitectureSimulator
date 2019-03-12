@@ -85,12 +85,14 @@ public class Pipeline {
         int RD = pipeline[3].getRD();
         int address = pipeline[3].getMemoryOutput();
         int data = 0;
-        
+        // Only need to updateHazard if load/store 
         // LD
         if (pipeline[3].getOpcode() == 15) {
+            
             try {
                 data = memory.readAddressInMemory(address);
                 pipeline[3].setDataFromMemory(data);
+                
             }
             catch (NoSuchMemoryLocationException e){
                 System.out.println("Test Failed");
@@ -101,6 +103,7 @@ public class Pipeline {
             try {
                 data = register.getRegisterValue(RD);
                 memory.writeAddressInMemory(data, address);
+                //updateMEMHazard();
             }
             catch (NoSuchMemoryLocationException e){
                 System.out.println("Test Failed");
@@ -117,6 +120,8 @@ public class Pipeline {
         int immediate = pipeline[2].getImmediate();
         int opcode = pipeline[2].getOpcode();
         int offset = pipeline[2].getOffset();
+        int branchTaken = 0;
+        
         int ALUOutput = 0;
         int memoryOutput = 0;
         
@@ -180,6 +185,7 @@ public class Pipeline {
                 break;
             // CMP
             case 9:
+                // set CMP Register?
                 if (RSValue == RTValue) {
                     ALUOutput = 1;
                 }
@@ -190,10 +196,12 @@ public class Pipeline {
             // ADDI
             case 10:
                 ALUOutput = RSValue + immediate;
+                System.out.println("In ADDI");
                 break;
             // SUBI
             case 11:
                 ALUOutput = RSValue - immediate;
+                System.out.println("In SUBI");
                 break;
             // LLS
             case 12:
@@ -218,20 +226,24 @@ public class Pipeline {
             // do we need the + 1 or can we use NextPC?
             // BGT    
             case 17:
+                System.out.println("In BGT");
                 if (RSValue > RDValue) {
-                    ALUOutput = register.getPC() + 1 + immediate;
+                    ALUOutput = register.getPC() - 1 - immediate;
+                    branchTaken = 1;
                 }
                 break; 
             // BLT
             case 18:
                 if (RSValue < RDValue) {
-                    ALUOutput = register.getPC() + 1 + immediate;
+                    ALUOutput = register.getPC() + immediate;
+                    branchTaken = 1;
                 }
                 break;
             // BOE
             case 19:
                 if (RSValue == RDValue) {
-                    ALUOutput = register.getPC() + 1 + immediate;
+                    ALUOutput = register.getPC() + immediate;
+                    branchTaken = 1;
                 }
                 break;
             // JMP
@@ -256,11 +268,26 @@ public class Pipeline {
                 // of loads/stores
         }
             
-        
+        // if branch taken, pc = ALUOutput, flush previous stages pipeline[0] pipeline[1], clear IDHazard(), clearEXHazard, clear 
+        // else pc=pc+1
         // switch statement for ALU operations
+        if (branchTaken == 1) {
+            clearHazards();
+            clearStage(this.getPipeline()[0]);
+            clearStage(this.getPipeline()[1]);
+            register.setPC(ALUOutput);
+            System.out.println("Branch taken pc value: " + register.getPC());
+        }
+        else {
+            
+            
+            
+        }
+        
         pipeline[2].setALUOutput(ALUOutput);
         pipeline[2].setMemoryOutput(memoryOutput);
         updateEXHazard();
+        
     }
     
     private void stepID() {
@@ -309,10 +336,10 @@ public class Pipeline {
         catch (NoSuchMemoryLocationException e){
             System.out.println("Test Failed");
         }
-        register.setNextPC(register.getPC() + 1);
         this.getPipeline()[0].setTestValue(instruction);
-        register.setPC(register.getNextPC());
-        // System.out.println("PC Value: " + register.getPC());
+        
+        // System.out.println("Fetch PC Value: " + register.getPC());
+        register.setPC(register.getPC() + 1);
     }
     
     // may need to return something to indicate how to change RS/RT
@@ -370,7 +397,7 @@ public class Pipeline {
         this.hazardValues.setMemoryOutput(pipeline[3].getMemoryOutput());
         int opcode = pipeline[3].getOpcode();
         
-        if (opcode >=1 && opcode <=8 || opcode >= 10 && opcode <= 15) {
+        if (opcode >= 1 && opcode <= 8 || opcode >= 10 && opcode <= 15) {
             this.hazardValues.setMEM_WB_RegWrite(1);
         }
     }
@@ -386,6 +413,7 @@ public class Pipeline {
         newStage.setMemoryOutput(oldStage.getMemoryOutput());
         newStage.setOpcode(oldStage.getOpcode());
         newStage.setTestValue(oldStage.getTestValue());
+        newStage.setDataFromMemory(oldStage.getDataFromMemory());
     }
     
     private void clearStage(PipeStage stage) {
@@ -399,10 +427,22 @@ public class Pipeline {
         stage.setMemoryOutput(0);
         stage.setOpcode((char) 0x0000);
         stage.setTestValue(0);
+        stage.setDataFromMemory(0);
     }
     
     private Boolean isEmpty(PipeStage stage) {
         return "".equals(stage.getStage());
+    }
+    
+    private void clearHazards() {
+        this.hazardValues.setEX_MEM_RegWrite(0);
+        this.hazardValues.setMEM_WB_RegWrite(0);
+        this.hazardValues.setEX_MEM_RegisterRd(0);
+        this.hazardValues.setMEM_WB_RegisterRd(0);
+        this.hazardValues.setID_EX_RegisterRs(0);
+        this.hazardValues.setID_EX_RegisterRt(0);
+        this.hazardValues.setALUOutput(0);
+        this.hazardValues.setMemoryOutput(0);
     }
 
     /**

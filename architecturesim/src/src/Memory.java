@@ -43,6 +43,21 @@ public class Memory {
     
     public void writeAddressInMemory(int data, int address) throws NoSuchMemoryLocationException{
         if (cacheEnabled){
+//            int exists = -1;
+//            try {
+//                exists = addressInMemory(address);
+//            } catch (NoSuchMemoryLocationException e) {
+//                throw e;
+//            }
+//            Cache pointer = headPointer;
+//            while (pointer.getHeirarchy() != exists){
+//                pointer = pointer.getNextCache();
+//            }
+//            
+//            if (pointer.getHeirarchy() != 0) {
+//                writeToL1(data, address);
+//                writeToL2(data, address);
+//            }
             writeToL1(data, address);
             writeToL2(data, address);
             writeToDRAM(data, address);
@@ -65,6 +80,7 @@ public class Memory {
         this.memoryCycleCount += pointer.getWaitCycles();
  
         if (pointer.getHeirarchy() == 0){
+            System.out.println("Reading from DRAM");
             int readData = DRAM.getMemArray()[address];
             if (cacheEnabled){
                 writeToL1(readData, address);
@@ -76,10 +92,12 @@ public class Memory {
             int MASK_INDEX = 0;
             int MASK_TAG = 0;
             if (pointer.getHeirarchy() == 2) { // L1 Cache
+                System.out.println("Reading from L1");
                 MASK_TAG = Utils.TAG_MASK_L1; 
                 MASK_INDEX = Utils.INDEX_MASK_L1;
                 
             } else { //  L2 Cache
+                System.out.println("Reading from L2");
                 MASK_TAG = Utils.TAG_MASK_L2; 
                 MASK_INDEX = Utils.INDEX_MASK_L2;
             }

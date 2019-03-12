@@ -281,14 +281,10 @@ public class Pipeline {
         }
         else {
             
-            
-            
         }
-        
         pipeline[2].setALUOutput(ALUOutput);
         pipeline[2].setMemoryOutput(memoryOutput);
         updateEXHazard();
-        
     }
     
     private void stepID() {

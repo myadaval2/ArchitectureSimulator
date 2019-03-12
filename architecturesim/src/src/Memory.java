@@ -59,8 +59,8 @@ public class Memory {
             }
             
             if (pointer.getHeirarchy() != 0) {
-                writeToL1(data, address);
-                writeToL2(data, address);
+                writeToL1(address);
+                writeToL2(address);
             }            
             
         } else {
@@ -84,8 +84,8 @@ public class Memory {
             
             int readData = DRAM.getMemArray()[address];
             if (cacheEnabled){
-                writeToL1(readData, address);
-                writeToL2(readData, address);  
+                writeToL1(address);
+                writeToL2(address);  
             }
             return readData;  
         }  
@@ -135,29 +135,29 @@ public class Memory {
         int i = index * Utils.N_SET;
         int min = 99999;
         int cacheIndexToReplace = -1;
+        // Already in cache
         for (int cacheIndex = i; cacheIndex < i + Utils.N_SET; cacheIndex++) {
             if (tag == cacheLevel.getTagArray()[cacheIndex]) {
                 cacheIndexToReplace = cacheIndex;
                 cacheLevel.updateHistoryArray(cacheIndexToReplace, 1);
-
                 return cacheIndexToReplace;
             }
         }
+        // Not in cache, need to bring it in
         for (int cacheIndex = i; cacheIndex < i + Utils.N_SET; cacheIndex++) {
             if (min > cacheLevel.getHistoryArray()[cacheIndex]) {
                 min = cacheLevel.getHistoryArray()[cacheIndex];
                 cacheIndexToReplace = cacheIndex;      
             }
         }
-
         cacheLevel.updateHistoryArray(cacheIndexToReplace, 0);
         return cacheIndexToReplace;
     }
     
-    private void writeToL1(int data, int address) {
+    private void writeToL1(int address) {
         int tag_bit = address & Utils.TAG_MASK_L1;
         int index_bit = (address & Utils.INDEX_MASK_L1) >> 1;
-        int dataToWrite = 0;
+        int dataToWrite;
         int cacheIndexToReplace = checkCacheHistoryForReplacement(index_bit, tag_bit, L1Cache);
 //        if (address % 2 == 0x0) {
 //            dataToWrite =  ((((int) data << 16) & Utils.WORD_0) | (L1Cache.getMemArray()[cacheIndexToReplace] & Utils.WORD_1));
@@ -176,10 +176,10 @@ public class Memory {
         L1Cache.setData(dataToWrite, cacheIndexToReplace);
         this.memoryCycleCount += L1Cache.getWaitCycles();
     }
-    private void writeToL2(int data, int address) {
+    private void writeToL2(int address) {
         int tag_bit = address & Utils.TAG_MASK_L2;
         int index_bit = (address & Utils.INDEX_MASK_L2) >> 1;
-        int dataToWrite = 0;
+        int dataToWrite;
         int cacheIndexToReplace = checkCacheHistoryForReplacement(index_bit, tag_bit, L2Cache);
 //        if (address % 2 == 0x0) {
 //            dataToWrite =  ((((int) data << 16) & Utils.WORD_0) | (L2Cache.getMemArray()[cacheIndexToReplace] & Utils.WORD_1));

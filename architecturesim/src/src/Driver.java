@@ -15,6 +15,8 @@ import java.util.Scanner;
 
 public class Driver {
     public Pipeline pipeline;
+    public Memory memory;
+    public Register register;
     
 
     public Driver(){
@@ -35,8 +37,8 @@ public class Driver {
     }
     
     public void forLoopTest() {
-        Memory memory = Memory.getMemory();
-        Register register = Register.getRegisters();
+        memory = Memory.getMemory();
+        register = Register.getRegisters();
         printRegisters();
         try {
             for (int i = 0; i < 5; i++) {
@@ -85,8 +87,8 @@ public class Driver {
     }
     
     public void pipelineTest() {
-        Memory memory = Memory.getMemory();
-        Register register = Register.getRegisters();
+        memory = Memory.getMemory();
+        register = Register.getRegisters();
         try {
             // ADD ADD ADD hazards
 //            memory.writeAddressInMemory(0b0000100101001100, 0); //2380

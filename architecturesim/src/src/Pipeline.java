@@ -12,9 +12,12 @@ package src;
 public class Pipeline {
     public PipeStage[] pipeline;
     private final PipeHazard hazardValues;
+    private boolean pipelineEnabled;
+    // public static Pipeline pipeline1 = new Pipeline();
     Register register = Register.getRegisters();
     Memory memory = Memory.getMemory();
     
+    // private Pipeline(boolean pipelineEnabled) {
     public Pipeline() {
         // make a linked list?
         // hardcoding an array makes it easy to keep track of each index as a specific stage in the pipeline
@@ -24,7 +27,18 @@ public class Pipeline {
         }
         // get rewritten every clock cycle
         this.hazardValues = new PipeHazard();
+        // this.pipelineEnabled = pipelineEnabled;
+        // setPipelineEnabled(pipelineEnabled);
         // step(this.pipeline);
+    }
+    
+    public void setPipelineEnabled(boolean pipelineEnabled) {
+        this.pipelineEnabled = pipelineEnabled;
+        if (pipelineEnabled){
+            
+        } else {
+            
+        }
     }
     
     public void step(int instruction) {
@@ -68,48 +82,55 @@ public class Pipeline {
         int writeDataToRegister;
         int registerWrite = pipeline[4].getRD();
         int opcode  = pipeline[4].getOpcode();
+        
+        // LDs
+        if (opcode == OpcodeDecoder.LDR || opcode == OpcodeDecoder.LDI || opcode == OpcodeDecoder.LD) {
+            writeDataToRegister = pipeline[4].getMemoryOutput();
+            register.setRegisterValue(registerWrite, writeDataToRegister);
+        }      
         // ALU Ops
-        if (opcode >= 1 && opcode <= 14) {
+        else if (opcode == OpcodeDecoder.ADD && opcode <= OpcodeDecoder.CMP || opcode == OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.ROT) {
             writeDataToRegister = pipeline[4].getALUOutput();
             register.setRegisterValue(registerWrite, writeDataToRegister);
         }
-        // LD
-        else if (opcode == 15) {
-            writeDataToRegister = pipeline[4].getDataFromMemory();
-            register.setRegisterValue(registerWrite, writeDataToRegister);
-        }        
+        printRegisters();
     }
     
     private void stepMEM() {
         // get from ALUOutput or memoryOutput?
         int RD = pipeline[3].getRD();
         int address = pipeline[3].getMemoryOutput();
-        int data = 0;
+
+        int opcode = pipeline[3].getOpcode();
+        int data;
         // Only need to updateHazard if load/store 
-        // LD
-        if (pipeline[3].getOpcode() == 15) {
-            
+        if (opcode == OpcodeDecoder.LDR || opcode == OpcodeDecoder.LDI) {
             try {
                 data = memory.readAddressInMemory(address);
-                pipeline[3].setDataFromMemory(data);
-                
+                pipeline[3].setMemoryOutput(data);
+                updateMEMHazard();
+
             }
             catch (NoSuchMemoryLocationException e){
                 System.out.println("Test Failed");
             }
         } 
-        // ST
-        else if (pipeline[3].getOpcode() == 16) {
+        else if (opcode == OpcodeDecoder.LD) {
+            pipeline[3].setMemoryOutput(address);
+            updateMEMHazard();
+        }
+        // Only STR for sure works, need to check ST and STI
+        else if (opcode == OpcodeDecoder.STR || opcode == OpcodeDecoder.STI || opcode == OpcodeDecoder.ST) {
             try {
                 data = register.getRegisterValue(RD);
                 memory.writeAddressInMemory(data, address);
-                //updateMEMHazard();
             }
             catch (NoSuchMemoryLocationException e){
                 System.out.println("Test Failed");
             }
         }
-        updateMEMHazard();
+        // do you only need to do this in the if/else statement?
+        
     }
     
     private void stepEX() {
@@ -121,7 +142,7 @@ public class Pipeline {
         int opcode = pipeline[2].getOpcode();
         int offset = pipeline[2].getOffset();
         int branchTaken = 0;
-        System.out.println("Current instruction: " + opcode);
+
         
         int ALUOutput = 0;
         int memoryOutput = 0;
@@ -141,10 +162,10 @@ public class Pipeline {
         
         switch (checkMEMHazard()) {
             case 1:
-                RSValue = this.hazardValues.getALUOutput();
+                RSValue = this.hazardValues.getMemoryOutput();
                 break;
             case 2:
-                RTValue = this.hazardValues.getALUOutput();
+                RTValue = this.hazardValues.getMemoryOutput();
                 break;
             default:
                 break;
@@ -152,40 +173,33 @@ public class Pipeline {
         
         // do ALU operations
         switch (opcode) {
-            // ADD
-            case 1:
+            // REGISTER
+            case OpcodeDecoder.ADD:
+                //System.out.println("In ADD");
                 ALUOutput = RSValue + RTValue;
                 break;
-            // SUB
-            case 2:
+            case OpcodeDecoder.SUB:
                 ALUOutput = RSValue - RTValue;
                 break;
-            // MULT
-            case 3:
+            case OpcodeDecoder.MUL:
                 ALUOutput = RSValue * RTValue;
                 break;
-            // DIV
-            case 4:
+            case OpcodeDecoder.DIV:
                 ALUOutput = RSValue / (RTValue + 1);
                 break;
-            // MOD
-            case 5:
+            case OpcodeDecoder.MOD:
                 ALUOutput = RSValue % RTValue;
                 break;
-            // AND
-            case 6:
+            case OpcodeDecoder.AND:
                 ALUOutput = RSValue & RTValue;
                 break;
-            // OR
-            case 7:
+            case OpcodeDecoder.OR:
                 ALUOutput = RSValue | RTValue;
                 break;
-            // XOR
-            case 8:
+            case OpcodeDecoder.XOR:
                 ALUOutput = RSValue ^ RTValue;
                 break;
-            // CMP
-            case 9:
+            case OpcodeDecoder.CMP:
                 // set CMP Register?
                 if (RSValue == RTValue) {
                     ALUOutput = 1;
@@ -194,75 +208,73 @@ public class Pipeline {
                     ALUOutput = 0;
                 }
                 break;
-            // ADDI
-            case 10:
+            case OpcodeDecoder.LDR:
+                // System.out.println("In LDR");
+                memoryOutput = RSValue + RTValue;
+                break;
+            case OpcodeDecoder.STR:
+                memoryOutput = RSValue + RTValue;
+                break;
+            // IMMEDIATES
+            case OpcodeDecoder.ADDI:
                 ALUOutput = RSValue + immediate;
-                System.out.println("In ADDI");
                 break;
-            // SUBI
-            case 11:
+            case OpcodeDecoder.SUBI:
                 ALUOutput = RSValue - immediate;
-                System.out.println("In SUBI");
                 break;
-            // LLS
-            case 12:
+            case OpcodeDecoder.ASL:
                 ALUOutput = RSValue >> immediate;
                 break;
-            // LRS
-            case 13: 
+            case OpcodeDecoder.ASR: 
                 ALUOutput = RSValue << immediate;
                 break;
-            // ROT
-            case 14:
+            case OpcodeDecoder.ROT:
                 ALUOutput = (RSValue >>> immediate) | (RSValue << (16 - immediate));
                 break;
-            // LD
-            case 15:
+            case OpcodeDecoder.LDI:
                 memoryOutput = RSValue + immediate;
                 break;
-            // ST
-            case 16:
+            case OpcodeDecoder.STI:
                 memoryOutput = RSValue + immediate;
                 break;
-            // do we need the + 1 or can we use NextPC?
-            // BGT    
-            case 17:
-                System.out.println("In BGT");
+            case OpcodeDecoder.BGT:
+                // STATUS Register
                 if (RSValue > RDValue) {
                     ALUOutput = register.getPC() - 1 - immediate;
                     branchTaken = 1;
                 }
                 break; 
-            // BLT
-            case 18:
+            case OpcodeDecoder.BLT:
                 if (RSValue < RDValue) {
                     ALUOutput = register.getPC() + immediate;
                     branchTaken = 1;
                 }
                 break;
-            // BOE
-            case 19:
+            case OpcodeDecoder.BOE:
                 if (RSValue == RDValue) {
                     ALUOutput = register.getPC() + immediate;
                     branchTaken = 1;
                 }
                 break;
-            // JMP
-            case 20:
+            // CONTROL    
+            case OpcodeDecoder.JI:
                 ALUOutput = RDValue + offset;
-            // HLT
-            case 21:
+            case OpcodeDecoder.HLT:
                 break;
-            // PUSH
-            case 22:
+            case OpcodeDecoder.LD:
+                memoryOutput = offset;
+                break;
+            case OpcodeDecoder.ST:
+                memoryOutput = offset;
+                break;
+            case OpcodeDecoder.PUSH:
                 // push
                 // iterate through bit vectors
                 // push is storing all of the registers onto the stack
                 // and decrementing the stack pointer
                 // where does the stack pointer point to begin with?
                 // need to set up a stack area!
-            // POP
-            case 23:
+            case OpcodeDecoder.POP:
                 // pop is loading all the registers and incrementing the stack
                 // pointer
                 // push and pop are both pretty complex, require a series
@@ -277,7 +289,6 @@ public class Pipeline {
             clearStage(this.getPipeline()[0]);
             clearStage(this.getPipeline()[1]);
             register.setPC(ALUOutput);
-            System.out.println("Branch taken pc value: " + register.getPC());
         }
         else {
             
@@ -297,20 +308,23 @@ public class Pipeline {
         int immediate = 0;
         int offset = 0;
         // Register Type
-        if (opcode >= 1 && opcode <= 9) {
+        // between 1 and 11
+        if ((opcode >= OpcodeDecoder.ADD && opcode <= OpcodeDecoder.STR)) {
             RD = (instruction >> 8) & 0x7;
             RS = (instruction >> 5) & 0x7;
             RT = (instruction >> 2) & 0x7;
             
         }
         // Immediate Type
-        else if (opcode >= 10 && opcode <= 19) {
+        // between 12 and 21
+        else if ((opcode >= OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.BOE)) {
             RD = (instruction >> 8) & 0x7;
             RS = (instruction >> 5) & 0x7;
             immediate = instruction & 0x1F;
         }
         // Control Type
-        else if (opcode >= 20 && opcode <= 23) {
+        // between 22 and 27
+        else if ((opcode >= OpcodeDecoder.JI && opcode <= OpcodeDecoder.ST)) {
             RD = (instruction >> 8) & 0x7;
             offset = instruction & 0xFF;
         }
@@ -321,7 +335,6 @@ public class Pipeline {
         pipeline[1].setImmediate(immediate);
         pipeline[1].setOffset(offset);
         pipeline[1].setOpcode(opcode);
-        
         updateIDHazard();
     }
     
@@ -335,7 +348,7 @@ public class Pipeline {
         }
         this.getPipeline()[0].setTestValue(instruction);
         
-        // System.out.println("Fetch PC Value: " + register.getPC());
+        System.out.println("Fetch PC Value: " + register.getPC());
         register.setPC(register.getPC() + 1);
     }
     
@@ -382,7 +395,7 @@ public class Pipeline {
         this.hazardValues.setALUOutput(pipeline[2].getALUOutput());
         int opcode = pipeline[2].getOpcode();
         
-        if (opcode >=1 && opcode <=8 || opcode >= 10 && opcode <= 15) {
+        if (opcode >= OpcodeDecoder.ADD && opcode <= OpcodeDecoder.LDR || opcode >= OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.LDI) {
             this.hazardValues.setEX_MEM_RegWrite(1);
         }
         
@@ -394,7 +407,7 @@ public class Pipeline {
         this.hazardValues.setMemoryOutput(pipeline[3].getMemoryOutput());
         int opcode = pipeline[3].getOpcode();
         
-        if (opcode >= 1 && opcode <= 8 || opcode >= 10 && opcode <= 15) {
+        if (opcode >= OpcodeDecoder.ADD && opcode <= OpcodeDecoder.LDR || opcode >= OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.LDI) {
             this.hazardValues.setMEM_WB_RegWrite(1);
         }
     }
@@ -409,8 +422,8 @@ public class Pipeline {
         newStage.setALUOutput(oldStage.getALUOutput());
         newStage.setMemoryOutput(oldStage.getMemoryOutput());
         newStage.setOpcode(oldStage.getOpcode());
+        newStage.setOffset(oldStage.getOffset());
         newStage.setTestValue(oldStage.getTestValue());
-        newStage.setDataFromMemory(oldStage.getDataFromMemory());
     }
     
     private void clearStage(PipeStage stage) {
@@ -424,7 +437,6 @@ public class Pipeline {
         stage.setMemoryOutput(0);
         stage.setOpcode((char) 0x0000);
         stage.setTestValue(0);
-        stage.setDataFromMemory(0);
     }
     
     private Boolean isEmpty(PipeStage stage) {
@@ -454,5 +466,18 @@ public class Pipeline {
      */
     public void setPipeline(PipeStage[] pipeline) {
         this.pipeline = pipeline;
+    }
+    
+    public void printRegisters() {
+        Register register = Register.getRegisters();
+        System.out.println("Registers: " +
+                              " R0 " + register.getRegisterValue(0)
+                            + " R1 " + register.getRegisterValue(1)
+                            + " R2 " + register.getRegisterValue(2)
+                            + " R3 " + register.getRegisterValue(3)
+                            + " R4 " + register.getRegisterValue(4)
+                            + " R5 " + register.getRegisterValue(5)
+                            + " R6 " + register.getRegisterValue(6)
+                            + " R7 " + register.getRegisterValue(7));
     }
 }

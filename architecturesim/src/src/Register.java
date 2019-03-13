@@ -22,11 +22,11 @@ public class Register {
     private Register() {
         this.GP = new int[8];
         for (int i = 0; i < 8; i++) {
-            this.GP[i] = (char) 1;
+            this.GP[i] = (char) 0;
         }
-        this.GP[0] = (char) 0;
-        this.GP[1] = (char) 0;
-        this.GP[3] = (char) 3;
+//        this.GP[0] = (char) 0;
+//        this.GP[1] = (char) 1;
+//        this.GP[3] = (char) 3;
         this.PC        = 0;
         this.NextPC    = 0;
         this.SP        = 0;

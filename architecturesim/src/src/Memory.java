@@ -20,10 +20,26 @@ public class Memory {
     
     public static Memory memory = new Memory(true);
     
-    public Memory() {   this(true);     }
+    // public Memory() {   this(true);     }
     
     private Memory(boolean cacheEnabled) {
         this.memoryCycleCount = 0;
+        this.cacheEnabled = cacheEnabled;
+        if (cacheEnabled){
+            DRAM    = new Cache(Utils.SIZE_DRAM , null      , Utils.WAIT_DRAM   , 0); 
+            L2Cache = new Cache(Utils.SIZE_L2   , DRAM      , Utils.WAIT_L2     , 1); 
+            L1Cache = new Cache(Utils.SIZE_L1   , L2Cache   , Utils.WAIT_L1     , 2);
+        
+            headPointer = L1Cache;
+        } else {
+            DRAM = new Cache(Utils.SIZE_DRAM, null, Utils.WAIT_DRAM, 0);
+            headPointer = DRAM;
+        }
+        
+        // setCacheEnabled(cacheEnabled);
+    }
+    
+    public void setCacheEnabled(boolean cacheEnabled) {
         this.cacheEnabled = cacheEnabled;
         if (cacheEnabled){
             DRAM    = new Cache(Utils.SIZE_DRAM , null      , Utils.WAIT_DRAM   , 0); 
@@ -90,8 +106,8 @@ public class Memory {
             return readData;  
         }  
         else {
-            int MASK_INDEX = 0;
-            int MASK_TAG = 0;
+            int MASK_INDEX;
+            int MASK_TAG;
             if (pointer.getHeirarchy() == 2) { // L1 Cache
                 MASK_TAG = Utils.TAG_MASK_L1; 
                 MASK_INDEX = Utils.INDEX_MASK_L1;

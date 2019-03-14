@@ -11,46 +11,37 @@ package src;
  */
 public class Memory {
     
-    public Cache    L1Cache;
+    public static Cache    L1Cache;
     public Cache    L2Cache;
-    public Cache    DRAM;
-    private Cache   headPointer;
-    private boolean cacheEnabled;
+    public static Cache    DRAM;
+    private static Cache   headPointer;
+    private static boolean cacheEnabled;
     private int     memoryCycleCount;
     
     public static Memory memory = new Memory(true);
     
     // public Memory() {   this(true);     }
     
-    private Memory(boolean cacheEnabled) {
+    private Memory(boolean enabled) {
         this.memoryCycleCount = 0;
-        this.cacheEnabled = cacheEnabled;
-        if (cacheEnabled){
-            DRAM    = new Cache(Utils.SIZE_DRAM , null      , Utils.WAIT_DRAM   , 0); 
-            L2Cache = new Cache(Utils.SIZE_L2   , DRAM      , Utils.WAIT_L2     , 1); 
-            L1Cache = new Cache(Utils.SIZE_L1   , L2Cache   , Utils.WAIT_L1     , 2);
         
-            headPointer = L1Cache;
-        } else {
-            DRAM = new Cache(Utils.SIZE_DRAM, null, Utils.WAIT_DRAM, 0);
-            headPointer = DRAM;
-        }
+        DRAM    = new Cache(Utils.SIZE_DRAM , null      , Utils.WAIT_DRAM   , 0); 
+        L2Cache = new Cache(Utils.SIZE_L2   , DRAM      , Utils.WAIT_L2     , 1); 
+        L1Cache = new Cache(Utils.SIZE_L1   , L2Cache   , Utils.WAIT_L1     , 2);
         
-        // setCacheEnabled(cacheEnabled);
+        setCacheEnabled(enabled);
     }
     
-    public void setCacheEnabled(boolean cacheEnabled) {
-        this.cacheEnabled = cacheEnabled;
-        if (cacheEnabled){
-            DRAM    = new Cache(Utils.SIZE_DRAM , null      , Utils.WAIT_DRAM   , 0); 
-            L2Cache = new Cache(Utils.SIZE_L2   , DRAM      , Utils.WAIT_L2     , 1); 
-            L1Cache = new Cache(Utils.SIZE_L1   , L2Cache   , Utils.WAIT_L1     , 2);
-        
+    public static void setCacheEnabled(boolean enabled) {
+        if (enabled) {
+            cacheEnabled = enabled;
             headPointer = L1Cache;
-        } else {
-            DRAM = new Cache(Utils.SIZE_DRAM, null, Utils.WAIT_DRAM, 0);
+        }
+        else {
+            cacheEnabled = enabled;
             headPointer = DRAM;
         }
+        
     }
     
     public static Memory getMemory() {
@@ -59,6 +50,7 @@ public class Memory {
     
     public void writeAddressInMemory(int data, int address) throws NoSuchMemoryLocationException{
         if (cacheEnabled){
+            System.out.println("Cache is enabled");
             // write through no-allocate
             int exists = -1;
             try {
@@ -80,6 +72,7 @@ public class Memory {
             }            
             
         } else {
+            System.out.println("Cache is disabled");
             writeToDRAM(data, address);
         }
     }

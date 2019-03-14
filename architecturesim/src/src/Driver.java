@@ -20,11 +20,20 @@ public class Driver {
     
 
     public Driver(){
-        // memoryDemo(memoryEnabled, memoryDisabled);
-        // pipeline = Pipeline.getPipeline();
-        pipeline = new Pipeline();
-        // pipelineTest();
+        memory = Memory.getMemory();
+        register = Register.getRegisters();
+        pipeline = Pipeline.getPipeline();
         forLoopTest();
+        register.clearRegisterFile();
+//        Pipeline.setPipelineEnabled(false);
+//        memory.setCacheEnabled(false);
+//        // pipelineTest();
+//        forLoopTest();
+//        register.clearRegisterFile();
+//        Pipeline.setPipelineEnabled(true);
+//        memory.setCacheEnabled(true);
+//        forLoopTest();
+//        register.clearRegisterFile();
     }
     
     public static void main(String[] args){
@@ -37,8 +46,7 @@ public class Driver {
     }
     
     public void forLoopTest() {
-        memory = Memory.getMemory();
-        register = Register.getRegisters();
+        
         printRegisters();
         try {
             for (int i = 0; i < 5; i++) {
@@ -59,11 +67,7 @@ public class Driver {
             memory.writeAddressInMemory(0b0110010010000001, 23); // ADDI R4, R4, 1
             memory.writeAddressInMemory(0b0110111111100001, 24); // SUBI R7, R7, -1
             memory.writeAddressInMemory(0b1001100011100111, 25); // BGT -7
-//            memory.writeAddressInMemory(0b, 26); // 
-//            memory.writeAddressInMemory(0b, 27); // 
-//            memory.writeAddressInMemory(0b, 28); // 
-            // memory.writeAddressInMemory(0b, 29); // 
-            // memory.writeAddressInMemory(0b, 30); // 
+
         }
         catch (NoSuchMemoryLocationException e){
             System.out.println("Test Failed");
@@ -73,8 +77,6 @@ public class Driver {
         for (int i = 15; i < 60; i++) {
             //printRegisters();
             pipeline.step(i);            
-            
-
         }
         try {
             for (int i = 0; i < 15; i++) {

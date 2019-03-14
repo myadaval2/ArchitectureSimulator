@@ -12,15 +12,15 @@ package src;
 public class Pipeline {
     public PipeStage[] pipeline;
     private final PipeHazard hazardValues;
-    private boolean pipelineEnabled;
+    private static boolean pipelineEnabled;
     // public static Pipeline pipeline1 = new Pipeline();
     Register register = Register.getRegisters();
     Memory memory = Memory.getMemory();
     
-    // private Pipeline(boolean pipelineEnabled) {
-    public Pipeline() {
-        // make a linked list?
-        // hardcoding an array makes it easy to keep track of each index as a specific stage in the pipeline
+    public static Pipeline pipelineMain = new Pipeline(true);
+    
+    private Pipeline(boolean pipelineEnabled) {
+    //private Pipeline() {
         this.pipeline = new PipeStage[6];
         for (int i = 0; i < 6; i++) {
             pipeline[i] = new PipeStage();
@@ -28,50 +28,84 @@ public class Pipeline {
         // get rewritten every clock cycle
         this.hazardValues = new PipeHazard();
         // this.pipelineEnabled = pipelineEnabled;
-        // setPipelineEnabled(pipelineEnabled);
+        setPipelineEnabled(pipelineEnabled);
         // step(this.pipeline);
     }
     
-    public void setPipelineEnabled(boolean pipelineEnabled) {
-        this.pipelineEnabled = pipelineEnabled;
-        if (pipelineEnabled){
-            
-        } else {
-            
-        }
+    public static void setPipelineEnabled(boolean enabled) {
+        pipelineEnabled = enabled;
+    }
+    
+    public static Pipeline getPipeline() {
+        return pipelineMain;
     }
     
     public void step(int instruction) {
-        for (int i = 5; i > 0; i--) {
-            if (isEmpty(this.getPipeline()[i])) {
-                switch (i) {
-                    case 5:
-                        // System.out.println("got to WB stage");
-                        stepWB();
-                        break;
-                    case 4:
-                        // System.out.println("got to MEM stage");
-                        stepMEM();
-                        break;
-                    case 3:
-                        // System.out.println("got to EX stage");
-                        stepEX();
-                        break;
-                    case 2:
-                        // System.out.println("got to ID stage");
-                        stepID();
-                        break;
-                    case 1:
-                        // System.out.println("got to IF stage");
-                        stepIF(instruction);
-                        break;
-                    default:
-                        break;
+        if (this.pipelineEnabled) {
+            System.out.println("Pipeline Enabled");
+            for (int i = 5; i > 0; i--) {
+                if (isEmpty(pipeline[i])) {
+                    switch (i) {
+                        case 5:
+                            // System.out.println("got to WB stage");
+                            stepWB();
+                            break;
+                        case 4:
+                            // System.out.println("got to MEM stage");
+                            stepMEM();
+                            break;
+                        case 3:
+                            // System.out.println("got to EX stage");
+                            stepEX();
+                            break;
+                        case 2:
+                            // System.out.println("got to ID stage");
+                            stepID();
+                            break;
+                        case 1:
+                            // System.out.println("got to IF stage");
+                            stepIF();
+                            break;
+                        default:
+                            break;
+                    }
+                    // OR use 5 pointers for 5 different stages
+                    copyStage(pipeline[i-1], pipeline[i]);
+                    clearStage(pipeline[i-1]);
                 }
-                // OR use 5 pointers for 5 different stages
-                copyStage(this.getPipeline()[i-1], this.getPipeline()[i]);
-                clearStage(this.getPipeline()[i-1]);
             }
+        }
+        else {
+            System.out.println("Pipeline Disabled");
+            int programStart = 15;
+            int i = ((instruction - programStart) % 5) + 1;
+            switch (i) {
+                case 5:
+                    // System.out.println("got to WB stage");
+                    stepWB();
+                    break;
+                case 4:
+                    // System.out.println("got to MEM stage");
+                    stepMEM();
+                    break;
+                case 3:
+                    // System.out.println("got to EX stage");
+                    stepEX();
+                    break;
+                case 2:
+                    // System.out.println("got to ID stage");
+                    stepID();
+                    break;
+                case 1:
+                    // System.out.println("got to IF stage");
+                    stepIF();
+                    break;
+                default:
+                    break;
+            }
+            // OR use 5 pointers for 5 different stages
+            copyStage(pipeline[i-1], pipeline[i]);
+            clearStage(pipeline[i-1]);
         }
     }
     
@@ -93,7 +127,7 @@ public class Pipeline {
             writeDataToRegister = pipeline[4].getALUOutput();
             register.setRegisterValue(registerWrite, writeDataToRegister);
         }
-        printRegisters();
+        // printRegisters();
     }
     
     private void stepMEM() {
@@ -286,8 +320,8 @@ public class Pipeline {
         // switch statement for ALU operations
         if (branchTaken == 1) {
             clearHazards();
-            clearStage(this.getPipeline()[0]);
-            clearStage(this.getPipeline()[1]);
+            clearStage(pipeline[0]);
+            clearStage(pipeline[1]);
             register.setPC(ALUOutput);
         }
         else {
@@ -338,7 +372,7 @@ public class Pipeline {
         updateIDHazard();
     }
     
-    private void stepIF(int instruction) {
+    private void stepIF() {
         // fetch instruction
         try {
             pipeline[0].setInstruction(memory.readAddressInMemory(register.getPC()));
@@ -346,7 +380,6 @@ public class Pipeline {
         catch (NoSuchMemoryLocationException e){
             System.out.println("Test Failed");
         }
-        this.getPipeline()[0].setTestValue(instruction);
         
         System.out.println("Fetch PC Value: " + register.getPC());
         register.setPC(register.getPC() + 1);
@@ -453,23 +486,8 @@ public class Pipeline {
         this.hazardValues.setALUOutput(0);
         this.hazardValues.setMemoryOutput(0);
     }
-
-    /**
-     * @return the pipeline
-     */
-    public PipeStage[] getPipeline() {
-        return pipeline;
-    }
-
-    /**
-     * @param pipeline the pipeline to set
-     */
-    public void setPipeline(PipeStage[] pipeline) {
-        this.pipeline = pipeline;
-    }
     
     public void printRegisters() {
-        Register register = Register.getRegisters();
         System.out.println("Registers: " +
                               " R0 " + register.getRegisterValue(0)
                             + " R1 " + register.getRegisterValue(1)

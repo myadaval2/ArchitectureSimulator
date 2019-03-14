@@ -45,6 +45,19 @@ public class Register {
         this.CMP       = 0;
     }
     
+    public static void printRegisters() {
+        Register register = Register.getRegisters();
+        System.out.println("Registers: " +
+                              " R0 " + register.getRegisterValue(0)
+                            + " R1 " + register.getRegisterValue(1)
+                            + " R2 " + register.getRegisterValue(2)
+                            + " R3 " + register.getRegisterValue(3)
+                            + " R4 " + register.getRegisterValue(4)
+                            + " R5 " + register.getRegisterValue(5)
+                            + " R6 " + register.getRegisterValue(6)
+                            + " R7 " + register.getRegisterValue(7));
+    }
+    
     public int getRegisterValue(int register) {
         return GP[register];
     }

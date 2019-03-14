@@ -13,13 +13,14 @@ public class Pipeline {
     public PipeStage[] pipeline;
     private final PipeHazard hazardValues;
     private static boolean pipelineEnabled;
+    private static boolean ishalted;
     // public static Pipeline pipeline1 = new Pipeline();
     Register register = Register.getRegisters();
     Memory memory = Memory.getMemory();
     
-    public static Pipeline pipelineMain = new Pipeline(true);
+    public static Pipeline pipelineMain = new Pipeline();
     
-    private Pipeline(boolean pipelineEnabled) {
+    private Pipeline() {
     //private Pipeline() {
         this.pipeline = new PipeStage[6];
         for (int i = 0; i < 6; i++) {
@@ -28,7 +29,6 @@ public class Pipeline {
         // get rewritten every clock cycle
         this.hazardValues = new PipeHazard();
         // this.pipelineEnabled = pipelineEnabled;
-        setPipelineEnabled(pipelineEnabled);
         // step(this.pipeline);
     }
     
@@ -36,13 +36,18 @@ public class Pipeline {
         pipelineEnabled = enabled;
     }
     
+    public static boolean getPipelineEnabled() {
+        return pipelineEnabled;
+        
+    }
+    
     public static Pipeline getPipeline() {
         return pipelineMain;
     }
     
     public void step(int instruction) {
-        if (this.pipelineEnabled) {
-            System.out.println("Pipeline Enabled");
+        if (pipelineEnabled) {
+            // System.out.println("Pipeline Enabled");
             for (int i = 5; i > 0; i--) {
                 if (isEmpty(pipeline[i])) {
                     switch (i) {
@@ -76,7 +81,7 @@ public class Pipeline {
             }
         }
         else {
-            System.out.println("Pipeline Disabled");
+            // System.out.println("Pipeline Disabled");
             int programStart = 15;
             int i = ((instruction - programStart) % 5) + 1;
             switch (i) {
@@ -123,7 +128,7 @@ public class Pipeline {
             register.setRegisterValue(registerWrite, writeDataToRegister);
         }      
         // ALU Ops
-        else if (opcode == OpcodeDecoder.ADD && opcode <= OpcodeDecoder.CMP || opcode == OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.ROT) {
+        else if (opcode >= OpcodeDecoder.ADD && opcode <= OpcodeDecoder.CMP || opcode >= OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.ROT) {
             writeDataToRegister = pipeline[4].getALUOutput();
             register.setRegisterValue(registerWrite, writeDataToRegister);
         }
@@ -176,7 +181,7 @@ public class Pipeline {
         int opcode = pipeline[2].getOpcode();
         int offset = pipeline[2].getOffset();
         int branchTaken = 0;
-
+        // System.out.println(opcode);
         
         int ALUOutput = 0;
         int memoryOutput = 0;
@@ -254,6 +259,7 @@ public class Pipeline {
                 ALUOutput = RSValue + immediate;
                 break;
             case OpcodeDecoder.SUBI:
+                // System.out.println("In SUBI");
                 ALUOutput = RSValue - immediate;
                 break;
             case OpcodeDecoder.ASL:
@@ -274,6 +280,7 @@ public class Pipeline {
             case OpcodeDecoder.BGT:
                 // STATUS Register
                 if (RSValue > RDValue) {
+                    // System.out.println(RSValue + " " + RDValue);
                     ALUOutput = register.getPC() - 1 - immediate;
                     branchTaken = 1;
                 }
@@ -294,6 +301,8 @@ public class Pipeline {
             case OpcodeDecoder.JI:
                 ALUOutput = RDValue + offset;
             case OpcodeDecoder.HLT:
+                // System.out.println("Entered Halt stage");
+                setIshalted(true);
                 break;
             case OpcodeDecoder.LD:
                 memoryOutput = offset;
@@ -381,7 +390,7 @@ public class Pipeline {
             System.out.println("Test Failed");
         }
         
-        System.out.println("Fetch PC Value: " + register.getPC());
+        // System.out.println("Fetch PC Value: " + register.getPC());
         register.setPC(register.getPC() + 1);
     }
     
@@ -486,16 +495,18 @@ public class Pipeline {
         this.hazardValues.setALUOutput(0);
         this.hazardValues.setMemoryOutput(0);
     }
-    
-    public void printRegisters() {
-        System.out.println("Registers: " +
-                              " R0 " + register.getRegisterValue(0)
-                            + " R1 " + register.getRegisterValue(1)
-                            + " R2 " + register.getRegisterValue(2)
-                            + " R3 " + register.getRegisterValue(3)
-                            + " R4 " + register.getRegisterValue(4)
-                            + " R5 " + register.getRegisterValue(5)
-                            + " R6 " + register.getRegisterValue(6)
-                            + " R7 " + register.getRegisterValue(7));
+
+    /**
+     * @return the ishalted
+     */
+    public static boolean isIshalted() {
+        return ishalted;
+    }
+
+    /**
+     * @param aIshalted the ishalted to set
+     */
+    public static void setIshalted(boolean aIshalted) {
+        ishalted = aIshalted;
     }
 }

@@ -65,9 +65,19 @@ public class MainWindow extends javax.swing.JFrame {
 
         PipelineButtons.add(pipelineEnabledButton);
         pipelineEnabledButton.setText("Enabled");
+        pipelineEnabledButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pipelineEnabledButtonActionPerformed(evt);
+            }
+        });
 
         PipelineButtons.add(pipelineDisabledButton);
         pipelineDisabledButton.setText("Disabled");
+        pipelineDisabledButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pipelineDisabledButtonActionPerformed(evt);
+            }
+        });
 
         pipelineButtonsLabel.setText("Pipeline Settings");
 
@@ -99,9 +109,19 @@ public class MainWindow extends javax.swing.JFrame {
 
         CacheButtons.add(cacheEnabledButton);
         cacheEnabledButton.setText("Enabled");
+        cacheEnabledButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cacheEnabledButtonActionPerformed(evt);
+            }
+        });
 
         CacheButtons.add(cacheDisabledButton);
         cacheDisabledButton.setText("Disabled");
+        cacheDisabledButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cacheDisabledButtonActionPerformed(evt);
+            }
+        });
 
         cacheButtonsLabel.setText("Cache Settings");
 
@@ -156,7 +176,7 @@ public class MainWindow extends javax.swing.JFrame {
         memoryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Memory Viewer"));
         memoryPanel.setName(""); // NOI18N
 
-        CacheLevelNameDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "L1 Cache", "L2 Cache", "DRAM" }));
+        CacheLevelNameDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
         CacheLevelNameDropDown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CacheLevelNameDropDownActionPerformed(evt);
@@ -281,7 +301,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(clockTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(stepButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,8 +330,9 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         // Driver driver = new Driver();
 //        cpu = new CPU();
-//        clockTextBox.setText(Integer.toString(cpu.getClock()));
-        d = new Driver();
+//        
+        Driver d = Driver.getDriver();
+        clockTextBox.setText(Integer.toString(Driver.getClockCycles()));
     }//GEN-LAST:event_RunButton
 
     private void AddressRangeDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddressRangeDropDownActionPerformed
@@ -319,19 +340,29 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_AddressRangeDropDownActionPerformed
 
     private void CacheLevelNameDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CacheLevelNameDropDownActionPerformed
-        if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
-            case "DRAM":
-            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("DRAM")));
-            break;
+        if (Memory.getCacheEnabled()) {
+            if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
+                case "DRAM":
+                AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("DRAM")));
+                break;
             case "L2 Cache":
-            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L2Cache")));
-            break;
+                AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L2Cache")));
+                break;
             case "L1 Cache":
-            AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L1Cache")));
-            break;
+                AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("L1Cache")));
+                break;
             default:
-            break;
+                break;
+            }
         }
+        else {
+            if (null != (String) CacheLevelNameDropDown.getSelectedItem()) switch ((String) CacheLevelNameDropDown.getSelectedItem()) {
+                case "DRAM":
+                AddressRangeDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(dm.getMemoryPageLabelsForMemoryType("DRAM")));
+                break;
+            }
+        }
+        
     }//GEN-LAST:event_CacheLevelNameDropDownActionPerformed
 
     private void clockTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clockTextBoxActionPerformed
@@ -370,7 +401,7 @@ public class MainWindow extends javax.swing.JFrame {
             );  break;
             case "L1 Cache":
                 columnNames[0] = "Line";
-                memoryArraySegment = dm.getMemoryPage("L1Cache", memory.L1Cache.getMemArray(), memory.L1Cache.getTagArray(), memory.L1Cache.getHistoryArray(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage("L1Cache", Memory.L1Cache.getMemArray(), Memory.L1Cache.getTagArray(), Memory.L1Cache.getHistoryArray(), memoryPage);
                 MemoryViewer.setModel(new javax.swing.table.DefaultTableModel(
                     memoryArraySegment,
                     columnNames
@@ -388,6 +419,24 @@ public class MainWindow extends javax.swing.JFrame {
         //System.out.println(d.counter);
         drawTable();
     }//GEN-LAST:event_stepButtonActionPerformed
+
+    private void cacheEnabledButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cacheEnabledButtonActionPerformed
+        Memory.setCacheEnabled(true);
+        CacheLevelNameDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "L1 Cache", "L2 Cache", "DRAM" }));
+    }//GEN-LAST:event_cacheEnabledButtonActionPerformed
+
+    private void cacheDisabledButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cacheDisabledButtonActionPerformed
+        Memory.setCacheEnabled(false);
+        CacheLevelNameDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DRAM" }));
+    }//GEN-LAST:event_cacheDisabledButtonActionPerformed
+
+    private void pipelineEnabledButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pipelineEnabledButtonActionPerformed
+        Pipeline.setPipelineEnabled(true);
+    }//GEN-LAST:event_pipelineEnabledButtonActionPerformed
+
+    private void pipelineDisabledButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pipelineDisabledButtonActionPerformed
+        Pipeline.setPipelineEnabled(false);
+    }//GEN-LAST:event_pipelineDisabledButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -425,7 +474,6 @@ public class MainWindow extends javax.swing.JFrame {
         });
     }
 
-    Driver d;
     //CPU cpu = new CPU();
     DisplayMemory dm = new DisplayMemory();
     // cpu.MemorySet.L1Cache.getMemArray();

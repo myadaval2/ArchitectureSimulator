@@ -17,37 +17,38 @@ public class Driver {
     public Pipeline pipeline;
     public Memory memory;
     public Register register;
-    
+    private static int clockCycles;
 
-    public Driver(){
+    public static Driver driver = new Driver();
+    
+    private Driver(){
         memory = Memory.getMemory();
         register = Register.getRegisters();
         pipeline = Pipeline.getPipeline();
+        clockCycles = 0;
+//        Memory.setCacheEnabled(false);
+//        Pipeline.setPipelineEnabled(false);
         forLoopTest();
         register.clearRegisterFile();
-//        Pipeline.setPipelineEnabled(false);
-//        memory.setCacheEnabled(false);
-//        // pipelineTest();
-//        forLoopTest();
-//        register.clearRegisterFile();
-//        Pipeline.setPipelineEnabled(true);
-//        memory.setCacheEnabled(true);
-//        forLoopTest();
-//        register.clearRegisterFile();
+        
     }
     
     public static void main(String[] args){
        // directCompare(memoryEnabled, memoryDisabled);
        // CLI();
-       Driver driver = new Driver();
+       Driver driver = Driver.getDriver();
+       
        // driver.allCacheDemoReal();
        // driver.pipelineTest();
        
     }
     
+    public static Driver getDriver() {
+        return driver;
+    }
     public void forLoopTest() {
         
-        printRegisters();
+        Register.printRegisters();
         try {
             for (int i = 0; i < 5; i++) {
                 memory.writeAddressInMemory(i, i); // ST 1-5 in Mem[0] - Mem[4]
@@ -66,26 +67,39 @@ public class Driver {
             memory.writeAddressInMemory(0b0101111001110000, 22); // STR R6 at Mem[R3+R4]
             memory.writeAddressInMemory(0b0110010010000001, 23); // ADDI R4, R4, 1
             memory.writeAddressInMemory(0b0110111111100001, 24); // SUBI R7, R7, -1
-            memory.writeAddressInMemory(0b1001100011100111, 25); // BGT -7
+            memory.writeAddressInMemory(0b1001100011100111, 25); // BGT R0, R7 -7
+            memory.writeAddressInMemory(0b1011100000000000, 26); // HLT
 
         }
         catch (NoSuchMemoryLocationException e){
             System.out.println("Test Failed");
         }
         
-        register.setPC(15);
-        for (int i = 15; i < 60; i++) {
-            //printRegisters();
-            pipeline.step(i);            
+        register.setPC(15); // where instructions begin
+        
+        int i = register.getPC();
+        
+        memory.resetMemoryCycleCount();
+        while(!Pipeline.isIshalted()) {
+            // printRegisters();
+            pipeline.step(i);  
+            i++;
+            clockCycles = i + memory.getMemoryCycleCount();
         }
+        System.out.println(getClockCycles());
+        // printRegisters();
         try {
-            for (int i = 0; i < 15; i++) {
+            for (i = 0; i < 15; i++) {
                 System.out.println("Read address " + i + ": " + memory.readAddressInMemory(i));
             }
         }
         catch (NoSuchMemoryLocationException e){
             System.out.println("Test Failed");
         }
+    }
+    
+    public static int getClockCycles() {
+        return clockCycles;
     }
     
     public void pipelineTest() {
@@ -123,7 +137,7 @@ public class Driver {
             System.out.println("Test Failed");
         }
         
-        printRegisters();
+        Register.printRegisters();
         
         for (int i = 0; i < 30; i++) {
             pipeline.step(i);
@@ -138,7 +152,7 @@ public class Driver {
         
             }
         }  
-        printRegisters();
+        Register.printRegisters();
         try {
             System.out.println("Read address 0: " + memory.readAddressInMemory(0));
             System.out.println("Read address 1: " + memory.readAddressInMemory(1));
@@ -154,18 +168,7 @@ public class Driver {
         
     }
     
-    public void printRegisters() {
-        Register register = Register.getRegisters();
-        System.out.println("Registers: " +
-                              " R0 " + register.getRegisterValue(0)
-                            + " R1 " + register.getRegisterValue(1)
-                            + " R2 " + register.getRegisterValue(2)
-                            + " R3 " + register.getRegisterValue(3)
-                            + " R4 " + register.getRegisterValue(4)
-                            + " R5 " + register.getRegisterValue(5)
-                            + " R6 " + register.getRegisterValue(6)
-                            + " R7 " + register.getRegisterValue(7));
-    }
+    
     
     public void memoryDemo(Memory memoryEnabled){
         System.out.println("Real Demo for caching, n-set associative, and n-lines");

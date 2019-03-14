@@ -18,18 +18,18 @@ public class Memory {
     private static boolean cacheEnabled;
     private int     memoryCycleCount;
     
-    public static Memory memory = new Memory(true);
+    public static Memory memory = new Memory();
     
     // public Memory() {   this(true);     }
     
-    private Memory(boolean enabled) {
+    private Memory() {
         this.memoryCycleCount = 0;
         
         DRAM    = new Cache(Utils.SIZE_DRAM , null      , Utils.WAIT_DRAM   , 0); 
         L2Cache = new Cache(Utils.SIZE_L2   , DRAM      , Utils.WAIT_L2     , 1); 
         L1Cache = new Cache(Utils.SIZE_L1   , L2Cache   , Utils.WAIT_L1     , 2);
         
-        setCacheEnabled(enabled);
+        //setCacheEnabled(enabled);
     }
     
     public static void setCacheEnabled(boolean enabled) {
@@ -44,13 +44,18 @@ public class Memory {
         
     }
     
+    public static boolean getCacheEnabled() {
+        return cacheEnabled;
+        
+    }
+    
     public static Memory getMemory() {
         return memory;
     }
     
     public void writeAddressInMemory(int data, int address) throws NoSuchMemoryLocationException{
         if (cacheEnabled){
-            System.out.println("Cache is enabled");
+            // System.out.println("Cache is enabled");
             // write through no-allocate
             int exists = -1;
             try {
@@ -72,7 +77,7 @@ public class Memory {
             }            
             
         } else {
-            System.out.println("Cache is disabled");
+            // System.out.println("Cache is disabled");
             writeToDRAM(data, address);
         }
     }
@@ -259,5 +264,7 @@ public class Memory {
     }
     
     public int getMemoryCycleCount()    {   return this.memoryCycleCount;   }
+    
+    public void resetMemoryCycleCount()    {   this.memoryCycleCount = 0;   }
     
 }

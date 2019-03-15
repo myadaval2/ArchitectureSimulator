@@ -81,9 +81,7 @@ public class Pipeline {
             }
         }
         else {
-            // System.out.println("Pipeline Disabled");
-            int programStart = 15;
-            int i = ((instruction - programStart) % 5) + 1;
+            int i = ((instruction - 15) % 5) + 1;
             switch (i) {
                 case 5:
                     // System.out.println("got to WB stage");
@@ -129,6 +127,7 @@ public class Pipeline {
         }      
         // ALU Ops
         else if (opcode >= OpcodeDecoder.ADD && opcode <= OpcodeDecoder.CMP || opcode >= OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.ROT) {
+            // System.out.println("writing data " + pipeline[4].getALUOutput() + "to register " + registerWrite);
             writeDataToRegister = pipeline[4].getALUOutput();
             register.setRegisterValue(registerWrite, writeDataToRegister);
         }
@@ -156,13 +155,16 @@ public class Pipeline {
         } 
         else if (opcode == OpcodeDecoder.LD) {
             pipeline[3].setMemoryOutput(address);
-            updateMEMHazard();
+            if (pipelineEnabled) {
+                updateMEMHazard();
+            }
         }
         // Only STR for sure works, need to check ST and STI
         else if (opcode == OpcodeDecoder.STR || opcode == OpcodeDecoder.STI || opcode == OpcodeDecoder.ST) {
             try {
                 data = register.getRegisterValue(RD);
                 memory.writeAddressInMemory(data, address);
+                // System.out.println("writing data " + data + "to memory " + address);
             }
             catch (NoSuchMemoryLocationException e){
                 System.out.println("Test Failed");
@@ -188,28 +190,29 @@ public class Pipeline {
         
         // memoryOutput is for load/store, ALUOutput is for new address calculations
         // do we need both??
-        switch (checkEXHazard()) {
-            case 1:
-                RSValue = this.hazardValues.getALUOutput();
-                break;
-            case 2:
-                RTValue = this.hazardValues.getALUOutput();
-                break;
-            default:
-                break;
+        if (pipelineEnabled) {
+            switch (checkEXHazard()) {
+                case 1:
+                    RSValue = this.hazardValues.getALUOutput();
+                    break;
+                case 2:
+                    RTValue = this.hazardValues.getALUOutput();
+                    break;
+                default:
+                    break;
+            }
+
+            switch (checkMEMHazard()) {
+                case 1:
+                    RSValue = this.hazardValues.getMemoryOutput();
+                    break;
+                case 2:
+                    RTValue = this.hazardValues.getMemoryOutput();
+                    break;
+                default:
+                    break;
+            }
         }
-        
-        switch (checkMEMHazard()) {
-            case 1:
-                RSValue = this.hazardValues.getMemoryOutput();
-                break;
-            case 2:
-                RTValue = this.hazardValues.getMemoryOutput();
-                break;
-            default:
-                break;
-        }
-        
         // do ALU operations
         switch (opcode) {
             // REGISTER
@@ -280,8 +283,8 @@ public class Pipeline {
             case OpcodeDecoder.BGT:
                 // STATUS Register
                 if (RSValue > RDValue) {
-                    // System.out.println(RSValue + " " + RDValue);
-                    ALUOutput = register.getPC() - 1 - immediate;
+                    // System.out.println("\t BRANCH TAKEN" + RSValue + " " + RDValue);
+                    ALUOutput = register.getPC() - immediate;
                     branchTaken = 1;
                 }
                 break; 
@@ -331,14 +334,24 @@ public class Pipeline {
             clearHazards();
             clearStage(pipeline[0]);
             clearStage(pipeline[1]);
-            register.setPC(ALUOutput);
-        }
-        else {
+            if (pipelineEnabled) {
+                register.setPC(ALUOutput - 1);
+                pipeline[2].setALUOutput(ALUOutput - 1);
+            }
+            else {
+                register.setPC(ALUOutput);
+                pipeline[2].setALUOutput(ALUOutput);
+            }
             
         }
-        pipeline[2].setALUOutput(ALUOutput);
-        pipeline[2].setMemoryOutput(memoryOutput);
-        updateEXHazard();
+        
+        else {
+            pipeline[2].setALUOutput(ALUOutput);
+            pipeline[2].setMemoryOutput(memoryOutput);
+            if (pipelineEnabled) {
+                updateEXHazard();
+            }
+        }
     }
     
     private void stepID() {
@@ -378,11 +391,15 @@ public class Pipeline {
         pipeline[1].setImmediate(immediate);
         pipeline[1].setOffset(offset);
         pipeline[1].setOpcode(opcode);
-        updateIDHazard();
+        if (pipelineEnabled) {
+            updateIDHazard();
+        }
+        
     }
     
     private void stepIF() {
         // fetch instruction
+        // System.out.println("Fetch PC Value: " + register.getPC());
         try {
             pipeline[0].setInstruction(memory.readAddressInMemory(register.getPC()));
         }
@@ -390,7 +407,7 @@ public class Pipeline {
             System.out.println("Test Failed");
         }
         
-        // System.out.println("Fetch PC Value: " + register.getPC());
+        
         register.setPC(register.getPC() + 1);
     }
     

@@ -25,6 +25,8 @@ public class Driver {
         memory = Memory.getMemory();
         register = Register.getRegisters();
         pipeline = Pipeline.getPipeline();
+        // Memory.setCacheEnabled(true);
+        // Pipeline.setPipelineEnabled(false);
         clockCycles = 0;
 //        Memory.setCacheEnabled(false);
 //        Pipeline.setPipelineEnabled(false);
@@ -52,7 +54,7 @@ public class Driver {
         try {
             for (int i = 0; i < 5; i++) {
                 memory.writeAddressInMemory(i, i); // ST 1-5 in Mem[0] - Mem[4]
-                memory.writeAddressInMemory(i, i + 5); // ST 1-5 in Mem[5] - Mem[9]
+                memory.writeAddressInMemory(i*10, i + 5); // ST 1-5 in Mem[5] - Mem[9]
             }
             for (int i = 10; i < 15; i++) {
                 memory.writeAddressInMemory(0, i); // ST 0 in Mem[10] - Mem[14]
@@ -60,15 +62,21 @@ public class Driver {
             memory.writeAddressInMemory(0b1101000100000000, 15); // LD R1 with Arr1 (Load with const value)
             memory.writeAddressInMemory(0b1101001000000101, 16); // LD R2 with Arr2 (Load with const value)
             memory.writeAddressInMemory(0b1101001100001010, 17); // LD R3 with Arr3 (Load with const value)
-            memory.writeAddressInMemory(0b0110011100000101, 18); // ADDI R7, R0, 5 COUNTER
+            memory.writeAddressInMemory(0b0110011100000011, 18); // ADDI R7, R0, 5 COUNTER
             memory.writeAddressInMemory(0b0101011000110000, 19); // LDR R6 with Mem[R1+R4]
             memory.writeAddressInMemory(0b0101010101010000, 20); // LDR R5 with Mem[R2+R4]
             memory.writeAddressInMemory(0b0000111010111000, 21); // ADD R6, R5, R6
             memory.writeAddressInMemory(0b0101111001110000, 22); // STR R6 at Mem[R3+R4]
             memory.writeAddressInMemory(0b0110010010000001, 23); // ADDI R4, R4, 1
             memory.writeAddressInMemory(0b0110111111100001, 24); // SUBI R7, R7, -1
-            memory.writeAddressInMemory(0b1001100011100111, 25); // BGT R0, R7 -7
+            memory.writeAddressInMemory(0b1001100011100111, 25); // BGT R0, R7 -7 
             memory.writeAddressInMemory(0b1011100000000000, 26); // HLT
+            
+            
+//            memory.writeAddressInMemory(0b0110011100000011, 15); // ADDI R7, R0, 5 COUNTER
+//            memory.writeAddressInMemory(0b0110111111100001, 16); // SUBI R7, R7, -1
+//            memory.writeAddressInMemory(0b1001100011100010, 17); // BGT R0, R7 -1
+//            memory.writeAddressInMemory(0b1011100000000000, 18); // HLT
 
         }
         catch (NoSuchMemoryLocationException e){
@@ -80,22 +88,30 @@ public class Driver {
         int i = register.getPC();
         
         memory.resetMemoryCycleCount();
+        
         while(!Pipeline.isIshalted()) {
             // printRegisters();
-            pipeline.step(i);  
-            i++;
+
+            pipeline.step(i);
+            //System.out.println(i);
+            
             clockCycles = i + memory.getMemoryCycleCount();
+            System.out.println("instruction clock cycles " + i + " memory count " + memory.getMemoryCycleCount() + " PC Value: " + register.getPC());
+            //System.out.println("i clock cycles" + i);
+            i++;
+            // register.printRegisters();
         }
+        System.out.println("i clock cycles " + i + "memory count " + memory.getMemoryCycleCount());
         System.out.println(getClockCycles());
-        // printRegisters();
-        try {
-            for (i = 0; i < 15; i++) {
-                System.out.println("Read address " + i + ": " + memory.readAddressInMemory(i));
-            }
-        }
-        catch (NoSuchMemoryLocationException e){
-            System.out.println("Test Failed");
-        }
+        
+//        try {
+//            for (i = 0; i < 27; i++) {
+//                System.out.println("Read address " + i + ": " + memory.readAddressInMemory(i));
+//            }
+//        }
+//        catch (NoSuchMemoryLocationException e){
+//            System.out.println("Test Failed");
+//        }
     }
     
     public static int getClockCycles() {

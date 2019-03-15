@@ -81,7 +81,8 @@ public class Pipeline {
             }
         }
         else {
-            int i = ((instruction - 15) % 5) + 1;
+            int pcOffset = 100;
+            int i = ((instruction - pcOffset) % 5) + 1;
             switch (i) {
                 case 5:
                     // System.out.println("got to WB stage");

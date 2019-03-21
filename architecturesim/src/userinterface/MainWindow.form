@@ -44,6 +44,8 @@
                       <Component id="clockTextBox" min="-2" pref="73" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="stepButton" min="-2" pref="73" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="stepButton1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -61,11 +63,12 @@
                       <Component id="clockTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="clockLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="stepButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="stepButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="leftPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="15" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -86,31 +89,38 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="simulationSettingsPanel" max="32767" attributes="0"/>
-                      <Component id="memoryPanel" max="32767" attributes="0"/>
+                  <Component id="simulationSettingsPanel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="510" max="32767" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="memoryPanel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+              </Group>
+              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                      <Component id="memoryPanel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="439" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="stepButton1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="242" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="simulationSettingsPanel" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="stepButton1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace pref="13" max="32767" attributes="0"/>
+                  <Component id="simulationSettingsPanel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Component id="memoryPanel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="335" max="-2" attributes="0"/>
+              </Group>
+              <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="147" max="32767" attributes="0"/>
+                      <Component id="memoryPanel1" min="-2" pref="540" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
+                  </Group>
               </Group>
           </Group>
         </DimensionLayout>
@@ -133,7 +143,7 @@
                       <Component id="CacheEnabledBox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="PipelineEnabledBox" min="-2" pref="210" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="16" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -285,6 +295,221 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder title="CPU Viewer"/>
+              </Border>
+            </Property>
+            <Property name="name" type="java.lang.String" value="" noResource="true"/>
+          </Properties>
+          <AccessibilityProperties>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="CPU Viewer"/>
+          </AccessibilityProperties>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="clockLabel1" min="-2" pref="76" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="clockTextBox1" min="-2" pref="255" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="clockLabel2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="clockTextBox2" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="clockLabel3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="clockTextBox3" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="clockLabel4" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="clockTextBox4" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="clockLabel5" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="clockTextBox5" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="clockLabel6" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="clockTextBox6" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="clockLabel7" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="clockTextBox7" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="clockLabel8" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="clockTextBox8" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="clockLabel9" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="clockTextBox9" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace pref="33" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="clockTextBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clockLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="clockTextBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clockLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="clockTextBox3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clockLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="clockTextBox4" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clockLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="clockTextBox5" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clockLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="clockTextBox6" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clockLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="clockTextBox7" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clockLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="clockTextBox8" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clockLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="clockTextBox9" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clockLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="clockLabel1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Instruction:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="clockTextBox1">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clockTextBox1ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="clockLabel2">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R0: "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="clockTextBox2">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clockTextBox2ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JTextField" name="clockTextBox3">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clockTextBox3ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="clockLabel3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R1: "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="clockTextBox4">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clockTextBox4ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="clockLabel4">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R2: "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="clockTextBox5">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clockTextBox5ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="clockLabel5">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R3: "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="clockTextBox6">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clockTextBox6ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="clockLabel6">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R4: "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="clockTextBox7">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clockTextBox7ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="clockLabel7">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R5: "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="clockTextBox8">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clockTextBox8ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="clockLabel8">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R6: "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="clockTextBox9">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clockTextBox9ActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="clockLabel9">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R7: "/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="memoryPanel1">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                 <TitledBorder title="Memory Viewer"/>
               </Border>
             </Property>
@@ -297,82 +522,82 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="memoryScrollPane" min="-2" max="-2" attributes="0"/>
+                          <Component id="memoryScrollPane1" min="-2" pref="523" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Component id="CacheLevelLabel" min="-2" pref="80" max="-2" attributes="0"/>
+                              <Component id="CacheLevelLabel1" min="-2" pref="80" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="CacheLevelNameDropDown" min="-2" pref="118" max="-2" attributes="0"/>
+                              <Component id="CacheLevelNameDropDown1" min="-2" pref="118" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="AddressPageLabel" min="-2" pref="103" max="-2" attributes="0"/>
+                              <Component id="AddressPageLabel1" min="-2" pref="103" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="AddressRangeDropDown" min="-2" pref="97" max="-2" attributes="0"/>
+                              <Component id="AddressRangeDropDown1" min="-2" pref="97" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace pref="9" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="CacheLevelLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="CacheLevelNameDropDown" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="AddressPageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="AddressRangeDropDown" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="CacheLevelLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="CacheLevelNameDropDown1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="AddressPageLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="AddressRangeDropDown1" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="memoryScrollPane" min="-2" pref="596" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                      <Component id="memoryScrollPane1" min="-2" pref="575" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JComboBox" name="CacheLevelNameDropDown">
+            <Component class="javax.swing.JComboBox" name="CacheLevelNameDropDown1">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;&quot; })" type="code"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CacheLevelNameDropDownActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CacheLevelNameDropDown1ActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JLabel" name="CacheLevelLabel">
+            <Component class="javax.swing.JLabel" name="CacheLevelLabel1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cache Level"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="AddressPageLabel">
+            <Component class="javax.swing.JLabel" name="AddressPageLabel1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Address Range"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="AddressRangeDropDown">
+            <Component class="javax.swing.JComboBox" name="AddressRangeDropDown1">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] {&quot; &quot;})" type="code"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AddressRangeDropDownActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AddressRangeDropDown1ActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Container class="javax.swing.JScrollPane" name="memoryScrollPane">
+            <Container class="javax.swing.JScrollPane" name="memoryScrollPane1">
               <AuxValues>
                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
               </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="MemoryViewer">
+                <Component class="javax.swing.JTable" name="MemoryViewer1">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        &#xa;    },&#xa;    new String [] {&#xa;        &quot;Address&quot;, &quot;Memory&quot;&#xa;    }&#xa;)" type="code"/>
@@ -389,14 +614,6 @@
             </Container>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="stepButton1">
-          <Properties>
-            <Property name="label" type="java.lang.String" value="Finish"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stepButton1ActionPerformed"/>
-          </Events>
-        </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JButton" name="RunButtonLabel">
@@ -415,7 +632,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="clockLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Clock Clycles"/>
+        <Property name="text" type="java.lang.String" value="Clock Cycles"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="stepButton">
@@ -424,6 +641,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stepButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="stepButton1">
+      <Properties>
+        <Property name="label" type="java.lang.String" value="Finish"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stepButton1ActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

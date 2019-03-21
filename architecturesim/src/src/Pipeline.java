@@ -14,6 +14,11 @@ public class Pipeline {
     private final PipeHazard hazardValues;
     private static boolean pipelineEnabled;
     private static boolean ishalted;
+    private String lastInstruction;
+
+    public String getLastInstruction() {
+        return lastInstruction;
+    }
     // public static Pipeline pipeline1 = new Pipeline();
     Register register = Register.getRegisters();
     Memory memory = Memory.getMemory();
@@ -22,6 +27,7 @@ public class Pipeline {
     
     private Pipeline() {
     //private Pipeline() {
+        lastInstruction = "";
         this.pipeline = new PipeStage[6];
         for (int i = 0; i < 6; i++) {
             pipeline[i] = new PipeStage();
@@ -121,8 +127,15 @@ public class Pipeline {
         int inst = pipeline[4].getInstruction();
         if (inst == 0){
             System.out.println("No instruction");
-        } else {
+            lastInstruction = "No instruction";
+        }
+        else {
             String in = String.format("%16s", Integer.toBinaryString(inst)).replace(" ", "0");
+            if (in.length() == 16){
+                lastInstruction = in;
+            } else {
+                lastInstruction = in.substring(15);
+            }
             System.out.println("Instruction: " + in + " ");
         }
         
@@ -316,6 +329,7 @@ public class Pipeline {
             case OpcodeDecoder.HLT:
                 // System.out.println("Entered Halt stage");
                 setIshalted(true);
+                lastInstruction = "Entered halt";
                 break;
             case OpcodeDecoder.LD:
                 memoryOutput = offset;

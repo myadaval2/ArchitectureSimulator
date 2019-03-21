@@ -117,6 +117,15 @@ public class Pipeline {
         // WHAT INSTRUCTIONS WRITE BACK?
         // write to register file pipeline[5]
         // NEED TO CAST AS CHAR ?? NEED TO GET THIS STRAIGHT
+        
+        int inst = pipeline[4].getInstruction();
+        if (inst == 0){
+            System.out.println("No instruction");
+        } else {
+            String in = String.format("%16s", Integer.toBinaryString(inst)).replace(" ", "0");
+            System.out.println("Instruction: " + in + " ");
+        }
+        
         int writeDataToRegister;
         int registerWrite = pipeline[4].getRD();
         int opcode  = pipeline[4].getOpcode();

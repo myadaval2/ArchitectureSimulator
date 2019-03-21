@@ -5,6 +5,7 @@
  */
 package userinterface;
 
+import java.util.Scanner;
 import src.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -51,6 +52,7 @@ public class MainWindow extends javax.swing.JFrame {
         AddressRangeDropDown = new javax.swing.JComboBox<>();
         memoryScrollPane = new javax.swing.JScrollPane();
         MemoryViewer = new javax.swing.JTable();
+        stepButton1 = new javax.swing.JButton();
         RunButtonLabel = new javax.swing.JButton();
         clockTextBox = new javax.swing.JTextField();
         clockLabel = new javax.swing.JLabel();
@@ -235,6 +237,13 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(memoryScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        stepButton1.setLabel("Finish");
+        stepButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stepButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
         leftPanel.setLayout(leftPanelLayout);
         leftPanelLayout.setHorizontalGroup(
@@ -244,13 +253,20 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(simulationSettingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(memoryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(342, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(stepButton1)
+                .addContainerGap(242, Short.MAX_VALUE))
         );
         leftPanelLayout.setVerticalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(leftPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(simulationSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(leftPanelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(simulationSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(leftPanelLayout.createSequentialGroup()
+                        .addComponent(stepButton1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addComponent(memoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -316,7 +332,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(stepButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -332,6 +348,8 @@ public class MainWindow extends javax.swing.JFrame {
 //        cpu = new CPU();
 //        
         Driver d = Driver.getDriver();
+        d.forLoopSetup();
+        drawTable();
         clockTextBox.setText(Integer.toString(Driver.getClockCycles()));
     }//GEN-LAST:event_RunButton
 
@@ -417,7 +435,14 @@ public class MainWindow extends javax.swing.JFrame {
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
         //d.memoryStep(d.memoryEnabled);
         //System.out.println(d.counter);
-        drawTable();
+        Driver d = Driver.getDriver();
+        if (!d.isFinished) {
+            d.forLoopStepper();
+            drawTable();
+        }
+        else
+            d.forLoopTeardown();
+        
     }//GEN-LAST:event_stepButtonActionPerformed
 
     private void cacheEnabledButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cacheEnabledButtonActionPerformed
@@ -437,6 +462,17 @@ public class MainWindow extends javax.swing.JFrame {
     private void pipelineDisabledButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pipelineDisabledButtonActionPerformed
         Pipeline.setPipelineEnabled(false);
     }//GEN-LAST:event_pipelineDisabledButtonActionPerformed
+
+    private void stepButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButton1ActionPerformed
+        // TODO add your handling code here:
+        Driver d = Driver.getDriver();
+        while (!d.isFinished) {
+            d.forLoopStepper();
+            
+        }
+        d.forLoopTeardown();
+        drawTable();
+    }//GEN-LAST:event_stepButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -503,5 +539,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JRadioButton pipelineEnabledButton;
     private javax.swing.JPanel simulationSettingsPanel;
     private javax.swing.JButton stepButton;
+    private javax.swing.JButton stepButton1;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,14 +14,18 @@ import java.util.Scanner;
  */
 
 public class Driver {
+    private Scanner scan;
     public Pipeline pipeline;
     public Memory memory;
     public Register register;
     private static int clockCycles;
+    public boolean isFinished;
 
     public static Driver driver = new Driver();
     
     private Driver(){
+        isFinished = false;
+        scan = new Scanner(System.in);
         memory = Memory.getMemory();
         register = Register.getRegisters();
         pipeline = Pipeline.getPipeline();
@@ -30,7 +34,7 @@ public class Driver {
         clockCycles = 0;
 //        Memory.setCacheEnabled(false);
 //        Pipeline.setPipelineEnabled(false);
-        forLoopTest();
+//        forLoopTest();
         register.clearRegisterFile();
         
     }
@@ -48,13 +52,44 @@ public class Driver {
     public static Driver getDriver() {
         return driver;
     }
-    public void forLoopTest() {
+    int i;
+    public void forLoopStepper(){
+            if (Pipeline.isIshalted()){
+                isFinished = true;
+            } else {
+                pipeline.step(i);
+            //System.out.println(i);
+            
+            clockCycles = i + memory.getMemoryCycleCount();
+            // System.out.println("instruction clock cycles " + i + " memory count " + memory.getMemoryCycleCount() + " PC Value: " + register.getPC());
+            //System.out.println("i clock cycles" + i);
+            i++;
+            
+            Register.printRegisters();
+            }
+            
+            
         
+    }
+    public void forLoopTeardown(){
+        System.out.println("i clock cycles " + i + " memory count " + memory.getMemoryCycleCount());
+        System.out.println(getClockCycles());
+        Register.printRegisters();
+        try {
+            for (i = 0; i < 30; i++) {
+                System.out.println("Read address " + i + ": " + memory.readAddressInMemory(i));
+            }
+        }
+        catch (NoSuchMemoryLocationException e){
+            System.out.println("Test Failed");
+        }
+    }
+    public void forLoopSetup(){
         Register.printRegisters();
         try {
             for (int i = 0; i < 10; i++) {
-                memory.writeAddressInMemory(i, i); // ST 1-5 in Mem[0] - Mem[4]
-                memory.writeAddressInMemory(i*10, i + 10); // ST 1-5 in Mem[5] - Mem[9]
+                memory.writeAddressInMemory(i, i); // ST 0-9 in Mem[0] - Mem[9]
+                memory.writeAddressInMemory(i*10, i + 10); // ST 11-19 in Mem[10] - Mem[90]
             }
 //            for (int i = 20; i < 25; i++) {
 //                memory.writeAddressInMemory(0, i); // ST 0 in Mem[10] - Mem[14]
@@ -66,7 +101,7 @@ public class Driver {
             memory.writeAddressInMemory(0b1101000100000000, mem); // LD R1 with Arr1 (Load with const value)
             memory.writeAddressInMemory(0b1101001000001010, mem + 1); // LD R2 with Arr2 (Load with const value)
             memory.writeAddressInMemory(0b1101001100010100, mem + 2); // LD R3 with Arr3 (Load with const value)
-            memory.writeAddressInMemory(0b0110011100001010, mem + 3); // ADDI R7, R0, 5 COUNTER
+            memory.writeAddressInMemory(0b0110011100001010, mem + 3); // ADDI R7, R0, 10 COUNTER
             memory.writeAddressInMemory(0b0101011000110000, mem + 4); // LDR R6 with Mem[R1+R4]
             memory.writeAddressInMemory(0b0101010101010000, mem + 5); // LDR R5 with Mem[R2+R4]
             memory.writeAddressInMemory(0b0000111010111000, mem + 6); // ADD R6, R5, R6
@@ -75,7 +110,55 @@ public class Driver {
             memory.writeAddressInMemory(0b0110111111100001, mem + 9); // SUBI R7, R7, -1
             memory.writeAddressInMemory(0b1001100011100111, mem + 10); // BGT R0, R7 -7 
             memory.writeAddressInMemory(0b1011100000000000, mem + 11); // HLT
+    }
+        
+        catch (NoSuchMemoryLocationException e){
+            System.out.println("Test Failed");
+        }
+        
+        register.setPC(100); // where instructions begin
+        i = register.getPC();
+        memory.resetMemoryCycleCount();
+        int step = 0;
+        
+    }
+    public void forLoopTest() {
+        
+        Register.printRegisters();
+        try {
+            for (int i = 0; i < 10; i++) {
+                memory.writeAddressInMemory(i, i); // ST 0-9 in Mem[0] - Mem[9]
+                memory.writeAddressInMemory(i*10, i + 10); // ST 11-19 in Mem[10] - Mem[90]
+            }
+//            for (int i = 20; i < 25; i++) {
+//                memory.writeAddressInMemory(0, i); // ST 0 in Mem[10] - Mem[14]
+//            }
             
+            int mem = 100;
+        
+            
+            memory.writeAddressInMemory(0b1101000100000000, mem); // LD R1 with Arr1 (Load with const value)
+            memory.writeAddressInMemory(0b1101001000001010, mem + 1); // LD R2 with Arr2 (Load with const value)
+            memory.writeAddressInMemory(0b1101001100010100, mem + 2); // LD R3 with Arr3 (Load with const value)
+            memory.writeAddressInMemory(0b0110011100001010, mem + 3); // ADDI R7, R0, 10 COUNTER
+            memory.writeAddressInMemory(0b0101011000110000, mem + 4); // LDR R6 with Mem[R1+R4]
+            memory.writeAddressInMemory(0b0101010101010000, mem + 5); // LDR R5 with Mem[R2+R4]
+            memory.writeAddressInMemory(0b0000111010111000, mem + 6); // ADD R6, R5, R6
+            memory.writeAddressInMemory(0b0101111001110000, mem + 7); // STR R6 at Mem[R3+R4]
+            memory.writeAddressInMemory(0b0110010010000001, mem + 8); // ADDI R4, R4, 1
+            memory.writeAddressInMemory(0b0110111111100001, mem + 9); // SUBI R7, R7, -1
+            memory.writeAddressInMemory(0b1001100011100111, mem + 10); // BGT R0, R7 -7 
+            memory.writeAddressInMemory(0b1011100000000000, mem + 11); // HLT
+            /**
+             * 
+             *  input (R1, R2, R3)
+             *  for (int R7 = 10; R7 > 0; R7--){
+             *      R6 = R1 + R4
+             *      R5 = R2 + R4
+             *      R6 = R5 + R6
+             *      
+             *  }
+             */
             
 //            memory.writeAddressInMemory(0b0110011100000011, 15); // ADDI R7, R0, 5 COUNTER
 //            memory.writeAddressInMemory(0b0110111111100001, 16); // SUBI R7, R7, -1
@@ -92,10 +175,13 @@ public class Driver {
         register.setPC(100); // where instructions begin
         int i = register.getPC();
         memory.resetMemoryCycleCount();
-        
+        int step = 0;
         while(!Pipeline.isIshalted()) {
             // register.printRegisters();
-
+            
+            
+            scan.nextLine();
+            System.out.println("Step: " + ++step);
             pipeline.step(i);
             //System.out.println(i);
             
@@ -103,11 +189,13 @@ public class Driver {
             // System.out.println("instruction clock cycles " + i + " memory count " + memory.getMemoryCycleCount() + " PC Value: " + register.getPC());
             //System.out.println("i clock cycles" + i);
             i++;
+            
+            Register.printRegisters();
             // register.printRegisters();
         }
-        System.out.println("i clock cycles " + i + "memory count " + memory.getMemoryCycleCount());
+        System.out.println("i clock cycles " + i + " memory count " + memory.getMemoryCycleCount());
         System.out.println(getClockCycles());
-        
+        Register.printRegisters();
         try {
             for (i = 0; i < 30; i++) {
                 System.out.println("Read address " + i + ": " + memory.readAddressInMemory(i));

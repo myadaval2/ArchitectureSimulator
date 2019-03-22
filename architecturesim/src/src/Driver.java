@@ -38,20 +38,7 @@ public class Driver {
         register.clearRegisterFile();
         
     }
-    public void reset(){
-        isFinished = false;
-        scan = new Scanner(System.in);
-        memory = Memory.getMemory();
-        register = Register.getRegisters();
-        pipeline = Pipeline.getPipeline();
-        Memory.setCacheEnabled(true);
-        Pipeline.setPipelineEnabled(true);
-        clockCycles = 0;
-//        Memory.setCacheEnabled(false);
-//        Pipeline.setPipelineEnabled(false);
-//        forLoopTest();
-        register.clearRegisterFile();
-    }
+
     
     public static void main(String[] args){
        // directCompare(memoryEnabled, memoryDisabled);
@@ -144,14 +131,11 @@ public class Driver {
                 memory.writeAddressInMemory(i, i); // ST 0-9 in Mem[0] - Mem[9]
                 memory.writeAddressInMemory(i*10, i + 10); // ST 11-19 in Mem[10] - Mem[90]
             }
-//            for (int i = 20; i < 25; i++) {
-//                memory.writeAddressInMemory(0, i); // ST 0 in Mem[10] - Mem[14]
-//            }
             
             int mem = 100;
         
             
-            memory.writeAddressInMemory(0b1101000100000000, mem); // LD R1 with Arr1 (Load with const value)
+            memory.writeAddressInMemory(0b1101000100000000, mem); // LD R1 with Arr1 (Lwoad with const value)
             memory.writeAddressInMemory(0b1101001000001010, mem + 1); // LD R2 with Arr2 (Load with const value)
             memory.writeAddressInMemory(0b1101001100010100, mem + 2); // LD R3 with Arr3 (Load with const value)
             memory.writeAddressInMemory(0b0110011100001010, mem + 3); // ADDI R7, R0, 10 COUNTER

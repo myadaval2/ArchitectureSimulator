@@ -5,10 +5,21 @@
  */
 package userinterface;
 
+import java.awt.BorderLayout;
 import java.util.Scanner;
 import src.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,6 +33,8 @@ public class MainWindow extends javax.swing.JFrame {
     private int stepCount = 1;
     private boolean cacheSet = false;
     private boolean pipeSet = false;
+    private String programFile = "";
+    
     public MainWindow() {
         initComponents();
     }
@@ -69,6 +82,8 @@ public class MainWindow extends javax.swing.JFrame {
         clockLabel9 = new javax.swing.JLabel();
         clockLabel10 = new javax.swing.JLabel();
         PCBox = new javax.swing.JTextField();
+        clockLabel11 = new javax.swing.JLabel();
+        InstructionEnglish = new javax.swing.JTextField();
         memoryPanel1 = new javax.swing.JPanel();
         CacheLevelNameDropDown1 = new javax.swing.JComboBox<>();
         CacheLevelLabel1 = new javax.swing.JLabel();
@@ -79,6 +94,7 @@ public class MainWindow extends javax.swing.JFrame {
         StepJumperDrop = new javax.swing.JComboBox<>();
         stepButton = new javax.swing.JButton();
         stepButton1 = new javax.swing.JButton();
+        LoadProgram = new javax.swing.JButton();
         RunButtonLabel = new javax.swing.JButton();
         clockTextBox = new javax.swing.JTextField();
         clockLabel = new javax.swing.JLabel();
@@ -281,6 +297,14 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        clockLabel11.setText("Instruction:");
+
+        InstructionEnglish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InstructionEnglishActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout memoryPanelLayout = new javax.swing.GroupLayout(memoryPanel);
         memoryPanel.setLayout(memoryPanelLayout);
         memoryPanelLayout.setHorizontalGroup(
@@ -288,57 +312,66 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(memoryPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(memoryPanelLayout.createSequentialGroup()
+                            .addComponent(clockLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(clockTextBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(memoryPanelLayout.createSequentialGroup()
+                            .addGroup(memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(memoryPanelLayout.createSequentialGroup()
+                                    .addComponent(clockLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(clockTextBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(memoryPanelLayout.createSequentialGroup()
+                                    .addComponent(clockLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(clockTextBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(memoryPanelLayout.createSequentialGroup()
+                                    .addComponent(clockLabel4)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(clockTextBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(memoryPanelLayout.createSequentialGroup()
+                                    .addComponent(clockLabel5)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(clockTextBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGap(46, 46, 46)
+                            .addGroup(memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(memoryPanelLayout.createSequentialGroup()
+                                    .addComponent(clockLabel6)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(clockTextBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(memoryPanelLayout.createSequentialGroup()
+                                    .addComponent(clockLabel7)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(clockTextBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(memoryPanelLayout.createSequentialGroup()
+                                    .addComponent(clockLabel8)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(clockTextBox8, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(memoryPanelLayout.createSequentialGroup()
+                                    .addComponent(clockLabel9)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(clockTextBox9, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, memoryPanelLayout.createSequentialGroup()
+                            .addComponent(clockLabel10)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(PCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(173, 173, 173)))
                     .addGroup(memoryPanelLayout.createSequentialGroup()
-                        .addComponent(clockLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(clockLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clockTextBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(memoryPanelLayout.createSequentialGroup()
-                        .addGroup(memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(memoryPanelLayout.createSequentialGroup()
-                                .addComponent(clockLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clockTextBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(memoryPanelLayout.createSequentialGroup()
-                                .addComponent(clockLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clockTextBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(memoryPanelLayout.createSequentialGroup()
-                                .addComponent(clockLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clockTextBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(memoryPanelLayout.createSequentialGroup()
-                                .addComponent(clockLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clockTextBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(46, 46, 46)
-                        .addGroup(memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(memoryPanelLayout.createSequentialGroup()
-                                .addComponent(clockLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clockTextBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(memoryPanelLayout.createSequentialGroup()
-                                .addComponent(clockLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clockTextBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(memoryPanelLayout.createSequentialGroup()
-                                .addComponent(clockLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clockTextBox8, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(memoryPanelLayout.createSequentialGroup()
-                                .addComponent(clockLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(clockTextBox9, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, memoryPanelLayout.createSequentialGroup()
-                        .addComponent(clockLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PCBox, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(173, 173, 173)))
+                        .addComponent(InstructionEnglish, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         memoryPanelLayout.setVerticalGroup(
             memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(memoryPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, memoryPanelLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(InstructionEnglish, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(clockLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clockTextBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(clockLabel1))
@@ -380,7 +413,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(memoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(clockLabel10))
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addGap(23, 23, 23))
         );
 
         memoryPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Memory Viewer"));
@@ -467,6 +500,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        LoadProgram.setText("Load Program");
+        LoadProgram.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LoadProgramActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
         leftPanel.setLayout(leftPanelLayout);
         leftPanelLayout.setHorizontalGroup(
@@ -479,17 +519,19 @@ public class MainWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(leftPanelLayout.createSequentialGroup()
-                                .addComponent(StepJumperDrop, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(stepButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(stepButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(stepButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addComponent(stepButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(367, 367, 367))
+                            .addGroup(leftPanelLayout.createSequentialGroup()
+                                .addComponent(StepJumperDrop, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(220, 220, 220)
+                                .addComponent(LoadProgram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(leftPanelLayout.createSequentialGroup()
                         .addComponent(memoryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addComponent(memoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         leftPanelLayout.setVerticalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -497,7 +539,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(leftPanelLayout.createSequentialGroup()
-                        .addComponent(StepJumperDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(StepJumperDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(LoadProgram))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(stepButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -509,8 +553,6 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(memoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(197, 197, 197))
         );
-
-        memoryPanel.getAccessibleContext().setAccessibleName("CPU Viewer");
 
         RunButtonLabel.setText("Run");
         RunButtonLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -574,16 +616,16 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void RunButton(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RunButton
         // TODO add your handling code here:
-        // Driver driver = new Driver();
-//        cpu = new CPU();
-//      
+        
         if (cacheSet && pipeSet){
-            Driver d = Driver.getDriver();
-        d.forLoopSetup();
-        drawTable();
-        clockTextBox.setText(Integer.toString(Driver.getClockCycles()));
-        clockTextBox1.setText("Ready");
-        Register register = Register.getRegisters();
+            
+            CPUManager d = CPUManager.getCPUManager();
+            d.readIn(programFile);
+            drawTable();
+            Register register = Register.getRegisters();
+            clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
+            clockTextBox1.setText("Ready");
+            InstructionEnglish.setText("Ready");
             clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
             clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
             clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
@@ -594,6 +636,7 @@ public class MainWindow extends javax.swing.JFrame {
             clockTextBox9.setText(Integer.toString(register.getRegisterValue(7)));
             int i = register.getPC();
             PCBox.setText(Integer.toString(i));
+            
         } else {
             clockTextBox1.setText("Cache and Pipeline settings not initialized");
         }
@@ -653,15 +696,17 @@ public class MainWindow extends javax.swing.JFrame {
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
         //d.memoryStep(d.memoryEnabled);
         //System.out.println(d.counter);
-        Driver d = Driver.getDriver();
+        CPUManager d = CPUManager.getCPUManager();
         Pipeline p = Pipeline.getPipeline();
         for (int i = 0; i < stepCount; i++){
            if (!d.isFinished) {
-            d.forLoopStepper();
+           // d.forLoopStepper();
+           d.Stepper();
             drawTable();
-            clockTextBox.setText(Integer.toString(Driver.getClockCycles()));
+            clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
             Register register = Register.getRegisters();
             clockTextBox1.setText(p.getLastInstruction());
+            InstructionEnglish.setText(p.getEnglishInstruction());
             clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
             clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
             clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
@@ -674,7 +719,6 @@ public class MainWindow extends javax.swing.JFrame {
             PCBox.setText(Integer.toString(pc));
         }
         else{
-            d.forLoopTeardown();
             break;
         } 
         }  
@@ -706,15 +750,17 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void stepButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButton1ActionPerformed
         // TODO add your handling code here:
-        Driver d = Driver.getDriver();
+        CPUManager d = CPUManager.getCPUManager();
         while (!d.isFinished) {
-            d.forLoopStepper();
+          //  d.forLoopStepper();
+          d.Stepper();
         }
         Pipeline p = Pipeline.getPipeline();
             drawTable();
-            clockTextBox.setText(Integer.toString(Driver.getClockCycles()));
+            clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
             Register register = Register.getRegisters();
             clockTextBox1.setText(p.getLastInstruction());
+            InstructionEnglish.setText(p.getEnglishInstruction());
             clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
             clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
             clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
@@ -723,7 +769,7 @@ public class MainWindow extends javax.swing.JFrame {
             clockTextBox7.setText(Integer.toString(register.getRegisterValue(5)));
             clockTextBox8.setText(Integer.toString(register.getRegisterValue(6)));
             clockTextBox9.setText(Integer.toString(register.getRegisterValue(7)));
-        d.forLoopTeardown();
+       // d.forLoopTeardown();
         drawTable();
     }//GEN-LAST:event_stepButton1ActionPerformed
 
@@ -816,6 +862,30 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_PCBoxActionPerformed
 
+    private void LoadProgramActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadProgramActionPerformed
+        // TODO add your handling code here:
+        final JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode( JFileChooser.FILES_AND_DIRECTORIES );
+        int returnVal = chooser.showOpenDialog( this );
+
+        if( returnVal == JFileChooser.APPROVE_OPTION ) {  
+            programFile = ( chooser.getSelectedFile().toString());
+            System.out.println(programFile);
+        }
+        if (programFile.equals("")){
+            clockTextBox1.setText("Default Program Selected");
+        } else {     
+            String[] filePath = programFile.split("\\/"); 
+            clockTextBox1.setText(filePath[filePath.length-1]);
+            InstructionEnglish.setText(filePath[filePath.length-1]);
+        }
+    }//GEN-LAST:event_LoadProgramActionPerformed
+
+    private void InstructionEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InstructionEnglishActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_InstructionEnglishActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -863,6 +933,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel CacheEnabledBox;
     private javax.swing.JLabel CacheLevelLabel1;
     private javax.swing.JComboBox<String> CacheLevelNameDropDown1;
+    private javax.swing.JTextField InstructionEnglish;
+    private javax.swing.JButton LoadProgram;
     private javax.swing.JTable MemoryViewer1;
     private javax.swing.JTextField PCBox;
     private javax.swing.ButtonGroup PipelineButtons;
@@ -876,6 +948,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel clockLabel;
     private javax.swing.JLabel clockLabel1;
     private javax.swing.JLabel clockLabel10;
+    private javax.swing.JLabel clockLabel11;
     private javax.swing.JLabel clockLabel2;
     private javax.swing.JLabel clockLabel3;
     private javax.swing.JLabel clockLabel4;
@@ -905,4 +978,9 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton stepButton;
     private javax.swing.JButton stepButton1;
     // End of variables declaration//GEN-END:variables
+
+
+
+     
+
 }

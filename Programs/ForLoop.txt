@@ -1,0 +1,36 @@
+data:
+0,0
+1,1
+2,2
+3,3
+4,4
+5,5
+6,6
+7,7
+8,8
+9,9
+0,10
+10,11
+20,12
+30,13
+40,14
+50,15
+60,16
+70,17
+80,18
+90,19
+
+# Example Comment
+instructions:
+LD R1 - 0
+LD R2 - 10
+LD R3 - 20
+ADDI R7 R0 10
+LDR R6 R1 16
+LDR R5 R2 16
+ADD R6 R5 24 
+STR R6 R3 16
+ADDI R4 R4 1
+SUBI R7 R7 1
+BGT R0 R7 7
+HLT

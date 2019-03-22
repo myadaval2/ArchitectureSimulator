@@ -15,6 +15,7 @@ public class Pipeline {
     private static boolean pipelineEnabled;
     private static boolean ishalted;
     private String lastInstruction;
+    private String englishLastInstruction;
 
     public String getLastInstruction() {
         return lastInstruction;
@@ -28,6 +29,7 @@ public class Pipeline {
     private Pipeline() {
     //private Pipeline() {
         lastInstruction = "";
+        englishLastInstruction = "";
         this.pipeline = new PipeStage[6];
         for (int i = 0; i < 6; i++) {
             pipeline[i] = new PipeStage();
@@ -118,7 +120,25 @@ public class Pipeline {
             clearStage(pipeline[i-1]);
         }
     }
+    public String getEnglishInstruction(){
+        return englishLastInstruction;
+    }
     
+    private void setEnglishInstruction(){
+        if (lastInstruction.equals("No instruction")){
+            return;
+        } else {
+            String opCode = lastInstruction.substring(0,5);
+            String reg1 = lastInstruction.substring(5,8);
+            String reg2 = lastInstruction.substring(8,11);
+            String imm = lastInstruction.substring(11);
+            englishLastInstruction = englishLastInstruction + opCode(Integer.parseInt(opCode, 2)) + " ";
+            englishLastInstruction = englishLastInstruction + registerNumber(Integer.parseInt(reg1, 2)) + " ";
+            englishLastInstruction = englishLastInstruction + registerNumber(Integer.parseInt(reg2, 2)) + " ";
+            englishLastInstruction = englishLastInstruction + Integer.parseInt(imm,2);
+            
+        }
+    }
     private void stepWB() {
         // WHAT INSTRUCTIONS WRITE BACK?
         // write to register file pipeline[5]
@@ -134,10 +154,12 @@ public class Pipeline {
             if (in.length() == 16){
                 lastInstruction = in;
             } else {
-                lastInstruction = in.substring(15);
+                lastInstruction = in.substring(16);
             }
             System.out.println("Instruction: " + in + " ");
         }
+        englishLastInstruction = "";
+        setEnglishInstruction();
         
         int writeDataToRegister;
         int registerWrite = pipeline[4].getRD();
@@ -549,5 +571,51 @@ public class Pipeline {
      */
     public static void setIshalted(boolean aIshalted) {
         ishalted = aIshalted;
+    }
+    
+    private String opCode(int inst) {
+        switch(inst){
+            case 1: return "ADD";
+            case 2: return "SUB";
+            case 3: return "MUL";
+            case 4: return "DIV";
+            case 5: return "MOD";
+            case 6: return "AND";
+            case 7: return "OR";
+            case 8: return "XOR";
+            case 9: return "CMP";
+            case 10: return "LDR";
+            case 11: return "STR";
+            case 12: return "ADDI";
+            case 13: return "SUBI";
+            case 14: return "ASL";
+            case 15: return "ASR";
+            case 16: return "ROT";
+            case 17: return "LDI";
+            case 18: return "STI";
+            case 19: return "BGT";
+            case 20: return "BLT";
+            case 21: return "BOE";
+            case 22: return "JI";
+            case 23: return "HLT";
+            case 24: return "PUSH";
+            case 25: return "POP";
+            case 26: return "LD";
+            case 27: return "ST";
+            default: return "";
+        }
+    }
+    private String registerNumber(int register) {
+        switch(register){
+            case 0: return "R0";
+            case 1: return "R1";
+            case 2: return "R2";
+            case 3: return "R3";
+            case 4: return "R4";
+            case 5: return "R5";
+            case 6: return "R6";
+            case 7: return "R7";
+            default: return "R0";
+        }
     }
 }

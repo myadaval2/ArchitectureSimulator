@@ -38,6 +38,20 @@ public class Driver {
         register.clearRegisterFile();
         
     }
+    public void reset(){
+        isFinished = false;
+        scan = new Scanner(System.in);
+        memory = Memory.getMemory();
+        register = Register.getRegisters();
+        pipeline = Pipeline.getPipeline();
+        Memory.setCacheEnabled(true);
+        Pipeline.setPipelineEnabled(true);
+        clockCycles = 0;
+//        Memory.setCacheEnabled(false);
+//        Pipeline.setPipelineEnabled(false);
+//        forLoopTest();
+        register.clearRegisterFile();
+    }
     
     public static void main(String[] args){
        // directCompare(memoryEnabled, memoryDisabled);

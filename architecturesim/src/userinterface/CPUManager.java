@@ -37,7 +37,7 @@ public class CPUManager {
         register = Register.getRegisters();
         pipeline = Pipeline.getPipeline();
         Memory.setCacheEnabled(true);
-        Pipeline.setPipelineEnabled(true);
+        // Pipeline.setPipelineEnabled(true);
         clockCycles = 0;
         register.clearRegisterFile();
         
@@ -76,6 +76,7 @@ public class CPUManager {
 //            }
         
         register.setPC(100); // where instructions begin
+        i = register.getPC();
         int pc = register.getPC();
         
         if (filename.equals("")){

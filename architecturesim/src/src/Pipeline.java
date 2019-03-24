@@ -42,6 +42,7 @@ public class Pipeline {
     
     public static void setPipelineEnabled(boolean enabled) {
         pipelineEnabled = enabled;
+        System.out.println("*** " + pipelineEnabled);
     }
     
     public static boolean getPipelineEnabled() {
@@ -89,6 +90,7 @@ public class Pipeline {
             }
         }
         else {
+            System.out.println("HELLO WORLD");
             int pcOffset = 100;
             int i = ((instruction - pcOffset) % 5) + 1;
             switch (i) {

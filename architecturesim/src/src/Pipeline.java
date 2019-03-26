@@ -11,7 +11,7 @@ package src;
  */
 public class Pipeline {
     public PipeStage[] pipeline;
-    private final PipeHazard hazardValues;
+    private PipeHazard hazardValues;
     private static boolean pipelineEnabled;
     private static boolean ishalted;
     private String lastInstruction;
@@ -28,6 +28,19 @@ public class Pipeline {
     
     private Pipeline() {
     //private Pipeline() {
+        lastInstruction = "";
+        englishLastInstruction = "";
+        this.pipeline = new PipeStage[6];
+        for (int i = 0; i < 6; i++) {
+            pipeline[i] = new PipeStage();
+        }
+        // get rewritten every clock cycle
+        this.hazardValues = new PipeHazard();
+        // this.pipelineEnabled = pipelineEnabled;
+        // step(this.pipeline);
+    }
+    public void reset(){
+        ishalted = false;
         lastInstruction = "";
         englishLastInstruction = "";
         this.pipeline = new PipeStage[6];

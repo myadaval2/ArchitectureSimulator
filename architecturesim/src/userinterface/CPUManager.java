@@ -42,7 +42,9 @@ public class CPUManager {
         register.clearRegisterFile();
         
     }
-    
+    public void setClockCycles(int clockCycles){
+        this.clockCycles = clockCycles;
+    }
     public static CPUManager getCPUManager() {
         return driver;
     }

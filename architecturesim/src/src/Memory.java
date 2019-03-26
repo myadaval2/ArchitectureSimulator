@@ -31,6 +31,13 @@ public class Memory {
         
         //setCacheEnabled(enabled);
     }
+    public void reset(){
+        this.memoryCycleCount = 0;
+        
+        DRAM    = new Cache(Utils.SIZE_DRAM , null      , Utils.WAIT_DRAM   , 0); 
+        L2Cache = new Cache(Utils.SIZE_L2   , DRAM      , Utils.WAIT_L2     , 1); 
+        L1Cache = new Cache(Utils.SIZE_L1   , L2Cache   , Utils.WAIT_L1     , 2);
+    }
     
     public static void setCacheEnabled(boolean enabled) {
         if (enabled) {

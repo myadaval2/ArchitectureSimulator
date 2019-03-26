@@ -33,6 +33,8 @@ public class MainWindow extends javax.swing.JFrame {
     private int stepCount = 1;
     private boolean cacheSet = false;
     private boolean pipeSet = false;
+    private boolean pipeVal;
+    private boolean cacheVal;
     private String programFile = "";
     
     public MainWindow() {
@@ -95,6 +97,7 @@ public class MainWindow extends javax.swing.JFrame {
         stepButton = new javax.swing.JButton();
         stepButton1 = new javax.swing.JButton();
         LoadProgram = new javax.swing.JButton();
+        ResetButton = new javax.swing.JButton();
         RunButtonLabel = new javax.swing.JButton();
         clockTextBox = new javax.swing.JTextField();
         clockLabel = new javax.swing.JLabel();
@@ -507,6 +510,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        ResetButton.setText("Reset");
+        ResetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ResetButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
         leftPanel.setLayout(leftPanelLayout);
         leftPanelLayout.setHorizontalGroup(
@@ -522,7 +532,8 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(stepButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                     .addComponent(stepButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ResetButton))
                             .addGroup(leftPanelLayout.createSequentialGroup()
                                 .addComponent(StepJumperDrop, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(220, 220, 220)
@@ -543,7 +554,9 @@ public class MainWindow extends javax.swing.JFrame {
                             .addComponent(StepJumperDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(LoadProgram))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stepButton)
+                        .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(stepButton)
+                            .addComponent(ResetButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(stepButton1))
                     .addComponent(simulationSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -696,6 +709,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
         //d.memoryStep(d.memoryEnabled);
         //System.out.println(d.counter);
+        System.out.println("step");
         CPUManager d = CPUManager.getCPUManager();
         Pipeline p = Pipeline.getPipeline();
         for (int i = 0; i < stepCount; i++){
@@ -726,6 +740,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void cacheEnabledButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cacheEnabledButtonActionPerformed
         Memory.setCacheEnabled(true);
+        cacheVal = true;
         CacheLevelNameDropDown1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "L1 Cache", "L2 Cache", "DRAM" }));
         drawTable();
         cacheSet = true;
@@ -733,6 +748,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void cacheDisabledButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cacheDisabledButtonActionPerformed
         Memory.setCacheEnabled(false);
+        cacheVal = false;
         CacheLevelNameDropDown1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DRAM" }));
         drawTable();
         cacheSet = true;
@@ -741,11 +757,13 @@ public class MainWindow extends javax.swing.JFrame {
     private void pipelineEnabledButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pipelineEnabledButtonActionPerformed
         Pipeline.setPipelineEnabled(true);
         pipeSet = true;
+        pipeVal = true;
     }//GEN-LAST:event_pipelineEnabledButtonActionPerformed
 
     private void pipelineDisabledButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pipelineDisabledButtonActionPerformed
         Pipeline.setPipelineEnabled(false);
         pipeSet = true;
+        pipeVal = false;
     }//GEN-LAST:event_pipelineDisabledButtonActionPerformed
 
     private void stepButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButton1ActionPerformed
@@ -885,6 +903,38 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_InstructionEnglishActionPerformed
 
+    private void ResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetButtonActionPerformed
+        // TODO add your handling code here:
+        CPUManager c = CPUManager.getCPUManager();
+        c.isFinished = false;
+        c.memory = Memory.getMemory();
+        c.register = Register.getRegisters();
+        c.pipeline = Pipeline.getPipeline();
+        c.setClockCycles(0);
+        c.register.clearRegisterFile();
+        Pipeline p = Pipeline.getPipeline();
+        p.reset();
+        Memory m = Memory.getMemory();
+        m.reset();
+        Memory.setCacheEnabled(cacheVal);
+        Pipeline.setPipelineEnabled(pipeVal);
+        drawTable();
+            clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
+            Register register = Register.getRegisters();
+            clockTextBox1.setText(p.getLastInstruction());
+            InstructionEnglish.setText(p.getEnglishInstruction());
+            clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
+            clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
+            clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
+            clockTextBox5.setText(Integer.toString(register.getRegisterValue(3)));
+            clockTextBox6.setText(Integer.toString(register.getRegisterValue(4)));
+            clockTextBox7.setText(Integer.toString(register.getRegisterValue(5)));
+            clockTextBox8.setText(Integer.toString(register.getRegisterValue(6)));
+            clockTextBox9.setText(Integer.toString(register.getRegisterValue(7)));
+       // d.forLoopTeardown();
+        drawTable();
+    }//GEN-LAST:event_ResetButtonActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -940,6 +990,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.ButtonGroup PipelineButtons;
     private javax.swing.JPanel PipelineEnabledBox;
     private javax.swing.JLabel ProjectNameLabel;
+    private javax.swing.JButton ResetButton;
     private javax.swing.JButton RunButtonLabel;
     private javax.swing.JComboBox<String> StepJumperDrop;
     private javax.swing.JLabel cacheButtonsLabel;

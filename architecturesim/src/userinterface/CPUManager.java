@@ -9,7 +9,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import src.Memory;
@@ -28,6 +30,7 @@ public class CPUManager {
     public Register register;
     private static int clockCycles;
     public boolean isFinished;
+    public Map<String, Integer> lookup;
 
     public static CPUManager driver = new CPUManager();
     
@@ -77,6 +80,7 @@ public class CPUManager {
 //             }
 //            }
         
+        lookup = new HashMap<>();
         register.setPC(100); // where instructions begin
         i = register.getPC();
         int pc = register.getPC();
@@ -93,7 +97,8 @@ public class CPUManager {
                     System.out.println(program[i]);
                     if (program[i].equals("data:") || program[i].length() == 0 || program[i].charAt(0) == '#' ){
                         
-                    } else if (program[i].equals("instructions:")){
+                    } 
+                    else if (program[i].equals("instructions:")){
                         isInstruction = true;
                     }
                     else {
@@ -103,16 +108,27 @@ public class CPUManager {
                     i++;
                 }
                 int offset = 0;
+                boolean functionSave = false;
+                String funcName = "";
                 for (int j = i; j < program.length; j++){
-                    
+                    String[] line = program[j].split(" "); 
                     if (program[j].charAt(0) == '#' || program[j].length() == 0){
                         
-                    } else{
-                       String binString = convert(program[j]);
+                    } else if (line[0].equals("function:")){
+                        functionSave = true;
+                        funcName = line[1];
+                    }
+                    else{
+                        String binString = convert(program[j]);
                         int instruction = Integer.parseInt(binString,2);
                         System.out.println("Instruction: " + program[j] + " Address: " + (pc+offset));
                         System.out.println(binString);
                         memory.writeAddressInMemory(instruction, pc+offset); 
+                        if (functionSave){
+                            lookup.put(funcName, pc+offset);
+                            functionSave = false;
+                            funcName = "";
+                        }
                         offset++; 
                     }
                         

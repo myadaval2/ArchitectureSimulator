@@ -20,7 +20,7 @@ public class TwoBitSaturationCounter {
         if ((counter >= 0 && counter < 3) && wasTaken) {
             counter++;
         }
-        else if ((counter >= 0 && counter < 3) && !wasTaken) {
+        else if ((counter > 0 && counter <= 3) && !wasTaken) {
             counter--;
         }
     }

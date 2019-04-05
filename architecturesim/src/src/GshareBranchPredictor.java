@@ -41,6 +41,5 @@ public class GshareBranchPredictor {
     public void updateGsharePredictorTable(Boolean wasTaken, int index) {
         ghr[index].updateState(wasTaken);
         GlobalHistoryRegister.updateGHR(wasTaken);
-    }
-    
+    }   
 }

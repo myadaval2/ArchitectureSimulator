@@ -18,13 +18,13 @@ public class GlobalHistoryRegister {
         mRecentBranchOutcomes = 0;
     }
     
-    public static long getGHR() {
+    public static int getGHR() {
         return mRecentBranchOutcomes;
     }
     
-    public void updateGHR(Boolean wasTaken) {
+    public static void updateGHR(Boolean wasTaken) {
         mRecentBranchOutcomes = mRecentBranchOutcomes << 1;
-        mRecentBranchOutcomes = mRecentBranchOutcomes & 0x3;
+        mRecentBranchOutcomes = mRecentBranchOutcomes & 0x3F;
         if (wasTaken) {
             mRecentBranchOutcomes += 1;
         }

@@ -23,6 +23,9 @@ public class Pipeline {
     // public static Pipeline pipeline1 = new Pipeline();
     Register register = Register.getRegisters();
     Memory memory = Memory.getMemory();
+    GshareBranchPredictor gshareBP = GshareBranchPredictor.getGshareBP();
+    BranchTargetAddress BTA = BranchTargetAddress.getBranchTargetAddress();
+    PrefetchQueue prefetchQueue = PrefetchQueue.getPrefetchQueue();
     
     public static Pipeline pipelineMain = new Pipeline();
     
@@ -90,6 +93,8 @@ public class Pipeline {
                             stepID();
                             break;
                         case 1:
+                            // System.out.println("got to prefetch stage");
+                            prefetchQueue.prefetch();
                             // System.out.println("got to IF stage");
                             stepIF();
                             break;
@@ -171,7 +176,7 @@ public class Pipeline {
             } else {
                 lastInstruction = in.substring(16);
             }
-            System.out.println("Instruction: " + in + " ");
+            // System.out.println("Instruction: " + in + " ");
         }
         englishLastInstruction = "";
         setEnglishInstruction();
@@ -184,6 +189,8 @@ public class Pipeline {
         if (opcode == OpcodeDecoder.LDR || opcode == OpcodeDecoder.LDI || opcode == OpcodeDecoder.LD) {
             writeDataToRegister = pipeline[4].getMemoryOutput();
             register.setRegisterValue(registerWrite, writeDataToRegister);
+            // System.out.println("Register was loaded" + writeDataToRegister + "register " + registerWrite );
+
         }      
         // ALU Ops
         else if (opcode >= OpcodeDecoder.ADD && opcode <= OpcodeDecoder.CMP || opcode >= OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.ROT) {
@@ -207,7 +214,6 @@ public class Pipeline {
                 data = memory.readAddressInMemory(address);
                 pipeline[3].setMemoryOutput(data);
                 updateMEMHazard();
-
             }
             catch (NoSuchMemoryLocationException e){
                 System.out.println("Test Failed");
@@ -243,6 +249,14 @@ public class Pipeline {
         int opcode = pipeline[2].getOpcode();
         int offset = pipeline[2].getOffset();
         int branchTaken = 0;
+        int predictedBranchOutcome;
+        Boolean predictedBranchOutcomeBool = pipeline[2].getPredictedBranchOutcome();
+        if (predictedBranchOutcomeBool) {
+            predictedBranchOutcome = 1;
+        }
+        else {
+            predictedBranchOutcome = 0;
+        }
         // System.out.println(opcode);
         
         int ALUOutput = 0;
@@ -343,8 +357,8 @@ public class Pipeline {
             case OpcodeDecoder.BGT:
                 // STATUS Register
                 if (RSValue > RDValue) {
-                    // System.out.println("\t BRANCH TAKEN" + RSValue + " " + RDValue);
                     ALUOutput = register.getPC() - immediate;
+                    System.out.println("\t BRANCH TAKEN " + ALUOutput);
                     branchTaken = 1;
                 }
                 break; 
@@ -391,26 +405,49 @@ public class Pipeline {
         // if branch taken, pc = ALUOutput, flush previous stages pipeline[0] pipeline[1], clear IDHazard(), clearEXHazard, clear 
         // else pc=pc+1
         // switch statement for ALU operations
-        if (branchTaken == 1) {
-            clearHazards();
-            clearStage(pipeline[0]);
-            clearStage(pipeline[1]);
-            if (pipelineEnabled) {
-                register.setPC(ALUOutput - 1);
-                pipeline[2].setALUOutput(ALUOutput - 1);
+        if (pipelineEnabled) {
+            if (opcode >= OpcodeDecoder.BGT && opcode <= OpcodeDecoder.BOE) {
+                // branch should not have been taken but predicted it should
+                if (branchTaken == 0 && predictedBranchOutcome == 1) {
+                    clearHazards();
+                    clearStage(pipeline[0]);
+                    clearStage(pipeline[1]);
+                    System.out.println("\n Real branch NO, predicted branch YES: " + register.getPrevPC());
+                    register.setPC(register.getPrevPC()); // reset PC for prefetch queue
+                    pipeline[2].setALUOutput(register.getPrevPC()); // finish rest of branch instruction
+                }
+                // branch should have been taken but predicted it didn't
+                else if (branchTaken == 1 && predictedBranchOutcome == 0) {
+                    clearHazards();
+                    clearStage(pipeline[0]);
+                    clearStage(pipeline[1]);
+                    int targetAddress = ALUOutput - 1;
+                    System.out.println("\n Real branch YES, predicted branch NO: " + targetAddress);
+                    register.setPC(targetAddress); // reset PC for prefetch queue
+                    pipeline[2].setALUOutput(targetAddress); // finish rest of branch instruction
+                    BTA.addAddress(register.getBR(), targetAddress);
+                }
+                else {
+                    System.out.println("\t Branch predicted correctly");
+                }
+                if (branchTaken == 1) {
+                    gshareBP.updateGsharePredictorTable(true, gshareBP.getIndex());
+                }
+                else {
+                    gshareBP.updateGsharePredictorTable(false, gshareBP.getIndex());
+                }
             }
+            // else: predicted correctly => we are fine
             else {
+                pipeline[2].setALUOutput(ALUOutput);
+                pipeline[2].setMemoryOutput(memoryOutput);
+            }
+            updateEXHazard();
+        }
+        else { // don't need branch prediction if pipeline is disabled
+            if (branchTaken == 1) {
                 register.setPC(ALUOutput);
                 pipeline[2].setALUOutput(ALUOutput);
-            }
-            
-        }
-        
-        else {
-            pipeline[2].setALUOutput(ALUOutput);
-            pipeline[2].setMemoryOutput(memoryOutput);
-            if (pipelineEnabled) {
-                updateEXHazard();
             }
         }
     }
@@ -452,24 +489,33 @@ public class Pipeline {
         pipeline[1].setImmediate(immediate);
         pipeline[1].setOffset(offset);
         pipeline[1].setOpcode(opcode);
+        // pipeline[1].setBranchTaken();
         if (pipelineEnabled) {
             updateIDHazard();
         }
-        
     }
     
     private void stepIF() {
         // fetch instruction
         // System.out.println("Fetch PC Value: " + register.getPC());
-        try {
-            pipeline[0].setInstruction(memory.readAddressInMemory(register.getPC()));
-        }
-        catch (NoSuchMemoryLocationException e){
-            System.out.println("Test Failed");
-        }
         
-        
-        register.setPC(register.getPC() + 1);
+        // if pipeline is disabled, fetch from memory
+        if (!pipelineEnabled) {
+            try {
+                // set instruction from prefetch queue
+                pipeline[0].setInstruction(memory.readAddressInMemory(register.getPC()));
+            }
+            catch (NoSuchMemoryLocationException e){
+                System.out.println("Test Failed");
+            }
+            register.setPC(register.getPC() + 1);
+        }
+        // if pipelineis enabled (meaning branch prediction), fetch from prefetch queue
+        else {
+            pipeline[0].setInstruction(0x0000FFFF & prefetchQueue.getPrefetchedInstruction());
+            pipeline[0].setPredictedBranchOutcome(prefetchQueue.getPrefectchedInstructionPrediction());
+        }
+        System.out.println("PC value: " + register.getPC());
     }
     
     // may need to return something to indicate how to change RS/RT
@@ -544,6 +590,7 @@ public class Pipeline {
         newStage.setOpcode(oldStage.getOpcode());
         newStage.setOffset(oldStage.getOffset());
         newStage.setTestValue(oldStage.getTestValue());
+        newStage.setPredictedBranchOutcome(oldStage.getPredictedBranchOutcome());
     }
     
     private void clearStage(PipeStage stage) {
@@ -557,6 +604,7 @@ public class Pipeline {
         stage.setMemoryOutput(0);
         stage.setOpcode((char) 0x0000);
         stage.setTestValue(0);
+        stage.setPredictedBranchOutcome(false);
     }
     
     private Boolean isEmpty(PipeStage stage) {

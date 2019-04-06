@@ -34,7 +34,7 @@ public class Driver {
         clockCycles = 0;
 //        Memory.setCacheEnabled(false);
 //        Pipeline.setPipelineEnabled(false);
-//        forLoopTest();
+        forLoopTest();
         register.clearRegisterFile();
         
     }
@@ -129,15 +129,15 @@ public class Driver {
         try {
             for (int i = 0; i < 10; i++) {
                 memory.writeAddressInMemory(i, i); // ST 0-9 in Mem[0] - Mem[9]
-                memory.writeAddressInMemory(i*10, i + 10); // ST 11-19 in Mem[10] - Mem[90]
+                memory.writeAddressInMemory(i*10, i + 10); // ST 10-90 in Mem[10] - Mem[19]
             }
             
             int mem = 100;
         
             
-            memory.writeAddressInMemory(0b1101000100000000, mem); // LD R1 with Arr1 (Lwoad with const value)
-            memory.writeAddressInMemory(0b1101001000001010, mem + 1); // LD R2 with Arr2 (Load with const value)
-            memory.writeAddressInMemory(0b1101001100010100, mem + 2); // LD R3 with Arr3 (Load with const value)
+            memory.writeAddressInMemory(0b1101000100000000, mem); // LD R1 with Arr1(0) (Lwoad with const value)
+            memory.writeAddressInMemory(0b1101001000001010, mem + 1); // LD R2 with Arr2(10) (Load with const value)
+            memory.writeAddressInMemory(0b1101001100010100, mem + 2); // LD R3 with Arr3(20) (Load with const value)
             memory.writeAddressInMemory(0b0110011100001010, mem + 3); // ADDI R7, R0, 10 COUNTER
             memory.writeAddressInMemory(0b0101011000110000, mem + 4); // LDR R6 with Mem[R1+R4]
             memory.writeAddressInMemory(0b0101010101010000, mem + 5); // LDR R5 with Mem[R2+R4]
@@ -178,10 +178,8 @@ public class Driver {
             // register.printRegisters();
             
             
-            scan.nextLine();
-            System.out.println("Step: " + ++step);
+            // scan.nextLine();
             pipeline.step(i);
-            //System.out.println(i);
             
             clockCycles = i + memory.getMemoryCycleCount();
             // System.out.println("instruction clock cycles " + i + " memory count " + memory.getMemoryCycleCount() + " PC Value: " + register.getPC());

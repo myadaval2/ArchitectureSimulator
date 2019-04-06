@@ -12,10 +12,11 @@ package src;
 public class Register {
     private int[]      GP;
     private int        PC;
-    private int        NextPC;
+    private int        prevPC;
     private int        SP;
     private int        RTN;
     private int        CMP;
+    private int        BR;
     
     public static Register registers = new Register();
     
@@ -28,10 +29,11 @@ public class Register {
 //        this.GP[1] = (char) 1;
 //        this.GP[3] = (char) 3;
         this.PC        = 0;
-        this.NextPC    = 0;
+        this.prevPC    = 0;
         this.SP        = 0;
         this.RTN       = 0;
         this.CMP       = 0;
+        this.BR        = 0;
     }
 
     public void clearRegisterFile() {
@@ -39,10 +41,11 @@ public class Register {
             this.GP[i] = (char) 0;
         }
         this.PC        = 0;
-        this.NextPC    = 0;
+        this.prevPC    = 0;
         this.SP        = 0;
         this.RTN       = 0;
         this.CMP       = 0;
+        this.BR        = 0;
     }
     
     public static void printRegisters() {
@@ -90,15 +93,15 @@ public class Register {
     /**
      * @return the NextPC
      */
-    public int getNextPC() {
-        return NextPC;
+    public int getPrevPC() {
+        return this.prevPC;
     }
 
     /**
      * @param NextPC the NextPC to set
      */
-    public void setNextPC(int NextPC) {
-        this.NextPC = NextPC;
+    public void setPrevPC(int prevPC) {
+        this.prevPC = prevPC;
     }
 
     /**
@@ -141,6 +144,20 @@ public class Register {
      */
     public void setCMP(int CMP) {
         this.CMP = CMP;
+    }
+    
+    /**
+     * @return the BR
+     */
+    public int getBR() {
+        return this.BR;
+    }
+
+    /**
+     * @param BR the BR to set
+     */
+    public void setBR(int BR) {
+        this.BR = BR;
     }
     
 }

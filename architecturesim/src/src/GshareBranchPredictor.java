@@ -10,7 +10,7 @@ package src;
  * @author megha
  */
 public class GshareBranchPredictor {
-    public Register register;
+    public Register register = Register.getRegisters();
     private TwoBitSaturationCounter[] ghr;
     public Boolean branchOutcome;
     
@@ -28,13 +28,13 @@ public class GshareBranchPredictor {
     }
     
     public int getIndex() {
-        int index = (register.getPC() & 0b111111) ^ GlobalHistoryRegister.getGHR();
+        int index = (register.getBR() & 0b111111) ^ GlobalHistoryRegister.getGHR();
         return index;
     }
     
-    public Boolean calculateBranchOutcome() {
+    public Boolean branchPredictedTaken() {
         // mask bottom 6 bits of PC with 
-        int index = getIndex();
+        int index = 0b111111 & getIndex();
         return ghr[index].currStateIsTaken();
     }
     

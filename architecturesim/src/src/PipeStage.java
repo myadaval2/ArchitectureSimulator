@@ -23,6 +23,7 @@ public class PipeStage {
     private int memoryOutput;
     private int dataFromMemory;
     private int regWrite;
+    private Boolean predictedBranchOutcome;
     // private int registerValue; OR should this be ALUOutput? ALUOutput is not used in LD/ST
     
     public PipeStage() {
@@ -37,6 +38,7 @@ public class PipeStage {
         this.ALUOutput = 0;
         this.memoryOutput = 0;
         this.regWrite = 0;
+        this.predictedBranchOutcome = false;
     }
 
     /**
@@ -219,5 +221,13 @@ public class PipeStage {
      */
     public void setRegWrite(int regWrite) {
         this.regWrite = regWrite;
+    }
+    
+    public Boolean getPredictedBranchOutcome() {
+        return this.predictedBranchOutcome;
+    }
+    
+    public void setPredictedBranchOutcome(Boolean branchPrediction) {
+        this.predictedBranchOutcome = branchPrediction;
     }
 }

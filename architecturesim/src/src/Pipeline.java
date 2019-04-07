@@ -238,6 +238,106 @@ public class Pipeline {
         }
         // do you only need to do this in the if/else statement?
         
+        //PUSH and POP
+        else if (opcode == OpcodeDecoder.PUSH) {
+            String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
+            address = register.getSP();
+            System.out.println(bitVector);
+            System.out.println(address);
+            for(int i=3; i<bitVector.length(); i++){
+                if (bitVector.charAt(i) == '1'){
+                    int reg = 0;
+                    switch(i) {
+                        case 3:
+                            reg = 0;
+                            break;
+                        case 4:
+                            reg = 1;
+                            break;
+                        case 5:
+                            reg = 2;
+                            break;
+                        case 6:
+                            reg = 3;
+                            break;
+                        case 7:
+                            reg = 4;
+                            break;
+                        case 8:
+                            reg = 5;
+                            break;
+                        case 9:
+                            reg = 6;
+                            break;
+                        case 10:
+                            reg = 7;
+                            break;
+                    }
+                    try {
+                        data = register.getRegisterValue(reg);
+                        memory.writeAddressInMemory(data, address);
+                        register.setRegisterValue(reg, 0);
+                        // System.out.println("writing data " + data + "to memory " + address);
+                    }
+                    catch (NoSuchMemoryLocationException e){
+                        System.out.println("Test Failed");
+                    }
+                }
+                address--;
+                register.setSP(address);
+            }
+        }
+        
+        else if (opcode == OpcodeDecoder.POP){
+            String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
+            address = register.getSP() + 1;
+            System.out.println(bitVector);
+            System.out.println(address);
+            for(int i=(bitVector.length()-1); i>2; i--){
+                if (bitVector.charAt(i) == '1'){
+                    int reg = 0;
+                    switch(i){
+                        case 3:
+                            reg = 0;
+                            break;
+                        case 4:
+                            reg = 1;
+                            break;
+                        case 5:
+                            reg = 2;
+                            break;
+                        case 6:
+                            reg = 3;
+                            break;
+                        case 7:
+                            reg = 4;
+                            break;
+                        case 8:
+                            reg = 5;
+                            break;
+                        case 9:
+                            reg = 6;
+                            break;
+                        case 10:
+                            reg = 7;
+                            break;
+                    }
+                    try {
+                        data = memory.readAddressInMemory(address);
+                        memory.writeAddressInMemory(0, address); //clear memory space
+                        register.setRegisterValue(reg, data);
+                        updateMEMHazard();
+
+                    }
+                    catch (NoSuchMemoryLocationException e){
+                        System.out.println("Test Failed");
+                    }
+                }
+                address++;
+                register.setSP(address);
+            }
+        }
+        
     }
     
     private void stepEX() {
@@ -395,11 +495,13 @@ public class Pipeline {
                 // and decrementing the stack pointer
                 // where does the stack pointer point to begin with?
                 // need to set up a stack area!
+                memoryOutput = offset;
             case OpcodeDecoder.POP:
                 // pop is loading all the registers and incrementing the stack
                 // pointer
                 // push and pop are both pretty complex, require a series
                 // of loads/stores
+                memoryOutput = offset; 
         }
             
         // if branch taken, pc = ALUOutput, flush previous stages pipeline[0] pipeline[1], clear IDHazard(), clearEXHazard, clear 
@@ -479,8 +581,13 @@ public class Pipeline {
         // Control Type
         // between 22 and 27
         else if ((opcode >= OpcodeDecoder.JI && opcode <= OpcodeDecoder.ST)) {
-            RD = (instruction >> 8) & 0x7;
-            offset = instruction & 0xFF;
+            if ((opcode == OpcodeDecoder.PUSH || opcode == OpcodeDecoder.POP)){
+                offset = instruction & 0x7FF; // 11 1's
+            }
+            else{
+                RD = (instruction >> 8) & 0x7;
+                offset = instruction & 0xFF;
+            }
         }
         
         pipeline[1].setRD(RD);

@@ -30,7 +30,7 @@ public class Register {
 //        this.GP[3] = (char) 3;
         this.PC        = 0;
         this.prevPC    = 0;
-        this.SP        = 0;
+        this.SP        = 63;
         this.RTN       = 0;
         this.CMP       = 0;
         this.BR        = 0;
@@ -42,7 +42,7 @@ public class Register {
         }
         this.PC        = 0;
         this.prevPC    = 0;
-        this.SP        = 0;
+        this.SP        = 63;
         this.RTN       = 0;
         this.CMP       = 0;
         this.BR        = 0;

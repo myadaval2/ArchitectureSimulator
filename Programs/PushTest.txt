@@ -1,0 +1,35 @@
+data:
+0,0
+1,1
+2,2
+3,3
+4,4
+5,5
+6,6
+7,7
+8,8
+9,9
+0,10
+10,11
+20,12
+30,13
+40,14
+50,15
+60,16
+70,17
+80,18
+90,19
+
+# Example Comment
+instructions:
+LD R1 - 5
+LD R2 - 10
+LD R3 - 20
+PUSH 2047
+ADDI R4 R4 1
+ADDI R4 R4 1
+ADDI R4 R4 1
+ADDI R4 R4 1
+ADDI R4 R4 1
+POP 1904
+HLT

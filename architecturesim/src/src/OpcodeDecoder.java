@@ -39,5 +39,7 @@ public class OpcodeDecoder {
     public static final int POP           =   25;
     public static final int LD            =   26;
     public static final int ST            =   27;
+    
+    public static final int FUNC          =   31;
 
 }

@@ -25,6 +25,8 @@ instructions:
 LD R1 - 0
 LD R2 - 10
 LD R3 - 20
+FUNC sampleFunction1
+FUNC sampleFunction2
 ADDI R7 R0 10
 LDR R6 R1 16
 LDR R5 R2 16
@@ -35,5 +37,8 @@ SUBI R7 R7 1
 BGT R0 R7 7
 HLT
 
-function: sampleFunction
-LD R4 - 30
+function: sampleFunction1
+LD R4 - 40
+
+function: sampleFunction2
+LD R5 - 50

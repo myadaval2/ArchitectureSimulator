@@ -31,6 +31,10 @@ public class CPUManager {
     private static int clockCycles;
     public boolean isFinished;
     public Map<String, Integer> lookup;
+    
+    public String[] fullProgram;
+    public Map<String,Integer> functionCallOffsets;
+    
 
     public static CPUManager driver = new CPUManager();
     
@@ -84,6 +88,7 @@ public class CPUManager {
         register.setPC(100); // where instructions begin
         i = register.getPC();
         int pc = register.getPC();
+        functionCallOffsets = new HashMap<>();
         
         if (filename.equals("")){
             //TODO
@@ -92,6 +97,7 @@ public class CPUManager {
             try{
                 boolean isInstruction = false;
                 String[] program = readLines(filename);
+                this.fullProgram = program;
                 int i = 0;
                 while(!isInstruction){
                     System.out.println(program[i]);
@@ -112,9 +118,17 @@ public class CPUManager {
                 String funcName = "";
                 for (int j = i; j < program.length; j++){
                     String[] line = program[j].split(" "); 
+                    //System.out.println(line[0]);
+                    if (line[0].equals("")) {
+                        continue;
+                    } else {
                     if (program[j].charAt(0) == '#' || program[j].length() == 0){
                         
-                    } else if (line[0].equals("function:")){
+                    } else if (line[0].equals("FUNC")){
+                        functionCallOffsets.put(line[1],pc+offset);
+                        offset++;
+                    }
+                        else if (line[0].equals("function:")){
                         functionSave = true;
                         funcName = line[1];
                     }
@@ -131,15 +145,38 @@ public class CPUManager {
                         }
                         offset++; 
                     }
-                        
-                }
-                
+                    }
+                }  
             }
-            catch (Exception e){
-                System.out.println("Bad File");
+            catch (NoSuchMemoryLocationException | IOException e){
+                System.out.println("Bad File - LINE 139");
                 System.exit(1);
             }
         }
+        System.out.println("SECOND PASS");
+        for (String inst : this.fullProgram){
+            String[] line = inst.split(" "); 
+            if (line[0].equals("FUNC")){
+                System.out.println(lookup.keySet());
+                int address = lookup.get(line[1]);
+                String binString = "11111";
+                binString += String.format("%11s", Integer.toBinaryString(address)).replace(" ", "0");
+                
+                int putback = functionCallOffsets.get(line[1]);
+                int instruction = Integer.parseInt(binString,2);
+                
+                System.out.println("Function: " + line[1] + " At Address: " + address + " goes at line: " + putback);
+                System.out.println("Binary string: " + binString);
+
+                try {
+                    memory.writeAddressInMemory(instruction, putback); 
+                } catch (Exception e){
+                    
+                }
+            }
+            
+        }
+        
         
     }
     public String[] readLines(String filename) throws IOException {
@@ -159,6 +196,18 @@ public class CPUManager {
         if (instructions[0].equals("HLT")){
             return "1011100000000000";
         }
+        if (instructions[0].equals("PUSH")){
+            String binString = "11000";
+            binString += String.format("%11s", Integer.toBinaryString(Integer.parseInt(instructions[1]))).replace(" ", "0");
+            return binString;
+        }
+        if (instructions[0].equals("POP")){
+            String binString = "11001";
+            binString += String.format("%11s", Integer.toBinaryString(Integer.parseInt(instructions[1]))).replace(" ", "0");
+            return binString;
+        }
+        
+        
         String binString = "";
            // String in = String.format("%16s", Integer.toBinaryString(inst)).replace(" ", "0");
            try {
@@ -210,6 +259,7 @@ public class CPUManager {
             case "POP": return 25;
             case "LD": return 26;
             case "ST": return 27;
+            case "FUNC": return 31;
             default: throw new BadInstructionException(inst);
         }
     }

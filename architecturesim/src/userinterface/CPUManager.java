@@ -196,18 +196,19 @@ public class CPUManager {
         if (instructions[0].equals("HLT")){
             return "1011100000000000";
         }
+
         if (instructions[0].equals("PUSH")){
             String binString = "11000";
             binString += String.format("%11s", Integer.toBinaryString(Integer.parseInt(instructions[1]))).replace(" ", "0");
             return binString;
         }
+
         if (instructions[0].equals("POP")){
             String binString = "11001";
             binString += String.format("%11s", Integer.toBinaryString(Integer.parseInt(instructions[1]))).replace(" ", "0");
             return binString;
         }
-        
-        
+
         String binString = "";
            // String in = String.format("%16s", Integer.toBinaryString(inst)).replace(" ", "0");
            try {

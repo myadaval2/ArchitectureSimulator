@@ -236,7 +236,105 @@ public class Pipeline {
                 System.out.println("Test Failed");
             }
         }
-        // do you only need to do this in the if/else statement?
+        // PUSH and POP
+        else if (opcode == OpcodeDecoder.PUSH) {
+            String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
+            address = register.getSP();
+            System.out.println(bitVector);
+            System.out.println(address);
+            for(int i=3; i<bitVector.length(); i++){
+                if (bitVector.charAt(i) == '1'){
+                    int reg = 0;
+                    switch(i) {
+                        case 3:
+                            reg = 0;
+                            break;
+                        case 4:
+                            reg = 1;
+                            break;
+                        case 5:
+                            reg = 2;
+                            break;
+                        case 6:
+                            reg = 3;
+                            break;
+                        case 7:
+                            reg = 4;
+                            break;
+                        case 8:
+                            reg = 5;
+                            break;
+                        case 9:
+                            reg = 6;
+                            break;
+                        case 10:
+                            reg = 7;
+                            break;
+                    }
+                    try {
+                        data = register.getRegisterValue(reg);
+                        memory.writeAddressInMemory(data, address);
+                        register.setRegisterValue(reg, 0);
+                        // System.out.println("writing data " + data + "to memory " + address);
+                    }
+                    catch (NoSuchMemoryLocationException e){
+                        System.out.println("Test Failed");
+                    }
+                }
+                address--;
+                register.setSP(address);
+            }
+        }
+        
+        else if (opcode == OpcodeDecoder.POP){
+            String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
+            address = register.getSP() + 1;
+            System.out.println(bitVector);
+            System.out.println(address);
+            for(int i=(bitVector.length()-1); i>2; i--){
+                if (bitVector.charAt(i) == '1'){
+                    int reg = 0;
+                    switch(i){
+                        case 3:
+                            reg = 0;
+                            break;
+                        case 4:
+                            reg = 1;
+                            break;
+                        case 5:
+                            reg = 2;
+                            break;
+                        case 6:
+                            reg = 3;
+                            break;
+                        case 7:
+                            reg = 4;
+                            break;
+                        case 8:
+                            reg = 5;
+                            break;
+                        case 9:
+                            reg = 6;
+                            break;
+                        case 10:
+                            reg = 7;
+                            break;
+                    }
+                    try {
+                        data = memory.readAddressInMemory(address);
+                        memory.writeAddressInMemory(0, address); //clear memory space
+                        register.setRegisterValue(reg, data);
+                        updateMEMHazard();
+
+                    }
+                    catch (NoSuchMemoryLocationException e){
+                        System.out.println("Test Failed");
+                    }
+                }
+                address++;
+                register.setSP(address);
+            }
+        }
         
         //PUSH and POP
         else if (opcode == OpcodeDecoder.PUSH) {
@@ -502,6 +600,7 @@ public class Pipeline {
                 // push and pop are both pretty complex, require a series
                 // of loads/stores
                 memoryOutput = offset; 
+
         }
             
         // if branch taken, pc = ALUOutput, flush previous stages pipeline[0] pipeline[1], clear IDHazard(), clearEXHazard, clear 
@@ -547,9 +646,13 @@ public class Pipeline {
             updateEXHazard();
         }
         else { // don't need branch prediction if pipeline is disabled
+            pipeline[2].setALUOutput(ALUOutput);
+            pipeline[2].setMemoryOutput(memoryOutput);
             if (branchTaken == 1) {
+                clearHazards();
+                clearStage(pipeline[0]);
+                clearStage(pipeline[1]);
                 register.setPC(ALUOutput);
-                pipeline[2].setALUOutput(ALUOutput);
             }
         }
     }
@@ -565,7 +668,7 @@ public class Pipeline {
         int offset = 0;
         // Register Type
         // between 1 and 11
-        if ((opcode >= OpcodeDecoder.ADD && opcode <= OpcodeDecoder.STR)) {
+        if (opcode >= OpcodeDecoder.ADD && opcode <= OpcodeDecoder.STR) {
             RD = (instruction >> 8) & 0x7;
             RS = (instruction >> 5) & 0x7;
             RT = (instruction >> 2) & 0x7;
@@ -573,7 +676,7 @@ public class Pipeline {
         }
         // Immediate Type
         // between 12 and 21
-        else if ((opcode >= OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.BOE)) {
+        else if (opcode >= OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.BOE) {
             RD = (instruction >> 8) & 0x7;
             RS = (instruction >> 5) & 0x7;
             immediate = instruction & 0x1F;
@@ -587,6 +690,7 @@ public class Pipeline {
             else{
                 RD = (instruction >> 8) & 0x7;
                 offset = instruction & 0xFF;
+
             }
         }
         
@@ -596,7 +700,6 @@ public class Pipeline {
         pipeline[1].setImmediate(immediate);
         pipeline[1].setOffset(offset);
         pipeline[1].setOpcode(opcode);
-        // pipeline[1].setBranchTaken();
         if (pipelineEnabled) {
             updateIDHazard();
         }

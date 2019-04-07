@@ -108,7 +108,6 @@ public class Pipeline {
             }
         }
         else {
-            System.out.println("HELLO WORLD");
             int pcOffset = 100;
             int i = ((instruction - pcOffset) % 5) + 1;
             switch (i) {
@@ -236,16 +235,18 @@ public class Pipeline {
                 System.out.println("Test Failed");
             }
         }
+        
         // PUSH and POP
         else if (opcode == OpcodeDecoder.PUSH) {
             String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
             address = register.getSP();
-            System.out.println(bitVector);
-            System.out.println(address);
-            for(int i=3; i<bitVector.length(); i++){
+            for(int i=2; i<bitVector.length(); i++){
                 if (bitVector.charAt(i) == '1'){
                     int reg = 0;
                     switch(i) {
+                        case 2:
+                            reg = -1;
+                            break;
                         case 3:
                             reg = 0;
                             break;
@@ -272,10 +273,17 @@ public class Pipeline {
                             break;
                     }
                     try {
-                        data = register.getRegisterValue(reg);
-                        memory.writeAddressInMemory(data, address);
-                        register.setRegisterValue(reg, 0);
-                        // System.out.println("writing data " + data + "to memory " + address);
+                        if (reg == -1){
+                            System.out.println("Pushing PC onto stack");
+                            data = register.getPC() + 1;
+                            memory.writeAddressInMemory(data, address); 
+                        }
+                        else{
+                            data = register.getRegisterValue(reg);
+                            memory.writeAddressInMemory(data, address);
+                            register.setRegisterValue(reg, 0);
+                            // System.out.println("writing data " + data + "to memory " + address);
+                        }
                     }
                     catch (NoSuchMemoryLocationException e){
                         System.out.println("Test Failed");
@@ -291,10 +299,13 @@ public class Pipeline {
             address = register.getSP() + 1;
             System.out.println(bitVector);
             System.out.println(address);
-            for(int i=(bitVector.length()-1); i>2; i--){
+            for(int i=(bitVector.length()-1); i>1; i--){
                 if (bitVector.charAt(i) == '1'){
                     int reg = 0;
                     switch(i){
+                        case 2:
+                            reg = -1;
+                            break;
                         case 3:
                             reg = 0;
                             break;
@@ -321,10 +332,18 @@ public class Pipeline {
                             break;
                     }
                     try {
-                        data = memory.readAddressInMemory(address);
-                        memory.writeAddressInMemory(0, address); //clear memory space
-                        register.setRegisterValue(reg, data);
-                        updateMEMHazard();
+                        if (reg == -1){
+                            data = memory.readAddressInMemory(address);
+                            memory.writeAddressInMemory(0, address);
+                            register.setPC(data);
+                            // updateMEMHazard();
+                        }
+                        else{
+                            data = memory.readAddressInMemory(address);
+                            memory.writeAddressInMemory(0, address); //clear memory space
+                            register.setRegisterValue(reg, data);
+                            // updateMEMHazard();
+                        }
 
                     }
                     catch (NoSuchMemoryLocationException e){
@@ -342,10 +361,14 @@ public class Pipeline {
             address = register.getSP();
             System.out.println(bitVector);
             System.out.println(address);
-            for(int i=3; i<bitVector.length(); i++){
+            for(int i=2; i<bitVector.length(); i++){
                 if (bitVector.charAt(i) == '1'){
                     int reg = 0;
                     switch(i) {
+                        case 2:
+                            System.out.println("HZZ");
+                            reg = -1;
+                            break;
                         case 3:
                             reg = 0;
                             break;
@@ -372,10 +395,17 @@ public class Pipeline {
                             break;
                     }
                     try {
-                        data = register.getRegisterValue(reg);
-                        memory.writeAddressInMemory(data, address);
-                        register.setRegisterValue(reg, 0);
-                        // System.out.println("writing data " + data + "to memory " + address);
+                        if (reg == -1){
+                            System.out.println("HEEERRREEE");
+                            data = register.getPC();
+                            memory.writeAddressInMemory(data, address); 
+                        }
+                        else{
+                            data = register.getRegisterValue(reg);
+                            memory.writeAddressInMemory(data, address);
+                            register.setRegisterValue(reg, 0);
+                            // System.out.println("writing data " + data + "to memory " + address);
+                        }
                     }
                     catch (NoSuchMemoryLocationException e){
                         System.out.println("Test Failed");
@@ -389,12 +419,13 @@ public class Pipeline {
         else if (opcode == OpcodeDecoder.POP){
             String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
             address = register.getSP() + 1;
-            System.out.println(bitVector);
-            System.out.println(address);
-            for(int i=(bitVector.length()-1); i>2; i--){
+            for(int i=(bitVector.length()-1); i>1; i--){
                 if (bitVector.charAt(i) == '1'){
                     int reg = 0;
                     switch(i){
+                        case 2:
+                            reg = -1;
+                            break;
                         case 3:
                             reg = 0;
                             break;
@@ -421,10 +452,18 @@ public class Pipeline {
                             break;
                     }
                     try {
-                        data = memory.readAddressInMemory(address);
-                        memory.writeAddressInMemory(0, address); //clear memory space
-                        register.setRegisterValue(reg, data);
-                        updateMEMHazard();
+                        if (reg == -1){
+                            data = memory.readAddressInMemory(address);
+                            memory.writeAddressInMemory(0, address);
+                            register.setPC(data);
+                            updateMEMHazard();
+                        }
+                        else{
+                            data = memory.readAddressInMemory(address);
+                            memory.writeAddressInMemory(0, address); //clear memory space
+                            register.setRegisterValue(reg, data);
+                            updateMEMHazard();
+                        }
 
                     }
                     catch (NoSuchMemoryLocationException e){
@@ -594,12 +633,19 @@ public class Pipeline {
                 // where does the stack pointer point to begin with?
                 // need to set up a stack area!
                 memoryOutput = offset;
+                break;
             case OpcodeDecoder.POP:
                 // pop is loading all the registers and incrementing the stack
                 // pointer
                 // push and pop are both pretty complex, require a series
                 // of loads/stores
-                memoryOutput = offset; 
+                memoryOutput = offset;
+                break;
+            case OpcodeDecoder.FUNC:
+                ALUOutput = offset;
+                System.out.println(ALUOutput);
+                break;
+            
 
         }
             
@@ -607,6 +653,9 @@ public class Pipeline {
         // else pc=pc+1
         // switch statement for ALU operations
         if (pipelineEnabled) {
+            if (opcode == OpcodeDecoder.FUNC){
+                register.setPC(ALUOutput); 
+            }
             if (opcode >= OpcodeDecoder.BGT && opcode <= OpcodeDecoder.BOE) {
                 // branch should not have been taken but predicted it should
                 if (branchTaken == 0 && predictedBranchOutcome == 1) {
@@ -646,6 +695,9 @@ public class Pipeline {
             updateEXHazard();
         }
         else { // don't need branch prediction if pipeline is disabled
+            if (opcode == OpcodeDecoder.FUNC){
+                register.setPC(ALUOutput); 
+            }
             pipeline[2].setALUOutput(ALUOutput);
             pipeline[2].setMemoryOutput(memoryOutput);
             if (branchTaken == 1) {
@@ -694,6 +746,10 @@ public class Pipeline {
             }
         }
         
+        else if((opcode == OpcodeDecoder.FUNC)){
+            offset = instruction & 0x7FF; 
+        }
+        
         pipeline[1].setRD(RD);
         pipeline[1].setRS(RS);
         pipeline[1].setRT(RT);
@@ -725,7 +781,7 @@ public class Pipeline {
             pipeline[0].setInstruction(0x0000FFFF & prefetchQueue.getPrefetchedInstruction());
             pipeline[0].setPredictedBranchOutcome(prefetchQueue.getPrefectchedInstructionPrediction());
         }
-        System.out.println("PC value: " + register.getPC());
+        // System.out.println("PC value: " + register.getPC() + "Instruction " + pipeline[0].getInstruction());
     }
     
     // may need to return something to indicate how to change RS/RT
@@ -875,6 +931,7 @@ public class Pipeline {
             case 25: return "POP";
             case 26: return "LD";
             case 27: return "ST";
+            case 31: return "FUNC";
             default: return "";
         }
     }

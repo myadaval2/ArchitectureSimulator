@@ -66,7 +66,7 @@ public class CPUManager {
             clockCycles = i + memory.getMemoryCycleCount();
             i++;
             
-            Register.printRegisters();
+            // Register.printRegisters();
             }   
     } 
     

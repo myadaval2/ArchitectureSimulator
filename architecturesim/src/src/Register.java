@@ -27,7 +27,7 @@ public class Register {
         }
         this.PC        = 0;
         this.prevPC    = 0;
-        this.SP        = 0x1FFFF;
+        this.SP        = 63;// 0x1FFFF;
         this.RTN       = 0;
         this.CMP       = 0;
         this.BR        = 0;
@@ -40,7 +40,7 @@ public class Register {
         this.PC        = 0;
         this.prevPC    = 0;
 
-        this.SP        = 0x1FFFF;
+        this.SP        = 63;// 0x1FFFF;
         this.RTN       = 0;
         this.CMP       = 0;
         this.BR        = 0;

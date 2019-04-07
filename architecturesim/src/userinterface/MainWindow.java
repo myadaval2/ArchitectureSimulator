@@ -707,9 +707,6 @@ public class MainWindow extends javax.swing.JFrame {
     
     
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
-        //d.memoryStep(d.memoryEnabled);
-        //System.out.println(d.counter);
-        System.out.println("step");
         CPUManager d = CPUManager.getCPUManager();
         Pipeline p = Pipeline.getPipeline();
         for (int i = 0; i < stepCount; i++){

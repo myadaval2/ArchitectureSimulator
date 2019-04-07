@@ -25,12 +25,9 @@ public class Register {
         for (int i = 0; i < 8; i++) {
             this.GP[i] = (char) 0;
         }
-//        this.GP[0] = (char) 0;
-//        this.GP[1] = (char) 1;
-//        this.GP[3] = (char) 3;
         this.PC        = 0;
         this.prevPC    = 0;
-        this.SP        = 0;
+        this.SP        = 0x1FFFF;
         this.RTN       = 0;
         this.CMP       = 0;
         this.BR        = 0;
@@ -42,7 +39,7 @@ public class Register {
         }
         this.PC        = 0;
         this.prevPC    = 0;
-        this.SP        = 0;
+        this.SP        = 0x1FFFF;
         this.RTN       = 0;
         this.CMP       = 0;
         this.BR        = 0;

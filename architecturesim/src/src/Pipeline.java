@@ -274,7 +274,7 @@ public class Pipeline {
                     }
                     try {
                         if (reg == -1){
-                            System.out.println("Pushing PC onto stack");
+                            // System.out.println("Pushing PC onto stack");
                             data = register.getPC() + 1;
                             memory.writeAddressInMemory(data, address); 
                         }
@@ -297,8 +297,8 @@ public class Pipeline {
         else if (opcode == OpcodeDecoder.POP){
             String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
             address = register.getSP() + 1;
-            System.out.println(bitVector);
-            System.out.println(address);
+            // System.out.println(bitVector);
+            // System.out.println(address);
             for(int i=(bitVector.length()-1); i>1; i--){
                 if (bitVector.charAt(i) == '1'){
                     int reg = 0;
@@ -359,14 +359,13 @@ public class Pipeline {
         else if (opcode == OpcodeDecoder.PUSH) {
             String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
             address = register.getSP();
-            System.out.println(bitVector);
-            System.out.println(address);
+            // System.out.println(bitVector);
+            // System.out.println(address);
             for(int i=2; i<bitVector.length(); i++){
                 if (bitVector.charAt(i) == '1'){
                     int reg = 0;
                     switch(i) {
                         case 2:
-                            System.out.println("HZZ");
                             reg = -1;
                             break;
                         case 3:
@@ -396,7 +395,6 @@ public class Pipeline {
                     }
                     try {
                         if (reg == -1){
-                            System.out.println("HEEERRREEE");
                             data = register.getPC();
                             memory.writeAddressInMemory(data, address); 
                         }

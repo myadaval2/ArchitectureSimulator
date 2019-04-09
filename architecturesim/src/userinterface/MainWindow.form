@@ -6,6 +6,8 @@
     </Component>
     <Component class="javax.swing.ButtonGroup" name="PipelineButtons">
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="MemoryFormatButtons">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
@@ -38,7 +40,11 @@
               <Component id="clockLabel" min="-2" pref="76" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="clockTextBox" min="-2" pref="73" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+              <Component id="ResetButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="LoadProgram" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="229" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
@@ -57,6 +63,8 @@
                       <Component id="RunButtonLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="clockTextBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="clockLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="LoadProgram" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="ResetButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -86,20 +94,21 @@
                           <Component id="simulationSettingsPanel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="stepButton1" alignment="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="stepButton" min="-2" pref="73" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="ResetButton" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="StepJumperDrop" min="-2" pref="79" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="220" max="-2" attributes="0"/>
-                                  <Component id="LoadProgram" max="32767" attributes="0"/>
+                              <Component id="StepJumperDrop" alignment="0" min="-2" pref="79" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="stepButton1" alignment="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="stepButton" min="-2" pref="73" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                          <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="FormatMemoryLabel" max="32767" attributes="0"/>
+                              <Component id="hexbutton" pref="71" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="binaryButton" min="-2" pref="78" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="decimalButton" min="-2" pref="100" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Component id="memoryPanel1" min="-2" max="-2" attributes="0"/>
@@ -107,7 +116,7 @@
                           <Component id="memoryPanel" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="39" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -115,21 +124,30 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="StepJumperDrop" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="LoadProgram" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="FormatMemoryLabel" alignment="3" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="stepButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="ResetButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="stepButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="stepButton1" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                  <Component id="hexbutton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="binaryButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="decimalButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="stepButton1" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="simulationSettingsPanel" min="-2" pref="99" max="-2" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="simulationSettingsPanel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -165,13 +183,8 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="CacheEnabledBox" min="-2" max="-2" attributes="0"/>
-                          <Component id="PipelineEnabledBox" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="CacheEnabledBox" max="32767" attributes="0"/>
+                  <Component id="PipelineEnabledBox" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -199,12 +212,12 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="pipelineButtonsLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="pipelineEnabledButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="pipelineDisabledButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="pipelineDisabledButton" min="-2" max="-2" attributes="0"/>
+                              <Component id="pipelineEnabledButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="34" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -262,12 +275,12 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="cacheButtonsLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="cacheEnabledButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="cacheDisabledButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -713,20 +726,42 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stepButton1ActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="LoadProgram">
+        <Component class="javax.swing.JLabel" name="FormatMemoryLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Load Program"/>
+            <Property name="text" type="java.lang.String" value="Format"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="hexbutton">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="MemoryFormatButtons"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Hex"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="LoadProgramActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hexbuttonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="ResetButton">
+        <Component class="javax.swing.JRadioButton" name="binaryButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Reset"/>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="MemoryFormatButtons"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Binary"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ResetButtonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="binaryButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="decimalButton">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="MemoryFormatButtons"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Decimal"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="decimalButtonActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -749,6 +784,22 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Clock Cycles"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="LoadProgram">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Load Program"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="LoadProgramActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="ResetButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Reset"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ResetButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

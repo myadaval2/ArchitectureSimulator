@@ -13,6 +13,7 @@ import java.util.*;
  */
 public class DisplayMemory {
     public String[] displayLabels;
+    public String format;
     public DisplayMemory() {
         int count = 0;
         for (int numberOfRows = 0; numberOfRows < Math.pow(2, 17); numberOfRows += Math.pow(2, 6)) {
@@ -24,7 +25,7 @@ public class DisplayMemory {
         }   
     }
     
-    public Object[][] getMemoryPage(String memoryLevel, int[] fullMemoryArray, int[] tagArray, int[] historyArray, int pageNum) {
+    public Object[][] getMemoryPage(String memoryLevel, int[] fullMemoryArray, int[] tagArray, int[] historyArray, int pageNum, String format) {
         int tableSize = 64;
         int addressValue = 0;
         
@@ -47,24 +48,40 @@ public class DisplayMemory {
             }
             for (int j = 0; j < 2; j++) {
                 if (j == 0) {
-                    if (historyArray[i] != -1) {
-                        memoryArraySegment[i-startIndex][j] = (Object) String.format("%05X", addressValue);
-                        // memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(addressValue);
+                    if (!"DRAM".equals(memoryLevel)) {
+                        if (historyArray[i] != -1) {
+                            memoryArraySegment[i-startIndex][j] = (Object) String.format("%05X", addressValue);
+                        }
+                        else {
+                            memoryArraySegment[i-startIndex][j] = (Object) String.format("%05X", 0);
+                        }
                     }
+                        
+                        // memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(addressValue);
+                    
                     else if ("DRAM".equals(memoryLevel)) {
                         memoryArraySegment[i-startIndex][j] = (Object) Integer.toHexString(addressValue);
                     }
                 }
                 else {
-                    if (historyArray[i] != -1) {
+                    // if (historyArray[i] != -1) {
                         // (Object) Integer.toHexString(fullMemoryArray[i]); // to display hex
                         // (Object) Integer.toBinaryString(fullMemoryArray[i]); // to display binary
+                        if ("Hex".equals(format)) {
+                            memoryArraySegment[i-startIndex][j] = (Object) Integer.toHexString(fullMemoryArray[i]);
+                        }
+                        else if ("Binary".equals(format)) {
+                            // memoryArraySegment[i-startIndex][j] = (Object) String.format("%016d", Integer.parseInt(Integer.toBinaryString(fullMemoryArray[i])));
+                            memoryArraySegment[i-startIndex][j] = (Object) Integer.toBinaryString(fullMemoryArray[i]);
+                        }
+                        else {
+                            memoryArraySegment[i-startIndex][j] = (Object) fullMemoryArray[i];
+                        }
                         
-                        memoryArraySegment[i-startIndex][j] = (Object) String.format("%08X", (int) fullMemoryArray[i]);
-                    }
-                    else if ("DRAM".equals(memoryLevel)) {
-                        memoryArraySegment[i-startIndex][j] = (Object) (String.format("%08X", (int) fullMemoryArray[i]));
-                    }
+                    // }
+                    // else if ("DRAM".equals(memoryLevel)) {
+                    //     memoryArraySegment[i-startIndex][j] = (Object) (String.format("%08X", (int) fullMemoryArray[i]));
+                    // }
                 }
             }
         }
@@ -85,5 +102,13 @@ public class DisplayMemory {
             default:
                 return Arrays.copyOfRange(this.displayLabels, 0, 64);
         }
+    }
+    
+    public String getFormat() {
+        return format;
+    }
+    
+    public void setFormat(String dropDownFormat) {
+        format = dropDownFormat;
     }
 }

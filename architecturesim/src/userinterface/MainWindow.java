@@ -52,6 +52,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         CacheButtons = new javax.swing.ButtonGroup();
         PipelineButtons = new javax.swing.ButtonGroup();
+        MemoryFormatButtons = new javax.swing.ButtonGroup();
         ProjectNameLabel = new javax.swing.JLabel();
         leftPanel = new javax.swing.JPanel();
         simulationSettingsPanel = new javax.swing.JPanel();
@@ -96,11 +97,15 @@ public class MainWindow extends javax.swing.JFrame {
         StepJumperDrop = new javax.swing.JComboBox<>();
         stepButton = new javax.swing.JButton();
         stepButton1 = new javax.swing.JButton();
-        LoadProgram = new javax.swing.JButton();
-        ResetButton = new javax.swing.JButton();
+        FormatMemoryLabel = new javax.swing.JLabel();
+        hexbutton = new javax.swing.JRadioButton();
+        binaryButton = new javax.swing.JRadioButton();
+        decimalButton = new javax.swing.JRadioButton();
         RunButtonLabel = new javax.swing.JButton();
         clockTextBox = new javax.swing.JTextField();
         clockLabel = new javax.swing.JLabel();
+        LoadProgram = new javax.swing.JButton();
+        ResetButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -146,11 +151,11 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PipelineEnabledBoxLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pipelineButtonsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(PipelineEnabledBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pipelineEnabledButton)
-                    .addComponent(pipelineDisabledButton))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PipelineEnabledBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pipelineDisabledButton)
+                    .addComponent(pipelineEnabledButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         CacheButtons.add(cacheEnabledButton);
@@ -190,11 +195,11 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, CacheEnabledBoxLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(cacheButtonsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(CacheEnabledBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cacheEnabledButton)
                     .addComponent(cacheDisabledButton))
-                .addGap(25, 25, 25))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout simulationSettingsPanelLayout = new javax.swing.GroupLayout(simulationSettingsPanel);
@@ -210,11 +215,8 @@ public class MainWindow extends javax.swing.JFrame {
         );
         simulationSettingsPanelLayout.setVerticalGroup(
             simulationSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(simulationSettingsPanelLayout.createSequentialGroup()
-                .addGroup(simulationSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CacheEnabledBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PipelineEnabledBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+            .addComponent(CacheEnabledBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(PipelineEnabledBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         memoryPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("CPU Viewer"));
@@ -503,17 +505,29 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        LoadProgram.setText("Load Program");
-        LoadProgram.addActionListener(new java.awt.event.ActionListener() {
+        FormatMemoryLabel.setText("Format");
+
+        MemoryFormatButtons.add(hexbutton);
+        hexbutton.setText("Hex");
+        hexbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LoadProgramActionPerformed(evt);
+                hexbuttonActionPerformed(evt);
             }
         });
 
-        ResetButton.setText("Reset");
-        ResetButton.addActionListener(new java.awt.event.ActionListener() {
+        MemoryFormatButtons.add(binaryButton);
+        binaryButton.setText("Binary");
+        binaryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ResetButtonActionPerformed(evt);
+                binaryButtonActionPerformed(evt);
+            }
+        });
+
+        MemoryFormatButtons.add(decimalButton);
+        decimalButton.setText("Decimal");
+        decimalButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decimalButtonActionPerformed(evt);
             }
         });
 
@@ -528,38 +542,46 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(simulationSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(leftPanelLayout.createSequentialGroup()
-                                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(stepButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(stepButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(ResetButton))
-                            .addGroup(leftPanelLayout.createSequentialGroup()
-                                .addComponent(StepJumperDrop, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(220, 220, 220)
-                                .addComponent(LoadProgram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(StepJumperDrop, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(stepButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(stepButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(36, 36, 36)
+                        .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(FormatMemoryLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(hexbutton, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(binaryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(decimalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(leftPanelLayout.createSequentialGroup()
                         .addComponent(memoryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addComponent(memoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         leftPanelLayout.setVerticalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(leftPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(leftPanelLayout.createSequentialGroup()
+                .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
                         .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(StepJumperDrop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(LoadProgram))
+                            .addComponent(FormatMemoryLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(stepButton)
-                            .addComponent(ResetButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stepButton1))
-                    .addComponent(simulationSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(leftPanelLayout.createSequentialGroup()
+                                .addComponent(stepButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(stepButton1))
+                            .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(hexbutton)
+                                .addComponent(binaryButton)
+                                .addComponent(decimalButton))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, leftPanelLayout.createSequentialGroup()
+                        .addComponent(simulationSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(memoryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -587,6 +609,20 @@ public class MainWindow extends javax.swing.JFrame {
 
         clockLabel.setText("Clock Cycles");
 
+        LoadProgram.setText("Load Program");
+        LoadProgram.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LoadProgramActionPerformed(evt);
+            }
+        });
+
+        ResetButton.setText("Reset");
+        ResetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ResetButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -600,7 +636,11 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(clockLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clockTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(53, 53, 53)
+                .addComponent(ResetButton)
+                .addGap(18, 18, 18)
+                .addComponent(LoadProgram, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(229, 229, 229))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(leftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -615,7 +655,9 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(RunButtonLabel)
                         .addComponent(clockTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(clockLabel)))
+                        .addComponent(clockLabel)
+                        .addComponent(LoadProgram)
+                        .addComponent(ResetButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(leftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 641, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -675,7 +717,7 @@ public class MainWindow extends javax.swing.JFrame {
         String [] columnNames = {"Address", "Instruction"};
         if (null != (String) CacheLevelNameDropDown1.getSelectedItem()) switch ((String) CacheLevelNameDropDown1.getSelectedItem()) {
             case "DRAM":
-                memoryArraySegment = dm.getMemoryPage("DRAM", memory.DRAM.getMemArray(), memory.DRAM.getTagArray(), memory.DRAM.getHistoryArray(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage("DRAM", memory.DRAM.getMemArray(), memory.DRAM.getTagArray(), memory.DRAM.getHistoryArray(), memoryPage, dm.getFormat());
                 MemoryViewer1.setModel(new javax.swing.table.DefaultTableModel(
                     memoryArraySegment,
                     columnNames
@@ -684,7 +726,7 @@ public class MainWindow extends javax.swing.JFrame {
             );  break;
             case "L2 Cache":
                 columnNames[0] = "Line";
-                memoryArraySegment = dm.getMemoryPage("L2Cache", memory.L2Cache.getMemArray(), memory.L2Cache.getTagArray(), memory.L2Cache.getHistoryArray(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage("L2Cache", memory.L2Cache.getMemArray(), memory.L2Cache.getTagArray(), memory.L2Cache.getHistoryArray(), memoryPage, dm.getFormat());
                 MemoryViewer1.setModel(new javax.swing.table.DefaultTableModel(
                     memoryArraySegment,
                     columnNames
@@ -693,7 +735,7 @@ public class MainWindow extends javax.swing.JFrame {
             );  break;
             case "L1 Cache":
                 columnNames[0] = "Line";
-                memoryArraySegment = dm.getMemoryPage("L1Cache", Memory.L1Cache.getMemArray(), Memory.L1Cache.getTagArray(), Memory.L1Cache.getHistoryArray(), memoryPage);
+                memoryArraySegment = dm.getMemoryPage("L1Cache", Memory.L1Cache.getMemArray(), Memory.L1Cache.getTagArray(), Memory.L1Cache.getHistoryArray(), memoryPage, dm.getFormat());
                 MemoryViewer1.setModel(new javax.swing.table.DefaultTableModel(
                     memoryArraySegment,
                     columnNames
@@ -932,6 +974,21 @@ public class MainWindow extends javax.swing.JFrame {
         drawTable();
     }//GEN-LAST:event_ResetButtonActionPerformed
 
+    private void hexbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hexbuttonActionPerformed
+        dm.setFormat("Hex");
+        drawTable();
+    }//GEN-LAST:event_hexbuttonActionPerformed
+
+    private void binaryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_binaryButtonActionPerformed
+        dm.setFormat("Binary");
+        drawTable();
+    }//GEN-LAST:event_binaryButtonActionPerformed
+
+    private void decimalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decimalButtonActionPerformed
+        dm.setFormat("Decimal");
+        drawTable();
+    }//GEN-LAST:event_decimalButtonActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -980,8 +1037,10 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel CacheEnabledBox;
     private javax.swing.JLabel CacheLevelLabel1;
     private javax.swing.JComboBox<String> CacheLevelNameDropDown1;
+    private javax.swing.JLabel FormatMemoryLabel;
     private javax.swing.JTextField InstructionEnglish;
     private javax.swing.JButton LoadProgram;
+    private javax.swing.ButtonGroup MemoryFormatButtons;
     private javax.swing.JTable MemoryViewer1;
     private javax.swing.JTextField PCBox;
     private javax.swing.ButtonGroup PipelineButtons;
@@ -990,6 +1049,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton ResetButton;
     private javax.swing.JButton RunButtonLabel;
     private javax.swing.JComboBox<String> StepJumperDrop;
+    private javax.swing.JRadioButton binaryButton;
     private javax.swing.JLabel cacheButtonsLabel;
     private javax.swing.JRadioButton cacheDisabledButton;
     private javax.swing.JRadioButton cacheEnabledButton;
@@ -1015,6 +1075,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTextField clockTextBox7;
     private javax.swing.JTextField clockTextBox8;
     private javax.swing.JTextField clockTextBox9;
+    private javax.swing.JRadioButton decimalButton;
+    private javax.swing.JRadioButton hexbutton;
     private javax.swing.JPanel leftPanel;
     private javax.swing.JPanel memoryPanel;
     private javax.swing.JPanel memoryPanel1;

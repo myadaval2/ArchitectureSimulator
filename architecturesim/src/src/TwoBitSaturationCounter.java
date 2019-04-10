@@ -13,7 +13,7 @@ public class TwoBitSaturationCounter {
     private int counter;
     
     public TwoBitSaturationCounter() {
-        counter = 3;
+        counter = 2;
     }
     
     public void updateState(Boolean wasTaken) {

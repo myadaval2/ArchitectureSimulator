@@ -1,0 +1,36 @@
+data:
+10,0
+9,1
+8,2
+7,3
+6,4
+5,5
+4,6
+3,7
+2,8
+1,9
+
+# Example Comment
+instructions:
+LD R2 - 10 #outer loop counter
+LD R1 - 0 #inner loop index
+LD R3 - 9 #inner loop counter
+PUSH 256
+FUNC innerloop
+AND R0 R0 0 # DUMMY
+AND R0 R0 0
+SUBI R2 R2 1
+BGT R0 R2 8
+HLT
+
+function: innerloop
+LDI R4 R1 0
+LDI R5 R1 1
+SUB R7 R4 20 # If R7 is negative then R5 is larger than R4 and should not swap, should skip
+BLT R0 R7 2
+STI R4 R1 1
+STI R5 R1 0
+ADDI R1 R1 1
+SUBI R3 R3 1
+BGT R0 R3 9 # RS = R3, RD = R1
+POP 256

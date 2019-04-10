@@ -165,7 +165,7 @@ public class Pipeline {
         
         int inst = pipeline[4].getInstruction();
         if (inst == 0){
-            System.out.println("No instruction");
+            // System.out.println("No instruction");
             lastInstruction = "No instruction";
         }
         else {
@@ -197,7 +197,6 @@ public class Pipeline {
             writeDataToRegister = pipeline[4].getALUOutput();
             register.setRegisterValue(registerWrite, writeDataToRegister);
         }
-        // printRegisters();
     }
     
     private void stepMEM() {
@@ -212,6 +211,7 @@ public class Pipeline {
             try {
                 data = memory.readAddressInMemory(address);
                 pipeline[3].setMemoryOutput(data);
+                // System.out.println("In mem stage, reading this data from memory: " + data + " " + address);
                 updateMEMHazard();
             }
             catch (NoSuchMemoryLocationException e){
@@ -297,8 +297,6 @@ public class Pipeline {
         else if (opcode == OpcodeDecoder.POP){
             String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
             address = register.getSP() + 1;
-            // System.out.println(bitVector);
-            // System.out.println(address);
             for(int i=(bitVector.length()-1); i>1; i--){
                 if (bitVector.charAt(i) == '1'){
                     int reg = 0;
@@ -353,126 +351,7 @@ public class Pipeline {
                 address++;
                 register.setSP(address);
             }
-        }
-        
-        //PUSH and POP
-        else if (opcode == OpcodeDecoder.PUSH) {
-            String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
-            address = register.getSP();
-            // System.out.println(bitVector);
-            // System.out.println(address);
-            for(int i=2; i<bitVector.length(); i++){
-                if (bitVector.charAt(i) == '1'){
-                    int reg = 0;
-                    switch(i) {
-                        case 2:
-                            reg = -1;
-                            break;
-                        case 3:
-                            reg = 0;
-                            break;
-                        case 4:
-                            reg = 1;
-                            break;
-                        case 5:
-                            reg = 2;
-                            break;
-                        case 6:
-                            reg = 3;
-                            break;
-                        case 7:
-                            reg = 4;
-                            break;
-                        case 8:
-                            reg = 5;
-                            break;
-                        case 9:
-                            reg = 6;
-                            break;
-                        case 10:
-                            reg = 7;
-                            break;
-                    }
-                    try {
-                        if (reg == -1){
-                            data = register.getPC();
-                            memory.writeAddressInMemory(data, address); 
-                        }
-                        else{
-                            data = register.getRegisterValue(reg);
-                            memory.writeAddressInMemory(data, address);
-                            register.setRegisterValue(reg, 0);
-                            // System.out.println("writing data " + data + "to memory " + address);
-                        }
-                    }
-                    catch (NoSuchMemoryLocationException e){
-                        System.out.println("Test Failed");
-                    }
-                }
-                address--;
-                register.setSP(address);
-            }
-        }
-        
-        else if (opcode == OpcodeDecoder.POP){
-            String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
-            address = register.getSP() + 1;
-            for(int i=(bitVector.length()-1); i>1; i--){
-                if (bitVector.charAt(i) == '1'){
-                    int reg = 0;
-                    switch(i){
-                        case 2:
-                            reg = -1;
-                            break;
-                        case 3:
-                            reg = 0;
-                            break;
-                        case 4:
-                            reg = 1;
-                            break;
-                        case 5:
-                            reg = 2;
-                            break;
-                        case 6:
-                            reg = 3;
-                            break;
-                        case 7:
-                            reg = 4;
-                            break;
-                        case 8:
-                            reg = 5;
-                            break;
-                        case 9:
-                            reg = 6;
-                            break;
-                        case 10:
-                            reg = 7;
-                            break;
-                    }
-                    try {
-                        if (reg == -1){
-                            data = memory.readAddressInMemory(address);
-                            memory.writeAddressInMemory(0, address);
-                            register.setPC(data);
-                            updateMEMHazard();
-                        }
-                        else{
-                            data = memory.readAddressInMemory(address);
-                            memory.writeAddressInMemory(0, address); //clear memory space
-                            register.setRegisterValue(reg, data);
-                            updateMEMHazard();
-                        }
-
-                    }
-                    catch (NoSuchMemoryLocationException e){
-                        System.out.println("Test Failed");
-                    }
-                }
-                address++;
-                register.setSP(address);
-            }
-        }
-        
+        }        
     }
     
     private void stepEX() {
@@ -492,7 +371,6 @@ public class Pipeline {
         else {
             predictedBranchOutcome = 0;
         }
-        // System.out.println(opcode);
         
         int ALUOutput = 0;
         int memoryOutput = 0;
@@ -526,7 +404,6 @@ public class Pipeline {
         switch (opcode) {
             // REGISTER
             case OpcodeDecoder.ADD:
-                //System.out.println("In ADD");
                 ALUOutput = RSValue + RTValue;
                 break;
             case OpcodeDecoder.SUB:
@@ -560,7 +437,6 @@ public class Pipeline {
                 }
                 break;
             case OpcodeDecoder.LDR:
-                // System.out.println("In LDR");
                 memoryOutput = RSValue + RTValue;
                 break;
             case OpcodeDecoder.STR:
@@ -571,7 +447,6 @@ public class Pipeline {
                 ALUOutput = RSValue + immediate;
                 break;
             case OpcodeDecoder.SUBI:
-                // System.out.println("In SUBI");
                 ALUOutput = RSValue - immediate;
                 break;
             case OpcodeDecoder.ASL:
@@ -593,12 +468,11 @@ public class Pipeline {
                 // STATUS Register
                 if (RSValue > RDValue) {
                     ALUOutput = register.getPC() - immediate;
-                    System.out.println("\t BRANCH TAKEN " + ALUOutput);
                     branchTaken = 1;
                 }
                 break; 
             case OpcodeDecoder.BLT:
-                if (RSValue < RDValue) {
+                if ((int) RSValue < ((int) RDValue << 27 >> 27)) {
                     ALUOutput = register.getPC() + immediate;
                     branchTaken = 1;
                 }
@@ -613,7 +487,6 @@ public class Pipeline {
             case OpcodeDecoder.JI:
                 ALUOutput = RDValue + offset;
             case OpcodeDecoder.HLT:
-                // System.out.println("Entered Halt stage");
                 setIshalted(true);
                 lastInstruction = "Entered halt";
                 break;
@@ -641,7 +514,6 @@ public class Pipeline {
                 break;
             case OpcodeDecoder.FUNC:
                 ALUOutput = offset;
-                System.out.println(ALUOutput);
                 break;
             
 
@@ -660,7 +532,7 @@ public class Pipeline {
                     clearHazards();
                     clearStage(pipeline[0]);
                     clearStage(pipeline[1]);
-                    System.out.println("\n Real branch NO, predicted branch YES: " + register.getPrevPC());
+                    // System.out.println("\n Real branch NO, predicted branch YES: " + register.getPrevPC());
                     register.setPC(register.getPrevPC()); // reset PC for prefetch queue
                     pipeline[2].setALUOutput(register.getPrevPC()); // finish rest of branch instruction
                 }
@@ -670,13 +542,13 @@ public class Pipeline {
                     clearStage(pipeline[0]);
                     clearStage(pipeline[1]);
                     int targetAddress = ALUOutput - 1;
-                    System.out.println("\n Real branch YES, predicted branch NO: " + targetAddress);
+                    // System.out.println("\n Real branch YES, predicted branch NO: " + targetAddress);
                     register.setPC(targetAddress); // reset PC for prefetch queue
                     pipeline[2].setALUOutput(targetAddress); // finish rest of branch instruction
                     BTA.addAddress(register.getBR(), targetAddress);
                 }
                 else {
-                    System.out.println("\t Branch predicted correctly");
+                    // System.out.println("\t Branch predicted correctly");
                 }
                 if (branchTaken == 1) {
                     gshareBP.updateGsharePredictorTable(true, gshareBP.getIndex());
@@ -689,9 +561,10 @@ public class Pipeline {
             else {
                 pipeline[2].setALUOutput(ALUOutput);
                 pipeline[2].setMemoryOutput(memoryOutput);
+                updateEXHazard();
+
             }
-            updateEXHazard();
-        }
+                    }
         else { // don't need branch prediction if pipeline is disabled
             if (opcode == OpcodeDecoder.FUNC){
                 register.setPC(ALUOutput); 
@@ -823,6 +696,7 @@ public class Pipeline {
         // update whatever starts with EX
         this.hazardValues.setEX_MEM_RegisterRd(pipeline[2].getRD());
         this.hazardValues.setALUOutput(pipeline[2].getALUOutput());
+        this.hazardValues.setMemoryOutput(pipeline[2].getMemoryOutput());
         int opcode = pipeline[2].getOpcode();
         
         if (opcode >= OpcodeDecoder.ADD && opcode <= OpcodeDecoder.LDR || opcode >= OpcodeDecoder.ADDI && opcode <= OpcodeDecoder.LDI) {

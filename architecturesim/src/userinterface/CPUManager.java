@@ -83,7 +83,6 @@ public class CPUManager {
 //             } catch (NoSuchMemoryLocationException ex) {
 //             }
 //            }
-        
         lookup = new HashMap<>();
         register.setPC(100); // where instructions begin
         i = register.getPC();

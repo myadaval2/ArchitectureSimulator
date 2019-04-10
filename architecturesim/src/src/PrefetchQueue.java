@@ -14,7 +14,6 @@ public class PrefetchQueue {
     GshareBranchPredictor gshareBP = GshareBranchPredictor.getGshareBP();
     Register register = Register.getRegisters();
     Memory memory = Memory.getMemory();
-    Pipeline pipeline = Pipeline.getPipeline();
     public int[] instruction;
     public Boolean[] prediction;
     // prefetch queue has 2 parts
@@ -50,10 +49,10 @@ public class PrefetchQueue {
             // System.out.println("\tBR register: " + register.getBR());
             // get branch prediction output
             if (BTA.getTargetAddress(register.getBR()) != -1) {
-                System.out.println("\tBranch target found");
+                // System.out.println("\tBranch target found");
                 // if predicted true, change pc
                 if (gshareBP.branchPredictedTaken()) {
-                    System.out.println("target address from file: " + "\t" + BTA.getTargetAddress(register.getBR()));
+                    // System.out.println("target address from file: " + "\t" + BTA.getTargetAddress(register.getBR()));
                     register.setPC(BTA.getTargetAddress(register.getBR()));
                     prediction[0] = gshareBP.branchPredictedTaken();
                 }

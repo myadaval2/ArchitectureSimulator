@@ -16,6 +16,7 @@ public class Pipeline {
     private static boolean ishalted;
     private String lastInstruction;
     private String englishLastInstruction;
+    private static boolean branchPredictionEnabled;
 
     public String getLastInstruction() {
         return lastInstruction;
@@ -39,8 +40,7 @@ public class Pipeline {
         }
         // get rewritten every clock cycle
         this.hazardValues = new PipeHazard();
-        // this.pipelineEnabled = pipelineEnabled;
-        // step(this.pipeline);
+        branchPredictionEnabled = true;
     }
     public void reset(){
         ishalted = false;
@@ -52,8 +52,6 @@ public class Pipeline {
         }
         // get rewritten every clock cycle
         this.hazardValues = new PipeHazard();
-        // this.pipelineEnabled = pipelineEnabled;
-        // step(this.pipeline);
     }
     
     public static void setPipelineEnabled(boolean enabled) {
@@ -497,35 +495,17 @@ public class Pipeline {
                 memoryOutput = offset;
                 break;
             case OpcodeDecoder.PUSH:
-                // push
-                // iterate through bit vectors
-                // push is storing all of the registers onto the stack
-                // and decrementing the stack pointer
-                // where does the stack pointer point to begin with?
-                // need to set up a stack area!
                 memoryOutput = offset;
                 break;
             case OpcodeDecoder.POP:
-                // pop is loading all the registers and incrementing the stack
-                // pointer
-                // push and pop are both pretty complex, require a series
-                // of loads/stores
                 memoryOutput = offset;
                 break;
             case OpcodeDecoder.FUNC:
                 ALUOutput = offset;
                 break;
-            
-
         }
             
-        // if branch taken, pc = ALUOutput, flush previous stages pipeline[0] pipeline[1], clear IDHazard(), clearEXHazard, clear 
-        // else pc=pc+1
-        // switch statement for ALU operations
-        if (pipelineEnabled) {
-            if (opcode == OpcodeDecoder.FUNC){
-                register.setPC(ALUOutput); 
-            }
+        if (branchPredictionEnabled && pipelineEnabled) {
             if (opcode >= OpcodeDecoder.BGT && opcode <= OpcodeDecoder.BOE) {
                 // branch should not have been taken but predicted it should
                 if (branchTaken == 0 && predictedBranchOutcome == 1) {
@@ -559,23 +539,41 @@ public class Pipeline {
             }
             // else: predicted correctly => we are fine
             else {
-                pipeline[2].setALUOutput(ALUOutput);
-                pipeline[2].setMemoryOutput(memoryOutput);
-                updateEXHazard();
-
+                if (opcode == OpcodeDecoder.FUNC) {
+                   register.setPC(ALUOutput); 
+                    clearHazards();
+                    clearStage(pipeline[0]);
+                    clearStage(pipeline[1]); 
+                }
+                else {
+                    pipeline[2].setALUOutput(ALUOutput);
+                    pipeline[2].setMemoryOutput(memoryOutput);
+                    updateEXHazard();
+                }
             }
-                    }
-        else { // don't need branch prediction if pipeline is disabled
-            if (opcode == OpcodeDecoder.FUNC){
-                register.setPC(ALUOutput); 
-            }
+        }
+        // No pipeline or no branch prediction
+        else {
             pipeline[2].setALUOutput(ALUOutput);
             pipeline[2].setMemoryOutput(memoryOutput);
-            if (branchTaken == 1) {
-                clearHazards();
-                clearStage(pipeline[0]);
-                clearStage(pipeline[1]);
-                register.setPC(ALUOutput);
+            if (pipelineEnabled) {
+                updateEXHazard();
+                if (branchTaken == 1 || opcode == OpcodeDecoder.FUNC) {
+                    clearHazards();
+                    clearStage(pipeline[0]);
+                    clearStage(pipeline[1]);
+                    if (branchTaken == 1) {
+                        register.setPC(ALUOutput - 1);
+                    }
+                    else {
+                        register.setPC(ALUOutput); 
+                    }
+                }
+            }
+            else {
+                if (branchTaken == 1 || opcode == OpcodeDecoder.FUNC) {
+                    register.setPC(ALUOutput); 
+                }
             }
         }
     }
@@ -633,11 +631,14 @@ public class Pipeline {
     }
     
     private void stepIF() {
-        // fetch instruction
-        // System.out.println("Fetch PC Value: " + register.getPC());
-        
-        // if pipeline is disabled, fetch from memory
-        if (!pipelineEnabled) {
+        // fetch instruction      
+        // if pipelineis enabled (meaning branch prediction), fetch from prefetch queue
+        if (pipelineEnabled && branchPredictionEnabled) {
+            pipeline[0].setInstruction(0x0000FFFF & prefetchQueue.getPrefetchedInstruction());
+            pipeline[0].setPredictedBranchOutcome(prefetchQueue.getPrefectchedInstructionPrediction());
+        }
+        else {
+            // System.out.println("PC value: " + register.getPC() + "Instruction " + pipeline[0].getInstruction());
             try {
                 // set instruction from prefetch queue
                 pipeline[0].setInstruction(memory.readAddressInMemory(register.getPC()));
@@ -647,12 +648,6 @@ public class Pipeline {
             }
             register.setPC(register.getPC() + 1);
         }
-        // if pipelineis enabled (meaning branch prediction), fetch from prefetch queue
-        else {
-            pipeline[0].setInstruction(0x0000FFFF & prefetchQueue.getPrefetchedInstruction());
-            pipeline[0].setPredictedBranchOutcome(prefetchQueue.getPrefectchedInstructionPrediction());
-        }
-        // System.out.println("PC value: " + register.getPC() + "Instruction " + pipeline[0].getInstruction());
     }
     
     // may need to return something to indicate how to change RS/RT

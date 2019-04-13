@@ -92,7 +92,9 @@ public class Pipeline {
                             break;
                         case 1:
                             // System.out.println("got to prefetch stage");
-                            prefetchQueue.prefetch();
+                            if (branchPredictionEnabled) {
+                                prefetchQueue.prefetch();
+                            }
                             // System.out.println("got to IF stage");
                             stepIF();
                             break;

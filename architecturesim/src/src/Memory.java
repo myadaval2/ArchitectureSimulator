@@ -16,44 +16,40 @@ public class Memory {
     public static Cache    DRAM;
     private static Cache   headPointer;
     private static boolean cacheEnabled;
-    private int     memoryCycleCount;
+    private static int     memoryCycleCount;
     
     public static Memory memory = new Memory();
     
-    // public Memory() {   this(true);     }
-    
     private Memory() {
-        this.memoryCycleCount = 0;
-        
-        DRAM    = new Cache(Utils.SIZE_DRAM , null      , Utils.WAIT_DRAM   , 0); 
-        L2Cache = new Cache(Utils.SIZE_L2   , DRAM      , Utils.WAIT_L2     , 1); 
-        L1Cache = new Cache(Utils.SIZE_L1   , L2Cache   , Utils.WAIT_L1     , 2);
-        
-        //setCacheEnabled(enabled);
-    }
-    public void reset(){
-        this.memoryCycleCount = 0;
-        
+        memoryCycleCount = 0;
         DRAM    = new Cache(Utils.SIZE_DRAM , null      , Utils.WAIT_DRAM   , 0); 
         L2Cache = new Cache(Utils.SIZE_L2   , DRAM      , Utils.WAIT_L2     , 1); 
         L1Cache = new Cache(Utils.SIZE_L1   , L2Cache   , Utils.WAIT_L1     , 2);
     }
     
-    public static void setCacheEnabled(boolean enabled) {
-        if (enabled) {
-            cacheEnabled = enabled;
+    public void reset(){
+        DRAM.clear(Utils.SIZE_DRAM);
+        L2Cache.clear(Utils.SIZE_L2);
+        L1Cache.clear(Utils.SIZE_L1);
+    }
+    
+    public static void resetMemoryCycleCount() {
+        memoryCycleCount = 0;
+    }
+    
+    public static void setCacheEnabled(boolean status) {
+        if (status) {
+            cacheEnabled = status;
             headPointer = L1Cache;
         }
         else {
-            cacheEnabled = enabled;
+            cacheEnabled = status;
             headPointer = DRAM;
         }
-        
     }
     
     public static boolean getCacheEnabled() {
         return cacheEnabled;
-        
     }
     
     public static Memory getMemory() {
@@ -82,9 +78,8 @@ public class Memory {
                 writeToL1(address);
                 writeToL2(address);
             }            
-            
-        } else {
-            // System.out.println("Cache is disabled");
+        } 
+        else {
             writeToDRAM(data, address);
         }
     }
@@ -100,11 +95,10 @@ public class Memory {
         while (pointer.getHeirarchy() != exists){
             pointer = pointer.getNextCache();
         }
-        this.memoryCycleCount += pointer.getWaitCycles();
+        memoryCycleCount += pointer.getWaitCycles();
         if (pointer.getHeirarchy() == 0){
-            
             int readData = DRAM.getMemArray()[address];
-            if (cacheEnabled){
+            if (cacheEnabled) {
                 writeToL1(address);
                 writeToL2(address);  
             }
@@ -180,12 +174,6 @@ public class Memory {
         int index_bit = (address & Utils.INDEX_MASK_L1) >> 1;
         int dataToWrite;
         int cacheIndexToReplace = checkCacheHistoryForReplacement(index_bit, tag_bit, L1Cache);
-//        if (address % 2 == 0x0) {
-//            dataToWrite =  ((((int) data << 16) & Utils.WORD_0) | (L1Cache.getMemArray()[cacheIndexToReplace] & Utils.WORD_1));
-//        }
-//        else {
-//            dataToWrite =  ((int) (data & Utils.WORD_1) | (L1Cache.getMemArray()[cacheIndexToReplace] & Utils.WORD_0));
-//        }
         if (address % 2 == 0x0) {
             dataToWrite = DRAM.getMemArray()[address] << 16 | DRAM.getMemArray()[address+1];
         }
@@ -195,19 +183,14 @@ public class Memory {
         
         L1Cache.setTagArray(tag_bit, cacheIndexToReplace);
         L1Cache.setData(dataToWrite, cacheIndexToReplace);
-        this.memoryCycleCount += L1Cache.getWaitCycles();
+        memoryCycleCount += L1Cache.getWaitCycles();
     }
+    
     private void writeToL2(int address) {
         int tag_bit = address & Utils.TAG_MASK_L2;
         int index_bit = (address & Utils.INDEX_MASK_L2) >> 1;
         int dataToWrite;
         int cacheIndexToReplace = checkCacheHistoryForReplacement(index_bit, tag_bit, L2Cache);
-//        if (address % 2 == 0x0) {
-//            dataToWrite =  ((((int) data << 16) & Utils.WORD_0) | (L2Cache.getMemArray()[cacheIndexToReplace] & Utils.WORD_1));
-//        }
-//        else {
-//            dataToWrite =  ((int) (data & Utils.WORD_1) | (L2Cache.getMemArray()[cacheIndexToReplace] & Utils.WORD_0));
-//        }
         if (address % 2 == 0x0) {
             dataToWrite = DRAM.getMemArray()[address] << 16 | DRAM.getMemArray()[address+1];
         }
@@ -216,10 +199,11 @@ public class Memory {
         }
         L2Cache.setTagArray(tag_bit, cacheIndexToReplace);
         L2Cache.setData(dataToWrite, cacheIndexToReplace);
-        this.memoryCycleCount += L2Cache.getWaitCycles();
+        memoryCycleCount += L2Cache.getWaitCycles();
     }
+    
     private void writeToDRAM(int data, int address){
-        this.memoryCycleCount += DRAM.getWaitCycles();
+        memoryCycleCount += DRAM.getWaitCycles();
         DRAM.setData(data, address);
     }
     
@@ -270,8 +254,6 @@ public class Memory {
         return(addressInDRAM(address));
     }
     
-    public int getMemoryCycleCount()    {   return this.memoryCycleCount;   }
-    
-    public void resetMemoryCycleCount()    {   this.memoryCycleCount = 0;   }
+    public int getMemoryCycleCount()    {   return memoryCycleCount;   }
     
 }

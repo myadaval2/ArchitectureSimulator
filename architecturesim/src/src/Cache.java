@@ -57,6 +57,14 @@ public class Cache {
             historyArray[address] += 1;
         }
     }
+    
+    public void clear(int size) {
+        for (int i = 0; i < size; i++) {
+            this.mem_array[i] = 0;
+            this.tag_array[i] = -1;
+            this.historyArray[i] = -1;
+        }
+    }
 }
 
 

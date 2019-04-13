@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import src.Memory;
 import src.NoSuchMemoryLocationException;
 import src.Pipeline;
@@ -43,14 +41,12 @@ public class CPUManager {
         memory = Memory.getMemory();
         register = Register.getRegisters();
         pipeline = Pipeline.getPipeline();
-        Memory.setCacheEnabled(true);
-        // Pipeline.setPipelineEnabled(true);
         clockCycles = 0;
         register.clearRegisterFile();
         
     }
-    public void setClockCycles(int clockCycles){
-        this.clockCycles = clockCycles;
+    public void setClockCycles(int cycles) {
+        clockCycles = cycles;
     }
     public static CPUManager getCPUManager() {
         return driver;
@@ -59,15 +55,13 @@ public class CPUManager {
     public void Stepper(){
             if (Pipeline.isIshalted()){
                 isFinished = true;
-            } else {
+            } 
+            else {
                 pipeline.step(i);
-            //System.out.println(i);
-            
-            clockCycles = i + memory.getMemoryCycleCount();
-            i++;
-            
-            // Register.printRegisters();
+                clockCycles = i + memory.getMemoryCycleCount();
+                i++;
             }   
+            // System.out.println("Number of clock cycles: " + clockCycles);
     } 
     
     public static int getClockCycles() {
@@ -99,7 +93,7 @@ public class CPUManager {
                 this.fullProgram = program;
                 int i = 0;
                 while(!isInstruction){
-                    System.out.println(program[i]);
+                    // System.out.println(program[i]);
                     if (program[i].equals("data:") || program[i].length() == 0 || program[i].charAt(0) == '#' ){
                         
                     } 
@@ -134,8 +128,8 @@ public class CPUManager {
                     else{
                         String binString = convert(program[j]);
                         int instruction = Integer.parseInt(binString,2);
-                        System.out.println("Instruction: " + program[j] + " Address: " + (pc+offset));
-                        System.out.println(binString);
+                        // System.out.println("Instruction: " + program[j] + " Address: " + (pc+offset));
+                        // System.out.println(binString);
                         memory.writeAddressInMemory(instruction, pc+offset); 
                         if (functionSave){
                             lookup.put(funcName, pc+offset);
@@ -152,11 +146,11 @@ public class CPUManager {
                 System.exit(1);
             }
         }
-        System.out.println("SECOND PASS");
+        // System.out.println("SECOND PASS");
         for (String inst : this.fullProgram){
             String[] line = inst.split(" "); 
             if (line[0].equals("FUNC")){
-                System.out.println(lookup.keySet());
+                // System.out.println(lookup.keySet());
                 int address = lookup.get(line[1]);
                 String binString = "11111";
                 binString += String.format("%11s", Integer.toBinaryString(address)).replace(" ", "0");
@@ -164,8 +158,8 @@ public class CPUManager {
                 int putback = functionCallOffsets.get(line[1]);
                 int instruction = Integer.parseInt(binString,2);
                 
-                System.out.println("Function: " + line[1] + " At Address: " + address + " goes at line: " + putback);
-                System.out.println("Binary string: " + binString);
+                // System.out.println("Function: " + line[1] + " At Address: " + address + " goes at line: " + putback);
+                // System.out.println("Binary string: " + binString);
 
                 try {
                     memory.writeAddressInMemory(instruction, putback); 
@@ -173,11 +167,9 @@ public class CPUManager {
                     
                 }
             }
-            
         }
-        
-        
     }
+    
     public String[] readLines(String filename) throws IOException {
         FileReader fileReader = new FileReader(filename);
         BufferedReader bufferedReader = new BufferedReader(fileReader);

@@ -32,46 +32,44 @@ public class PrefetchQueue {
     }
     
     public void prefetch() {
-        if (true) {
-            try {
-                // System.out.println("\tCheck after branch: " + register.getPC());
-                instruction[0] = memory.readAddressInMemory(register.getPC());
-            }
-            catch (NoSuchMemoryLocationException e){
-                System.out.println("Test Failed");
-            }
-            int opcode = (instruction[0] >> 11) & 0x1F;
-            // System.out.println("opcode: " + opcode);
-            // branch instruction
-            if (opcode >= OpcodeDecoder.BGT && opcode <= OpcodeDecoder.BOE) {
-                // System.out.println("Branch Instruction");
-                register.setBR(register.getPC());
-                register.setPrevPC(register.getPC()+1);
-                // System.out.println("\tBR register: " + register.getBR());
-                // get branch prediction output
-                if (BTA.getTargetAddress(register.getBR()) != -1) {
-                    // System.out.println("\tBranch target found");
-                    // if predicted true, change pc
-                    if (gshareBP.branchPredictedTaken()) {
-                        // System.out.println("target address from file: " + "\t" + BTA.getTargetAddress(register.getBR()));
-                        register.setPC(BTA.getTargetAddress(register.getBR()));
-                        prediction[0] = gshareBP.branchPredictedTaken();
-                    }
-                    else {
-                        register.setPC(register.getPC() + 1);
-                    }
+        try {
+            // System.out.println("\tCheck after branch: " + register.getPC());
+            instruction[0] = memory.readAddressInMemory(register.getPC());
+        }
+        catch (NoSuchMemoryLocationException e){
+            System.out.println("Test Failed");
+        }
+        int opcode = (instruction[0] >> 11) & 0x1F;
+        // System.out.println("opcode: " + opcode);
+        // branch instruction
+        if (opcode >= OpcodeDecoder.BGT && opcode <= OpcodeDecoder.BOE) {
+            // System.out.println("Branch Instruction");
+            register.setBR(register.getPC());
+            register.setPrevPC(register.getPC()+1);
+            // System.out.println("\tBR register: " + register.getBR());
+            // get branch prediction output
+            if (BTA.getTargetAddress(register.getBR()) != -1) {
+                // System.out.println("\tBranch target found");
+                // if predicted true, change pc
+                if (gshareBP.branchPredictedTaken()) {
+                    // System.out.println("target address from file: " + "\t" + BTA.getTargetAddress(register.getBR()));
+                    register.setPC(BTA.getTargetAddress(register.getBR()));
+                    prediction[0] = gshareBP.branchPredictedTaken();
                 }
                 else {
                     register.setPC(register.getPC() + 1);
-                    // System.out.println("Branch instruction had no match so PC incremented " + register.getPC());
                 }
             }
             else {
-                    register.setPC(register.getPC() + 1);
-                    // System.out.println("PC incremented" + register.getPC());
+                register.setPC(register.getPC() + 1);
+                // System.out.println("Branch instruction had no match so PC incremented " + register.getPC());
             }
-            copyAndClearStage();
         }
+        else {
+                register.setPC(register.getPC() + 1);
+                // System.out.println("PC incremented" + register.getPC());
+        }
+        copyAndClearStage();
     }
     
     public static PrefetchQueue getPrefetchQueue() {

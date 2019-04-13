@@ -11,9 +11,10 @@ package src;
  */
 public class TwoBitSaturationCounter {
     private int counter;
+    private static final int predictionValue = 2;
     
     public TwoBitSaturationCounter() {
-        counter = 2;
+        counter = predictionValue;
     }
     
     public void updateState(Boolean wasTaken) {
@@ -27,5 +28,9 @@ public class TwoBitSaturationCounter {
     
     public Boolean currStateIsTaken() {
         return (counter > 1);
+    }
+    
+    public void resetState() {
+        counter = predictionValue;
     }
 }

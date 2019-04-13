@@ -29,4 +29,8 @@ public class GlobalHistoryRegister {
             mRecentBranchOutcomes += 1;
         }
     }
+    
+    public static void resetGHR() {
+        mRecentBranchOutcomes = 0;
+    }
 }

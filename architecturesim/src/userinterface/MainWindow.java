@@ -649,17 +649,29 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_RunButtonLabelActionPerformed
 
     private void RunButton(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RunButton
-        // TODO add your handling code here:
-        
-        if (cacheSet && pipeSet){
-            
-            CPUManager d = CPUManager.getCPUManager();
-            d.readIn(programFile);
+        if (cacheSet && pipeSet) {
+            CPUManager c = CPUManager.getCPUManager();
+            c.isFinished = false;
+            c.memory = Memory.getMemory();
+            c.register = Register.getRegisters();
+            c.pipeline = Pipeline.getPipeline();
+            GshareBranchPredictor gshareBP = GshareBranchPredictor.getGshareBP();
+            gshareBP.resetGsharePredictorTable();
+            c.setClockCycles(0);
+            c.register.clearRegisterFile();
+            Pipeline p = Pipeline.getPipeline();
+            p.reset();
+            Memory m = Memory.getMemory();
+            m.reset();
+            Memory.resetMemoryCycleCount();
+            Memory.setCacheEnabled(cacheVal);
+            Pipeline.setPipelineEnabled(pipeVal);
+            c.readIn(programFile);
             drawTable();
-            Register register = Register.getRegisters();
             clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
-            clockTextBox1.setText("Ready");
-            InstructionEnglish.setText("Ready");
+            Register register = Register.getRegisters();
+            clockTextBox1.setText(p.getLastInstruction());
+            InstructionEnglish.setText(p.getEnglishInstruction());
             clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
             clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
             clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
@@ -668,10 +680,9 @@ public class MainWindow extends javax.swing.JFrame {
             clockTextBox7.setText(Integer.toString(register.getRegisterValue(5)));
             clockTextBox8.setText(Integer.toString(register.getRegisterValue(6)));
             clockTextBox9.setText(Integer.toString(register.getRegisterValue(7)));
-            int i = register.getPC();
-            // PCBox.setText(Integer.toString(i));
-            
-        } else {
+            drawTable();
+        } 
+        else {
             clockTextBox1.setText("Cache and Pipeline settings not initialized");
         }
         
@@ -731,28 +742,28 @@ public class MainWindow extends javax.swing.JFrame {
         CPUManager d = CPUManager.getCPUManager();
         Pipeline p = Pipeline.getPipeline();
         for (int i = 0; i < stepCount; i++){
-           if (!d.isFinished) {
-           // d.forLoopStepper();
-           d.Stepper();
-            drawTable();
-            clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
-            Register register = Register.getRegisters();
-            clockTextBox1.setText(p.getLastInstruction());
-            InstructionEnglish.setText(p.getEnglishInstruction());
-            clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
-            clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
-            clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
-            clockTextBox5.setText(Integer.toString(register.getRegisterValue(3)));
-            clockTextBox6.setText(Integer.toString(register.getRegisterValue(4)));
-            clockTextBox7.setText(Integer.toString(register.getRegisterValue(5)));
-            clockTextBox8.setText(Integer.toString(register.getRegisterValue(6)));
-            clockTextBox9.setText(Integer.toString(register.getRegisterValue(7)));
-            int pc = register.getPC();
-            // PCBox.setText(Integer.toString(pc));
-        }
-        else{
-            break;
-        } 
+            if (!d.isFinished) {
+                // d.forLoopStepper();
+                d.Stepper();
+                drawTable();
+                clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
+                Register register = Register.getRegisters();
+                clockTextBox1.setText(p.getLastInstruction());
+                InstructionEnglish.setText(p.getEnglishInstruction());
+                clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
+                clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
+                clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
+                clockTextBox5.setText(Integer.toString(register.getRegisterValue(3)));
+                clockTextBox6.setText(Integer.toString(register.getRegisterValue(4)));
+                clockTextBox7.setText(Integer.toString(register.getRegisterValue(5)));
+                clockTextBox8.setText(Integer.toString(register.getRegisterValue(6)));
+                clockTextBox9.setText(Integer.toString(register.getRegisterValue(7)));
+                int pc = register.getPC();
+                // PCBox.setText(Integer.toString(pc));
+            }
+            else {
+                break;
+            } 
         }  
     }//GEN-LAST:event_stepButtonActionPerformed
 
@@ -788,24 +799,22 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         CPUManager d = CPUManager.getCPUManager();
         while (!d.isFinished) {
-          //  d.forLoopStepper();
           d.Stepper();
         }
         Pipeline p = Pipeline.getPipeline();
-            drawTable();
-            clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
-            Register register = Register.getRegisters();
-            clockTextBox1.setText(p.getLastInstruction());
-            InstructionEnglish.setText(p.getEnglishInstruction());
-            clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
-            clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
-            clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
-            clockTextBox5.setText(Integer.toString(register.getRegisterValue(3)));
-            clockTextBox6.setText(Integer.toString(register.getRegisterValue(4)));
-            clockTextBox7.setText(Integer.toString(register.getRegisterValue(5)));
-            clockTextBox8.setText(Integer.toString(register.getRegisterValue(6)));
-            clockTextBox9.setText(Integer.toString(register.getRegisterValue(7)));
-       // d.forLoopTeardown();
+        drawTable();
+        clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
+        Register register = Register.getRegisters();
+        clockTextBox1.setText(p.getLastInstruction());
+        InstructionEnglish.setText(p.getEnglishInstruction());
+        clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
+        clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
+        clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
+        clockTextBox5.setText(Integer.toString(register.getRegisterValue(3)));
+        clockTextBox6.setText(Integer.toString(register.getRegisterValue(4)));
+        clockTextBox7.setText(Integer.toString(register.getRegisterValue(5)));
+        clockTextBox8.setText(Integer.toString(register.getRegisterValue(6)));
+        clockTextBox9.setText(Integer.toString(register.getRegisterValue(7)));
         drawTable();
     }//GEN-LAST:event_stepButton1ActionPerformed
 
@@ -926,26 +935,28 @@ public class MainWindow extends javax.swing.JFrame {
         c.pipeline = Pipeline.getPipeline();
         c.setClockCycles(0);
         c.register.clearRegisterFile();
+        GshareBranchPredictor gshareBP = GshareBranchPredictor.getGshareBP();
+        gshareBP.resetGsharePredictorTable();
         Pipeline p = Pipeline.getPipeline();
         p.reset();
         Memory m = Memory.getMemory();
         m.reset();
+        Memory.resetMemoryCycleCount();
         Memory.setCacheEnabled(cacheVal);
         Pipeline.setPipelineEnabled(pipeVal);
         drawTable();
-            clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
-            Register register = Register.getRegisters();
-            clockTextBox1.setText(p.getLastInstruction());
-            InstructionEnglish.setText(p.getEnglishInstruction());
-            clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
-            clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
-            clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
-            clockTextBox5.setText(Integer.toString(register.getRegisterValue(3)));
-            clockTextBox6.setText(Integer.toString(register.getRegisterValue(4)));
-            clockTextBox7.setText(Integer.toString(register.getRegisterValue(5)));
-            clockTextBox8.setText(Integer.toString(register.getRegisterValue(6)));
-            clockTextBox9.setText(Integer.toString(register.getRegisterValue(7)));
-       // d.forLoopTeardown();
+        clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
+        Register register = Register.getRegisters();
+        clockTextBox1.setText(p.getLastInstruction());
+        InstructionEnglish.setText(p.getEnglishInstruction());
+        clockTextBox2.setText(Integer.toString(register.getRegisterValue(0)));
+        clockTextBox3.setText(Integer.toString(register.getRegisterValue(1)));
+        clockTextBox4.setText(Integer.toString(register.getRegisterValue(2)));
+        clockTextBox5.setText(Integer.toString(register.getRegisterValue(3)));
+        clockTextBox6.setText(Integer.toString(register.getRegisterValue(4)));
+        clockTextBox7.setText(Integer.toString(register.getRegisterValue(5)));
+        clockTextBox8.setText(Integer.toString(register.getRegisterValue(6)));
+        clockTextBox9.setText(Integer.toString(register.getRegisterValue(7)));
         drawTable();
     }//GEN-LAST:event_ResetButtonActionPerformed
 

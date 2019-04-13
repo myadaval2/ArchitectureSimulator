@@ -56,7 +56,7 @@ public class Pipeline {
     
     public static void setPipelineEnabled(boolean enabled) {
         pipelineEnabled = enabled;
-        System.out.println("*** " + pipelineEnabled);
+        // System.out.println("*** " + pipelineEnabled);
     }
     
     public static boolean getPipelineEnabled() {
@@ -155,9 +155,9 @@ public class Pipeline {
             englishLastInstruction = englishLastInstruction + registerNumber(Integer.parseInt(reg1, 2)) + " ";
             englishLastInstruction = englishLastInstruction + registerNumber(Integer.parseInt(reg2, 2)) + " ";
             englishLastInstruction = englishLastInstruction + Integer.parseInt(imm,2);
-            
         }
     }
+    
     private void stepWB() {
         // WHAT INSTRUCTIONS WRITE BACK?
         // write to register file pipeline[5]

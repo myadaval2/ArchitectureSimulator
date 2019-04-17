@@ -199,6 +199,58 @@ public class CPUManager {
             binString += String.format("%11s", Integer.toBinaryString(Integer.parseInt(instructions[1]))).replace(" ", "0");
             return binString;
         }
+        
+        if (instructions[0].equals("ADD")){
+            String binString = "";
+            try {
+                binString += String.format("%5s", Integer.toBinaryString(opCode(instructions[0]))).replace(" ", "0");
+            } catch (BadInstructionException e){
+                System.out.println("Please load a different program");
+            }
+            try {
+                binString += String.format("%3s", Integer.toBinaryString(registerNumber(instructions[1]))).replace(" ", "0");
+            } catch (BadInstructionException e){
+                System.out.println("Please load a different program");
+            }
+            try {
+                binString += String.format("%3s", Integer.toBinaryString(registerNumber(instructions[2]))).replace(" ", "0");
+            } catch (BadInstructionException e){
+                System.out.println("Please load a different program");
+            }
+            try {
+                binString += String.format("%3s", Integer.toBinaryString(registerNumber(instructions[3]))).replace(" ", "0");
+            } catch (BadInstructionException e){
+                System.out.println("Please load a different program");
+            }
+            binString += "00";
+            return binString;
+        }
+        
+        if (instructions[0].equals("MUL")){
+            String binString = "";
+            try {
+                binString += String.format("%5s", Integer.toBinaryString(opCode(instructions[0]))).replace(" ", "0");
+            } catch (BadInstructionException e){
+                System.out.println("Please load a different program");
+            }
+            try {
+                binString += String.format("%3s", Integer.toBinaryString(registerNumber(instructions[1]))).replace(" ", "0");
+            } catch (BadInstructionException e){
+                System.out.println("Please load a different program");
+            }
+            try {
+                binString += String.format("%3s", Integer.toBinaryString(registerNumber(instructions[2]))).replace(" ", "0");
+            } catch (BadInstructionException e){
+                System.out.println("Please load a different program");
+            }
+            try {
+                binString += String.format("%3s", Integer.toBinaryString(registerNumber(instructions[3]))).replace(" ", "0");
+            } catch (BadInstructionException e){
+                System.out.println("Please load a different program");
+            }
+            binString += "00";
+            return binString;
+        }
 
         String binString = "";
            // String in = String.format("%16s", Integer.toBinaryString(inst)).replace(" ", "0");

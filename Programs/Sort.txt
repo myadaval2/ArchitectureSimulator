@@ -1,20 +1,30 @@
 data:
-10,0
-9,1
-8,2
-7,3
-6,4
-5,5
-4,6
-3,7
-2,8
-1,9
+20,0
+19,1
+18,2
+17,3
+16,4
+15,5
+14,6
+13,7
+12,8
+11,9
+10,10
+9,11
+8,12
+7,13
+6,14
+5,15
+4,16
+3,17
+2,18
+1,19
 
 # Example Comment
 instructions:
-LD R2 - 10 #outer loop counter
+LD R2 - 20 #outer loop counter
 LD R1 - 0 #inner loop index
-LD R3 - 9 #inner loop counter
+LD R3 - 19 #inner loop counter
 PUSH 256
 FUNC innerloop
 AND R0 R0 0 # DUMMY

@@ -1,0 +1,30 @@
+data:
+10,0
+9,1
+8,2
+7,3
+6,4
+5,5
+4,6
+3,7
+2,8
+1,9
+
+# Example Comment
+instructions:
+LD R0 - 0 #outer loop index
+LD R1 - 0 #inner loop index
+LD R2 - 10 #outer loop upperbound
+LD R3 - 9 #inner loop upperbound
+LDI R4 R1 0
+LDI R5 R1 1
+ADDI R0 - 0
+ADDI R0 - 0
+BLT R5 R4 6
+STI R4 R1 1
+STI R5 R1 0
+ADDI R0 - 0
+ADDI R0 - 0
+ADDI R1 R1 1
+BGT R1 R3 11
+HLT

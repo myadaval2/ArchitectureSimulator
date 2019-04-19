@@ -165,6 +165,22 @@ public class Memory {
                 cacheIndexToReplace = cacheIndex;      
             }
         }
+        // age all entries
+        if (cacheLevel.getHeirarchy() == 2) {
+            for (int cacheIndex = 0; cacheIndex < Utils.SIZE_L1; cacheIndex++) {
+                if (cacheLevel.getHistoryArray()[cacheIndex] > 0) {
+                    cacheLevel.updateHistoryArray(cacheIndex, -1);
+                }
+            }
+        }
+        if (cacheLevel.getHeirarchy() == 1) {
+            for (int cacheIndex = 0; cacheIndex < Utils.SIZE_L2; cacheIndex++) {
+                if (cacheLevel.getHistoryArray()[cacheIndex] > 0) {
+                    cacheLevel.updateHistoryArray(cacheIndex, -1);
+                }
+            }
+        }
+        
         cacheLevel.updateHistoryArray(cacheIndexToReplace, 0);
         return cacheIndexToReplace;
     }

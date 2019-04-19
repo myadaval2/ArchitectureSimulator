@@ -54,7 +54,7 @@ public class Cache {
             historyArray[address] = 0;
         }
         else {
-            historyArray[address] += 1;
+            historyArray[address] = historyArray[address] + value;
         }
     }
     

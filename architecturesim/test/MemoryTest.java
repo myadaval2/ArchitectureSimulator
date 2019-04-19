@@ -37,7 +37,7 @@ public class MemoryTest {
     @Test
     public void testResetClock() {
         System.out.println("Test Reset clock...");
-        Memory mem = new Memory();
+        Memory mem = Memory.getMemory();
         try{
             mem.writeAddressInMemory((char)0xffff, 0);
         } catch (Exception e){
@@ -56,7 +56,7 @@ public class MemoryTest {
     @Test
     public void testWrite3LocationsClock() {
         System.out.println("Test write to address...");
-        Memory mem = new Memory();
+        Memory mem = Memory.getMemory();
         try {
         mem.writeAddressInMemory((char) 0xffff, 0);
         mem.writeAddressInMemory((char) 0xffff, 0x1ffff);
@@ -72,7 +72,7 @@ public class MemoryTest {
     @Test
     public void testReadWriteClock1() {
         System.out.println("Test read/write to address...");
-        Memory memory = new Memory();
+        Memory memory = Memory.getMemory();
         try {
             assertEquals("CPU did not write correctly" , 0, memory.getMemoryCycleCount());
             memory.writeAddressInMemory((char) 0xffff, 0);

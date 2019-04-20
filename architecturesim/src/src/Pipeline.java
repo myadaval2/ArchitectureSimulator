@@ -491,7 +491,7 @@ public class Pipeline {
                 lastInstruction = "Entered halt";
                 break;
             case OpcodeDecoder.LD:
-                memoryOutput = offset;
+                memoryOutput = RSValue + offset;
                 break;
             case OpcodeDecoder.ST:
                 memoryOutput = offset;
@@ -609,6 +609,11 @@ public class Pipeline {
         else if ((opcode >= OpcodeDecoder.JI && opcode <= OpcodeDecoder.ST)) {
             if ((opcode == OpcodeDecoder.PUSH || opcode == OpcodeDecoder.POP)){
                 offset = instruction & 0x7FF; // 11 1's
+            }
+            else if (opcode == OpcodeDecoder.LD){
+                RD = (instruction >> 8) & 0x7;
+                RS = (instruction >> 5) & 0x7;
+                offset = instruction & 0x1F;
             }
             else{
                 RD = (instruction >> 8) & 0x7;

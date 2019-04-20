@@ -10,72 +10,103 @@ data:
 
 # Example Comment
 instructions:
-# first part
-LD R0 - 0 # first index of first matrix
-LD R3 - 12 # index for temp result
-LD R1 - 2 # loop counter
-LD R2 - 0 # index
-LDI R4 R0 0
-LDI R5 R2 4
-MUL R6 R5 R4
-STI R6 R3 0
-SUBI R1 R1 1
-ADDI R2 R2 1
-ADDI R3 R3 1
-BGT R0 R1 7 
-# second part
+LD R0 - 0 # big loop boundry
+LD R1 - 10 # big loop counter
 LD R7 - 0
-LD R0 - 2 # first index of first matrix
-LD R3 - 14 # index for temp result
-LD R1 - 2 # loop counter
-LD R2 - 0 # index
-LDI R4 R0 0
-LDI R5 R2 4
-MUL R6 R5 R4
-STI R6 R3 0
-SUBI R1 R1 1
-ADDI R2 R2 1
-ADDI R3 R3 1
-BGT R7 R1 7 
-# third part 
-LD R7 - 0
-LD R0 - 1 # first index of first matrix
-LD R3 - 16 # index for temp result
-LD R1 - 2 # loop counter
-LD R2 - 0 # index
-LDI R4 R0 0
-LDI R5 R2 6
-MUL R6 R5 R4
-STI R6 R3 0
-SUBI R1 R1 1
-ADDI R2 R2 1
-ADDI R3 R3 1
-BGT R7 R1 7
-# fourth part
-LD R7 - 0
-LD R0 - 3 # first index of first matrix
-LD R3 - 18 # index for temp result
-LD R1 - 2 # loop counter
-LD R2 - 0 # index
-LDI R4 R0 0
-LDI R5 R2 6
-MUL R6 R5 R4
-STI R6 R3 0
-SUBI R1 R1 1
-ADDI R2 R2 1
-ADDI R3 R3 1
-BGT R7 R1 7
-# final part
-LD R7 - 0
-LD R6 - 8
-LD R0 - 12
-LD R1 - 4
-LDI R2 R0 0
-LDI R3 R0 4
-ADD R4 R3 R2
-STI R4 R6 0
-SUBI R1 R1 1
-ADDI R6 R6 1
-ADDI R0 R0 1
-BGT R7 R1 8
+PUSH 256 # push PC counter
+FUNC matrixMultiply
+ADDI R0 R0 0 # Dummy
+ADDI R0 R0 0 # Dummy
+ADDI R0 R0 1 # increment loop counter
+BGT R0 R1 6
 HLT
+
+function: matrixMultiply
+# first part
+ADDI R2 R0 0
+LD R2 R2 0 # first index of first matrix
+ADDI R3 R0 12 
+LD R3 R3 0 # index for temp result
+ADDI R4 R0 0
+LD R4 R4 0 # index
+LDI R5 R2 0
+LDI R6 R4 4
+MUL R6 R6 R5
+STI R6 R3 0
+ADDI R4 R4 1
+ADDI R3 R3 1
+LDI R6 R4 4
+MUL R6 R6 R5
+STI R6 R3 0
+ADDI R4 R4 1
+ADDI R3 R3 1
+# second part
+ADDI R2 R0 2
+LD R2 R2 0 # first index of first matrix
+ADDI R3 R0 14 
+LD R3 R3 0 # index for temp result
+ADDI R4 R0 0
+LD R4 R4 0 # index
+LDI R5 R2 0
+LDI R6 R4 4
+MUL R6 R6 R5
+STI R6 R3 0
+ADDI R4 R4 1
+ADDI R3 R3 1
+LDI R6 R4 4
+MUL R6 R6 R5
+STI R6 R3 0
+ADDI R4 R4 1
+ADDI R3 R3 1
+# third part
+ADDI R2 R0 1
+LD R2 R2 0 # first index of first matrix
+ADDI R3 R0 16 
+LD R3 R3 0 # index for temp result
+ADDI R4 R0 0
+LD R4 R4 0 # index
+LDI R5 R2 0
+LDI R6 R4 4
+MUL R6 R6 R5
+STI R6 R3 0
+ADDI R4 R4 1
+ADDI R3 R3 1
+LDI R6 R4 4
+MUL R6 R6 R5
+STI R6 R3 0
+ADDI R4 R4 1
+ADDI R3 R3 1
+# fourth part
+ADDI R2 R0 3
+LD R2 R2 0 # first index of first matrix
+ADDI R3 R0 18 
+LD R3 R3 0 # index for temp result
+ADDI R4 R0 0
+LD R4 R4 0 # index
+LDI R5 R2 0
+LDI R6 R4 4
+MUL R6 R6 R5
+STI R6 R3 0
+ADDI R4 R4 1
+ADDI R3 R3 1
+LDI R6 R4 4
+MUL R6 R6 R5
+STI R6 R3 0
+ADDI R4 R4 1
+ADDI R3 R3 1
+# final part
+ADDI R2 R0 8
+LD R2 R2 0 # first index of first matrix
+ADDI R3 R0 12 
+LD R3 R3 0 # index for temp result
+ADDI R4 R0 4
+LD R4 R4 0 # index
+LDI R5 R3 0
+LDI R6 R3 4
+ADD R6 R6 R5
+STI R6 R2 0
+SUBI R4 R4 1
+ADDI R2 R2 1
+ADDI R3 R3 1
+BGT R7 R4 8
+POP 256

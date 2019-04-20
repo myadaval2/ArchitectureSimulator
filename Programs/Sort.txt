@@ -22,9 +22,9 @@ data:
 
 # Example Comment
 instructions:
-LD R2 - 20 #outer loop counter
-LD R1 - 0 #inner loop index
-LD R3 - 19 #inner loop counter
+LD R2 20 #outer loop counter
+LD R1 0 #inner loop index
+LD R3 19 #inner loop counter
 PUSH 256
 FUNC innerloop
 AND R0 R0 0 # DUMMY

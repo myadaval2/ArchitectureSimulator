@@ -78,7 +78,7 @@ public class CPUManager {
 //             }
 //            }
         lookup = new HashMap<>();
-        register.setPC(100); // where instructions begin
+        register.setPC(1000); // where instructions begin
         i = register.getPC();
         int pc = register.getPC();
         functionCallOffsets = new HashMap<>();
@@ -186,6 +186,23 @@ public class CPUManager {
         String[] instructions = programLine.split(" "); 
         if (instructions[0].equals("HLT")){
             return "1011100000000000";
+        }
+
+        if (instructions[0].equals("LD")){
+            String binString = "";
+            try {
+                binString += String.format("%5s", Integer.toBinaryString(opCode(instructions[0]))).replace(" ", "0");
+            } catch (BadInstructionException e){
+                System.out.println("Please load a different program");
+            }
+            try {
+                binString += String.format("%3s", Integer.toBinaryString(registerNumber(instructions[1]))).replace(" ", "0");
+            } catch (BadInstructionException e){
+                System.out.println("Please load a different program");
+            }
+            
+            binString += String.format("%8s", Integer.toBinaryString(Integer.parseInt(instructions[2]))).replace(" ", "0");
+            return binString;
         }
 
         if (instructions[0].equals("PUSH")){

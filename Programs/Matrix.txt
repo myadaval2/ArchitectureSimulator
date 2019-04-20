@@ -1,34 +1,32 @@
 data:
 1,0
-2,1
-3,2
-4,3
-5,4
-6,5
-7,6
-8,7
+0,1
+0,2
+0,3
+1,4
+0,5
+0,6
+0,7
 
 # Example Comment
 instructions:
-LD R0 - 0 # big loop boundry
-LD R1 - 10 # big loop counter
-LD R7 - 0
+LD R0 0
+LD R1 100
+LD R7 0  
 PUSH 256 # push PC counter
 FUNC matrixMultiply
 ADDI R0 R0 0 # Dummy
 ADDI R0 R0 0 # Dummy
-ADDI R0 R0 1 # increment loop counter
-BGT R0 R1 6
+SUBI R1 R1 1
+ADDI R0 R0 1 # increment index 
+BGT R7 R1 7
 HLT
 
 function: matrixMultiply
 # first part
 ADDI R2 R0 0
-LD R2 R2 0 # first index of first matrix
 ADDI R3 R0 12 
-LD R3 R3 0 # index for temp result
 ADDI R4 R0 0
-LD R4 R4 0 # index
 LDI R5 R2 0
 LDI R6 R4 4
 MUL R6 R6 R5
@@ -38,15 +36,10 @@ ADDI R3 R3 1
 LDI R6 R4 4
 MUL R6 R6 R5
 STI R6 R3 0
-ADDI R4 R4 1
-ADDI R3 R3 1
 # second part
 ADDI R2 R0 2
-LD R2 R2 0 # first index of first matrix
 ADDI R3 R0 14 
-LD R3 R3 0 # index for temp result
 ADDI R4 R0 0
-LD R4 R4 0 # index
 LDI R5 R2 0
 LDI R6 R4 4
 MUL R6 R6 R5
@@ -56,15 +49,10 @@ ADDI R3 R3 1
 LDI R6 R4 4
 MUL R6 R6 R5
 STI R6 R3 0
-ADDI R4 R4 1
-ADDI R3 R3 1
 # third part
 ADDI R2 R0 1
-LD R2 R2 0 # first index of first matrix
 ADDI R3 R0 16 
-LD R3 R3 0 # index for temp result
 ADDI R4 R0 0
-LD R4 R4 0 # index
 LDI R5 R2 0
 LDI R6 R4 4
 MUL R6 R6 R5
@@ -74,15 +62,10 @@ ADDI R3 R3 1
 LDI R6 R4 4
 MUL R6 R6 R5
 STI R6 R3 0
-ADDI R4 R4 1
-ADDI R3 R3 1
 # fourth part
 ADDI R2 R0 3
-LD R2 R2 0 # first index of first matrix
 ADDI R3 R0 18 
-LD R3 R3 0 # index for temp result
 ADDI R4 R0 0
-LD R4 R4 0 # index
 LDI R5 R2 0
 LDI R6 R4 4
 MUL R6 R6 R5
@@ -92,15 +75,10 @@ ADDI R3 R3 1
 LDI R6 R4 4
 MUL R6 R6 R5
 STI R6 R3 0
-ADDI R4 R4 1
-ADDI R3 R3 1
 # final part
 ADDI R2 R0 8
-LD R2 R2 0 # first index of first matrix
 ADDI R3 R0 12 
-LD R3 R3 0 # index for temp result
 ADDI R4 R0 4
-LD R4 R4 0 # index
 LDI R5 R3 0
 LDI R6 R3 4
 ADD R6 R6 R5

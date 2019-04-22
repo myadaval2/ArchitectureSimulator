@@ -18,7 +18,7 @@ public class Driver {
     public Pipeline pipeline;
     public Memory memory;
     public Register register;
-    private static int clockCycles;
+    private static long clockCycles;
     public boolean isFinished;
 
     public static Driver driver = new Driver();
@@ -202,7 +202,7 @@ public class Driver {
         }
     }
     
-    public static int getClockCycles() {
+    public static long getClockCycles() {
         return clockCycles;
     }
     
@@ -443,8 +443,8 @@ public class Driver {
             memoryDisabled.writeAddressInMemory((char) 13, 3);
             memoryDisabled.writeAddressInMemory((char) 14, 4);
             
-            int memEnabledCycles = memoryEnabled.getMemoryCycleCount();
-            int memDisabledCycles = memoryDisabled.getMemoryCycleCount();
+            long memEnabledCycles = memoryEnabled.getMemoryCycleCount();
+            long memDisabledCycles = memoryDisabled.getMemoryCycleCount();
             
             System.out.println("Cache enabled write 5 pieces data, cycles: " + memEnabledCycles);
             System.out.println("Cache disabled write 5 pieces data, cycles: " + memDisabledCycles);

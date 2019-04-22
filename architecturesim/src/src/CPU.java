@@ -12,7 +12,7 @@ package src;
 public class CPU {
 
     private Memory  memory;
-    private int     clock;
+    private long     clock;
 
     public CPU() {      this(true);     }
     
@@ -26,7 +26,7 @@ public class CPU {
     }
     
     public Memory getMemory()   {       return this.memory;     }
-    public int getClock()       {       return this.clock;      }
+    public long getClock()       {       return this.clock;      }
     public void resetClock()    {       this.clock = 0;         }
     
 }

@@ -16,7 +16,7 @@ public class Memory {
     public static Cache    DRAM;
     private static Cache   headPointer;
     private static boolean cacheEnabled;
-    private static int     memoryCycleCount;
+    private static long     memoryCycleCount;
     
     public static Memory memory = new Memory();
     
@@ -270,6 +270,6 @@ public class Memory {
         return(addressInDRAM(address));
     }
     
-    public int getMemoryCycleCount()    {   return memoryCycleCount;   }
+    public long getMemoryCycleCount()    {   return memoryCycleCount;   }
     
 }

@@ -14,7 +14,7 @@ public class Cache {
     
     private final int       sizeOfMemory;
     private final Cache     lowerLevelMemory;
-    private final int       waitCycles;
+    private final long       waitCycles;
     private final int[]    mem_array;
     private final int[]     tag_array;
     private final int[]     historyArray;
@@ -34,7 +34,7 @@ public class Cache {
     
     public int getHeirarchy()           {   return heirarchy;               }
     public int getSizeOfMemory()        {   return sizeOfMemory;            }
-    public int getWaitCycles()          {   return waitCycles;              }
+    public long getWaitCycles()          {   return waitCycles;              }
     public int[] getMemArray()          {   return mem_array;               }
     public int[] getTagArray()          {   return tag_array;               }
     public int[] getHistoryArray()      {   return historyArray;            }

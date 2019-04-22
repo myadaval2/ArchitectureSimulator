@@ -70,14 +70,6 @@ public class CPUManager {
     }
     
     public void readIn(String filename){
-        
-//         for (int i = 0; i < 10; i++) {
-//             try {
-//                 memory.writeAddressInMemory(i, i); // ST 0-9 in Mem[0] - Mem[9]
-//                 memory.writeAddressInMemory(i*10, i + 10); // ST 11-19 in Mem[10] - Mem[90]
-//             } catch (NoSuchMemoryLocationException ex) {
-//             }
-//            }
         lookup = new HashMap<>();
         register.setPC(0); // where instructions begin
         i = register.getPC();
@@ -107,6 +99,7 @@ public class CPUManager {
                     }
                     i++;
                 }
+                Memory.resetMemoryCycleCount();
                 int offset = 0;
                 boolean functionSave = false;
                 String funcName = "";

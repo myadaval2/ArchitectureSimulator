@@ -1,17 +1,21 @@
 data:
-1,0
-0,1
-0,2
-0,3
-1,4
-0,5
-0,6
-0,7
+1,100
+0,101
+0,102
+0,103
+1,104
+0,105
+0,106
+0,107
 
 # Example Comment
 instructions:
-LD R0 0
-LD R1 100
+LD R0 100
+LD R1 10
+ADDI R6 R6 0
+ADDI R6 R6 0
+ADDI R6 R6 0
+MUL R1 R1 R0 # set counter to 1000
 LD R7 0  
 PUSH 256 # push PC counter
 FUNC matrixMultiply

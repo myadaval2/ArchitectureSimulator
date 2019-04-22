@@ -109,6 +109,8 @@ public class Pipeline {
         }
         else {
             int pcOffset = 0;
+            //System.out.println(instruction);
+            //int i = instruction;
             int i = ((instruction - pcOffset) % 5) + 1;
             switch (i) {
                 case 5:

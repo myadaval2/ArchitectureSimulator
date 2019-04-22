@@ -59,7 +59,8 @@ public class CPUManager {
             else {
                 pipeline.step(i);
                 clockCycles = i + memory.getMemoryCycleCount();
-                i++;
+                i = ((i) % 5) + 1;
+                //i++:
             }   
             // System.out.println("Number of clock cycles: " + clockCycles);
     } 

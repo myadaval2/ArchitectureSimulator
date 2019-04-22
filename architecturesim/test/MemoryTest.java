@@ -30,7 +30,7 @@ public class MemoryTest {
         System.out.println("Trivial CPU test case...");
         CPU instance = new CPU();
         int expResult = 0;
-        int result = instance.getClock();
+        long result = instance.getClock();
         assertEquals("CPU did not initialize Clock correctly" ,expResult, result);
     }
     
@@ -47,7 +47,7 @@ public class MemoryTest {
         CPU instance = new CPU(mem);
         instance.resetClock();
         int expResult = 0;
-        int result = instance.getClock();
+        long result = instance.getClock();
         assertEquals("CPU did not reset Clock correctly" ,expResult, result);
     }
     /**
@@ -65,7 +65,7 @@ public class MemoryTest {
             
         }
         int expResult = 402;
-        int result = mem.getMemoryCycleCount();
+        long result = mem.getMemoryCycleCount();
         assertEquals("CPU did not write correctly" ,expResult, result);
     }
     

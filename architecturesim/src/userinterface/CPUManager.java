@@ -78,7 +78,7 @@ public class CPUManager {
 //             }
 //            }
         lookup = new HashMap<>();
-        register.setPC(1000); // where instructions begin
+        register.setPC(0); // where instructions begin
         i = register.getPC();
         int pc = register.getPC();
         functionCallOffsets = new HashMap<>();

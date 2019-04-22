@@ -108,7 +108,7 @@ public class Pipeline {
             }
         }
         else {
-            int pcOffset = 100;
+            int pcOffset = 0;
             int i = ((instruction - pcOffset) % 5) + 1;
             switch (i) {
                 case 5:
@@ -239,7 +239,7 @@ public class Pipeline {
         // PUSH and POP
         else if (opcode == OpcodeDecoder.PUSH) {
             String bitVector = String.format("%11s", Integer.toBinaryString(address)).replace(' ', '0');
-            address = register.getSP();
+            address = register.getSP() - 1;
             for(int i=2; i<bitVector.length(); i++){
                 if (bitVector.charAt(i) == '1'){
                     int reg = 0;
@@ -290,6 +290,7 @@ public class Pipeline {
                     }
                 }
                 address--;
+                //System.out.println("Push " + address);
                 register.setSP(address);
             }
         }
@@ -349,6 +350,7 @@ public class Pipeline {
                     }
                 }
                 address++;
+                //System.out.println("pop "+address);
                 register.setSP(address);
             }
         }        

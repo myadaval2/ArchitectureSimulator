@@ -52,16 +52,16 @@ public class CPUManager {
         return driver;
     }
     int i;
+    long clockCount;
     public void Stepper(){
             if (Pipeline.isIshalted()){
                 isFinished = true;
             } 
             else {
                 pipeline.step(i);
-                long temp = i;
-                clockCycles = temp + memory.getMemoryCycleCount();
+                clockCycles = clockCount + memory.getMemoryCycleCount();
                 i = ((i) % 5) + 1;
-                //i++:
+                clockCount++;
             }   
             // System.out.println("Number of clock cycles: " + clockCycles);
     } 

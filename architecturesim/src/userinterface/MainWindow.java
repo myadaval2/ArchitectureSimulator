@@ -668,7 +668,7 @@ public class MainWindow extends javax.swing.JFrame {
             Pipeline.setPipelineEnabled(pipeVal);
             c.readIn(programFile);
             drawTable();
-            clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
+            clockTextBox.setText(Long.toString(CPUManager.getClockCycles()));
             Register register = Register.getRegisters();
             clockTextBox1.setText(p.getLastInstruction());
             InstructionEnglish.setText(p.getEnglishInstruction());
@@ -746,7 +746,7 @@ public class MainWindow extends javax.swing.JFrame {
                 // d.forLoopStepper();
                 d.Stepper();
                 drawTable();
-                clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
+                clockTextBox.setText(Long.toString(CPUManager.getClockCycles()));
                 Register register = Register.getRegisters();
                 clockTextBox1.setText(p.getLastInstruction());
                 InstructionEnglish.setText(p.getEnglishInstruction());
@@ -803,7 +803,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
         Pipeline p = Pipeline.getPipeline();
         drawTable();
-        clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
+        clockTextBox.setText(Long.toString(CPUManager.getClockCycles()));
         Register register = Register.getRegisters();
         clockTextBox1.setText(p.getLastInstruction());
         InstructionEnglish.setText(p.getEnglishInstruction());
@@ -945,7 +945,7 @@ public class MainWindow extends javax.swing.JFrame {
         Memory.setCacheEnabled(cacheVal);
         Pipeline.setPipelineEnabled(pipeVal);
         drawTable();
-        clockTextBox.setText(Integer.toString(CPUManager.getClockCycles()));
+        clockTextBox.setText(Long.toString(CPUManager.getClockCycles()));
         Register register = Register.getRegisters();
         clockTextBox1.setText(p.getLastInstruction());
         InstructionEnglish.setText(p.getEnglishInstruction());

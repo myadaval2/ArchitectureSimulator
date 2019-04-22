@@ -26,7 +26,7 @@ public class CPUManager {
     public Pipeline pipeline;
     public Memory memory;
     public Register register;
-    private static int clockCycles;
+    private static long clockCycles;
     public boolean isFinished;
     public Map<String, Integer> lookup;
     
@@ -58,14 +58,15 @@ public class CPUManager {
             } 
             else {
                 pipeline.step(i);
-                clockCycles = i + memory.getMemoryCycleCount();
+                long temp = i;
+                clockCycles = temp + memory.getMemoryCycleCount();
                 i = ((i) % 5) + 1;
                 //i++:
             }   
             // System.out.println("Number of clock cycles: " + clockCycles);
     } 
     
-    public static int getClockCycles() {
+    public static long getClockCycles() {
         return clockCycles;
     }
     
